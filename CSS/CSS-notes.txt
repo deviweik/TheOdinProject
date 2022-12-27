@@ -1,0 +1,266 @@
+
+Syntax:
+selector {
+    property: value;
+    property2: value;
+}
+
+Selectors
+    Universal Selector
+        * { property: value;}
+        selects elements of any type
+
+    Type Selectors
+        ex:
+        div {property: value;}
+        This would update property to value for all div elements, and not
+        affect other elements (headers, paragraphs, other)
+
+    Class Selectors
+        Classes are attributes that can be added to elements:
+        <element class="class">
+            content
+        </element>
+
+        This element and all others with the same class attribute can be
+        selected by referencing the class with a period like this:
+        .class {
+            property: value;
+        }
+
+        You can add multiple classes by separating with spaces:
+        <element class="class-1 class-2">
+
+    ID Selectors
+        IDs are similar to classes, with the major difference being that
+        an id is meant to identify a unique element and can only be used
+        once in the same document. So it will be a faster but more
+        limited selection. Also elements can only have one id.
+        <element id="id-title">Content</element>
+
+        This is selected similar to classes, but with a #:
+        #id-title {
+            property: value;
+        }
+
+    Grouping Selectors
+        If you are implementing the same property changes for multiple
+        classes you can select them with a comma-separated list:
+        .class-1, .class-2 {
+            property: value;
+            property2: value;
+        }
+
+    Chaining Selectors
+        You can also select elements that have multiple classes by 
+        listing class names like this:
+        .class-1.class-2 {
+            property: value;
+        }
+        This would select any elements that have both class-1 and
+        class-2 as attributes.
+
+        You can also chain classes and an id:
+        .class-1#id-title {
+            property: value;
+        }
+        This would select the element with id "id-title" if it also has
+        class "class-1".
+
+        Type selectors (div, p, h1, etc.) can't be chained since an 
+        element can't be multiple types at once.
+
+    Descendant Combinator
+        Combinators allow you to combine selectors based on the 
+        relationship between the selectors. The four types of combinators 
+        in CSS are the descendant selector ( ), the child selector ( > ), 
+        the adjacent sibling selector ( + ) and the general sibling 
+        selector ( ~ )
+
+        The descendant combinator will only allow matches for the last
+        selector if they also have an ancestor (parent, grandparent, etc.)
+        that matches the previous selector. The ancestor relationship
+        comes from being nested inside other elements with that class.
+
+        Ex:
+        <div class="ancestor">              <!-- A -->
+            <div class="contents">          <!-- B -->
+                <div class="contents">      <!-- C -->
+                </div>
+            </div>
+        </div>
+
+        <div class="contents"></div>        <!-- D -->
+
+        If you use a descendant combinator like so:
+        .ancestor .contents{
+            property: value;
+        }
+        This will change property to value for B and C, without affecting
+        A or D.
+        
+        You can nest as many levels deep as you'd like, but high 
+        levels (4+) of nesting lead to overly complicated selectors
+
+Properties
+    Color and Background-Color
+        Accepted values
+            - colors like "red", "transparent" (140 color names)
+            - HEX codes ex:     color: #ffffff;
+                - Hex codes with transparency (add two digits)
+            - RGB ex:           color: rgb(100, 10, 150);
+                - RGBA (adds opacity)
+            - HSL ex:           color: hsl(15, 82%, 56%);
+                - HSLA (adds opacity)
+            - "currentcolor" keyword: refers to color value of element
+
+    Typography Basics and Text-Align
+        - font-family
+            Takes a single value or comma-separated list of values. 
+            Fonts fall into two categories:
+            - font family name like "Times New Roman" (in quotes to
+            include spaces)
+            - generic family name like sans-serif
+            If the browser cannot find a specific font it will move to
+            the next in the list. That is why it is best practice to list
+            fonts in font-family in order of preference and always end
+            with a generic font family.
+            ex: font-family: "Times New Roman", sans-serif;
+        - font-size
+            - ex: font-size: 22px;
+        - font-weight
+            - ex: font-weight: bold;
+            - ex: font-weight: 700; (same as bold)
+            Values for bold typically go up in 100 increments from 100-900.
+        - text-align
+            - ex: text-align: center
+
+    Image Height and Width 
+        ex:
+        img {
+            height: auto;
+            width: 250px;
+        }
+        This would change the size of the image without distoring it.
+        Assigning values to both height and width will likely distort
+        the image unless you calculate these values based on the 
+        dimensions of the original image.
+
+        It is best practice to inclue both properties even if you don't 
+        plan on adjusting from the original image size.
+
+The Cascade
+    Understanding the cascade is key to making sure your rules are 
+    applied as you intend. It is also important to understand the 
+    default styles and where this may be leading to unintentional 
+    appearences.
+
+    Specificity
+        Some CSS declarations take precendence over others based on their
+        specificity. Inline styles have the highest specificity compared 
+        to any selector.
+
+        The specificity of the selectors mentioned in this lesson:
+            1. id selectors (most specific selector of all) 
+            2. Class selectors
+            3. Type selectors
+            There are other selectors not included here.
+
+        Specificity only comes into consideration when elements have
+        multiple, conflicting declarations. If multiple declarations
+        of the same specificity level are used, preference will be 
+        given to the declaration with more selectors involved. 
+        ex: 
+        <div class="main">
+            <div class="list subsection"></div>
+        </div>
+
+        .subsection {
+            color: blue;
+        }
+        .main .list {
+            color: red;
+        }
+        In this case, the element will be red since this declaration 
+        is more specific as it uses more class selectors. If you changed
+        .subsection to #subsection, this would lead to blue being chosen
+        over red since id's are more specific than any number of classes.
+
+        Also, declarations with no conflictions that are under the same
+        selectors as conflicting declarations with lower specificity 
+        selectors will still be applied.
+
+        Chaining vs using combinators to combine selectors does not 
+        change specificity, it will still depend on the number of 
+        selectors.
+
+        Universal selectors (*) have no specificity value.
+
+    Inheritance
+        Some properties are inherited by decendants (nested elements) 
+        when they are applied to a parent element. Typography based 
+        properties (color, font-size, font-family, etc.) are usually 
+        inherited, while most other properties aren’t.
+
+        Direct declarations will always take precendence over inherited 
+        properties regardless of the specificity of the ancestor.
+
+    Rule Order 
+        Whenever declarations are tied based on all of the other 
+        evaluation factors, the winning declaration is decided based on
+        which one was defined last.
+
+Adding CSS to HTML 
+    External CSS
+        This is the most common of the three methods. This method involves
+        creating a separate file for the CSS and linking in the HTML's
+        <head> tag with a self closing <link> element.
+
+        syntax:
+        <head>
+            <link rel="stylesheet" href="styles.css">
+        </head>
+        Notes: rel attribute is required
+
+        This method is popular because it allows you to keep your HTML 
+        code shorter and simpler. It is also helpful for websites with 
+        multiple webpages using the same styling, since you can use 
+        the same CSS file for multiple HTML pages.
+    
+    Internal CSS
+        All CSS is added between opening and closing <style> tags inside 
+        the <head> tags. This method is similar to having a separate
+        CSS file if you are only working on one webpage, but if you have
+        many webpages with similar design it is very inefficient to 
+        copy the <style> section into every HTML file.
+
+    Inline CSS
+        ex:
+        <body>
+            <div style="color: white; background-color: black;">
+                content
+            </div>
+        </body>
+
+        The style attribute allows you to add CSS directly to the element
+        which foregoes the need for selectors. This is good if one single
+        element needs unique styling, but has many drawbacks for 
+        consistent usage. 
+
+        This method gets very messy when many declarations are needed for
+        each element. It would be tons of copying and pasting for elements
+        with the same styling. Also, Inline CSS will override the other two
+        CSS methods which can lead to unexpected results.
+
+
+    
+
+
+
+
+
+
+
+
+
+    
