@@ -1,10 +1,4 @@
 
-Syntax:
-selector {
-    property: value;
-    property2: value;
-}
-
 Selectors
     Universal Selector
         * { property: value;}
@@ -249,18 +243,325 @@ Adding CSS to HTML
 
         This method gets very messy when many declarations are needed for
         each element. It would be tons of copying and pasting for elements
-        with the same styling. Also, Inline CSS will override the other two
-        CSS methods which can lead to unexpected results.
+        with the same styling. Also, Inline CSS will override the other 
+        two CSS methods which can lead to unexpected results.
 
+Spacing
+    Margins, Padding, Borders
+        margin: (vertical) (horizontal); (margin: top right bottom left;)
+            Margin is the space between the outside of the border and 
+            nearby elements or edges.
 
+            ex. margin: 20px 10px; will add 20 pixels of space between 
+            elements vertically and 10 pixels of space between 
+            elements horizontally)
+
+            You can center elements by using margin: auto; 
+            (or margin: 0 auto;)
+
+        padding: (vertical) (horizontal); (padding: top right bottom left)
+            Padding is the space between the content inside a container 
+            and the border.
+
+            ex. padding: 20px 10px; will add 20 pixels of vertical space 
+            between the content inside the container and the border and 
+            10 pixels of horizontal space between content and the border)
+
+            'auto' cannot be used for padding.
+        
+        border: width style color;
+            Border defines the border around the element.
+
+            Width can be a pixel/em value or a keyword like 'thin', 
+            'medium', or 'thick'.
+
+            Style will usually default to 'solid' and can be defined as
+            keywords like 'dotted', 'dashed', 'double', 'groove', 
+            'ridge', 'inset', 'outset', and 'none'.
+
+            Color can be set as a named color, hex code, rgb code, etc.
+
+            You can also define specifc borders using 'border-top:',
+            'border-bottom', 'border-right', 'border-left'. You can go
+            even further and individually define the width, style, and
+            color of borders like 'border-top-style: dotted;'.
+
+            border-radius: 2px; can create rounded borders.
     
+    Display types
+        The display property is used to specify the layout format for
+        HTML elements.
 
+        Block
+            Takes up the full width of its parent element (meaning it
+            will move to a new line from other content inside its parent
+            element).
 
+            Examples: div, h1-h6, p, form, header, footer, section, etc.
 
+            Block elements will respect height/width properties.
 
+        Inline 
+            Only takes up as much width as necessary and does not create
+            a new line.
 
+            Examples: a, span, em, strong, img, input, etc.
 
+            Inline elements will not respect height/width properties.
 
+            Also, padding/margins for inline elements will only apply to
+            the top and bottom, not the left and right sides.
 
+        Inline-Block
+            Inline-block elements are treated as inline elements but they
+            will respect height/width properties and can have 
+            padding/margins applied. 
+
+            With no width defined, it will only take as much space as 
+            necessary for its content and will not create a new line.
+
+            Useful when you want elements to sit side by side but also
+            need to control their dimensions/position.
+
+    Flexbox
+        Flexbox is a layout mode designed to make it easier to align and
+        distribute items along main axes. It makes it much easier to 
+        construct complex layouts that let you fill content exactly
+        where you need it.
+
+        Flex Containers are parent elements with display: flex; or
+        display: inline-flex;.
+
+        Flex Items are the direct children of these elements. A flex
+        item can also be a flex parent.
+
+        Flex containers have two axes: main axis and cross axis.
+            The main axis runs along the direction of the container.
+            The cross axis runs perpendicular to the main.
+
+            You can change the main axis to the vertical direction by 
+            setting flex-direction: column; (other values are row, 
+            row-reverse, and column-reverse) 
+
+        Main Properties
+            Flex Shorthand - 'flex: 1;' is shorthand for defining three
+                properties: 'flex-grow', 'flex-shrink', and 'flex-basis'.
+                flex: 1; really means flex: 1 1 0;
+
+            flex-grow: takes a single number that represents the growth
+                factor. If one of three components is defined with 
+                flex-grow: 2 (and the others have 1), this component will
+                grow 2x the size of the others. Essentially lets you set
+                a width ratio between components.
+
+                Although, if the first flex item is defined with 
+                flex-grow: 1; and the others are set to 0, the first 
+                component will take up all of the extra space not taken by
+                the content/width of the other elements.
+
+            flex-shrink: similar to flex-grow, but sets a shrink factor.
+                You can prevent a flex item from shrinking smaller than
+                its defined width by setting flex-shrink: 0;. This 
+                property will only end up being applied if the size of all
+                flex items is larger than their flex container.
+
+                The best way to think about this is to consider the 
+                deficit created by shrinking a container smaller than the
+                width of the content. If you have 500px worth of content,
+                and a 400px wide container, the flex-shrink values of the
+                flex items create a ratio for where that extra space is 
+                cut from. By default it's set to 1, so if there's three 
+                flex items they will each lose 1/3 of the deficit. If you
+                set one of the flex items to flex-shrink:2, that item 
+                would lose 50px, and the others would lose 25px.
+            
+            flex-basis: sets the initial size of the flex item so that any
+                shrinking or growing happens. Shorthand defaults to 
+                flex-basis: 0%. If you need the flex-items to check for a
+                width declaration, you can define flex-basis: auto;.
+
+                The actual default for flex-basis is 'auto', flex: 1 will
+                set flex-basis: 0;. flex: auto is shorthand for setting
+                flex: 1 1 auto;
+
+                To put it simply: In a Flex row, flex-basis does the same
+                thing as width. In a Flex column, flex-basis does the 
+                same thing as height. Width/height are not capable of 
+                changing axes the same way flex items/containers can, so 
+                flex-basis was created as a way to set this for flexbox.
+
+                Flex-basis is not a direct replacement for width/height,
+                but it acts very similarly for flexbox.
+
+                flex-grow controls how the extra space is distributed when
+                the items are smaller than their container.
+                flex-shrink controls how space is removed when the items
+                are bigger than their container.
+                This means only one can be active at a time, if there is 
+                extra space, there is no need to shrink, if there's not 
+                enough space, there's no need to grow.
+
+            *** Default for flex-items is flex: 0 1 auto; ***
+
+            min-width: auto or 0px or _px; By default, min-width is set to
+            auto. Text inputs have a default minimum size of 170-200px. 
+            Elements containing text have a minimum size of the length of
+            the longest unbreakable string of characters. (min-height
+            exists as well for flex columns).
+
+            Other shorthand presets:
+                flex: initial; sets flex: 0 1 auto; Makes the flex item 
+                inflexible when there is positive free space, but allows
+                it to shrink to its minimum size when there is 
+                insufficient space.
+                
+                flex: auto; sets flex: 1 1 auto; 
+
+                flex: none; sets flex: 0 0 auto; Sizes the flex item based
+                on its width/height and makes the item fully inflexible. 
+                Similar to initial except no shrinking is permitted.
+
+                flex: <positive-number>; sets flex: <positive-number> 1 0;
+
+            You can also set 'min-width' and 'min-height' to allow flex 
+            items to shrink below the minimum content size.
+
+        Other Properties
+            flex-direction: column; (defined above)
+            justify-content: can be used to align items, inputs are 
+                'center', 'flex-start', 'flex-end', 'space-between', and
+                'space-around'.
+            align-items: can be used to align on cross axis, inputs are
+                'stretch', 'center', 'flex-start', 'flex-end', and 
+                'baseline'.
+            flex-wrap: controls whether items are forced onto a single 
+                line or wrapped onto multiple.
+
+            You can do some very interesting things by combining 
+            flex-wrap, align-items, and align-content. When flex items are
+            wrapped onto separate rows, they essentially create individual
+            flexbox environments on each row that can be affected by 
+            align-items and align-content for interesting results.
+        
+        Common use:
+            .parent {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            In this case, we’re aligning the child items side-by-side and
+            then spacing them equally between each other.
+
+        Different way to think about flex properties:
+            .child {
+                flex: [max] [min] [ideal size];
+            }
+        
+        Axes 
+            Default direction for a flex container is horizontal, but you
+            can change the direction to vertical using 
+            flex-direction: column;
+
+            Flex containers have 2 axes: main axis and cross axis
+            When you change the flex-direction, you are changing the 
+            direction of these axes.
+
+            Remember that flex shorthands may act differently when the 
+            main axis is changed to vertical. If there is no content in
+            the flex items and flex-basis = 0, the divs will collaspe
+            since no space is required to fill the container. Setting 
+            flex-basis = auto or flex: auto will fix this. You could 
+            also have fixed it by putting a height on the parent 
+            .flex-container, or by using flex-grow: 1 instead of the 
+            shorthand
+
+            General understanding:
+                Flex items are laid out from start to end on the primary
+                axis, and by default will only take up as much space on 
+                this axis as their content demands. By default, the start 
+                and end of the cross axis is less important because items
+                are set to take up the full space from start to finish.
+
+        Alignment 
+            justify-content is used for spacing on the primary axis, 
+            align-content is used for spacing on the cross axis.
+
+            justify-content: space-between; This will make flex items
+            respect their given width and equally space themselves 
+            within the container.
+
+            justify-content: center; This will make flex items respect 
+            their given width and center themselves in the container with
+            equal space on either side.
+
+            justify-content: flex-end; This will reverse the start and end
+            of the primary axis. (flex-start is default, this is the 
+            opposite)
+
+            justify-content: space-around; This is similar to 
+            space-between but it will also leave space between the edges.
+            The amount of space between edges and 
+
+            justify-content: space-evenly; An extension of the previous
+            properties but makes the spacing between edges the same as
+            the space between flex items.            
+
+            align-items: stetch; This is the default setting and will make
+            flex items take up the whole cross axis.
+
+            align-items: flex-start; This will make flex items only take
+            up the space they need to contain their content on the cross
+            axis.
+
+            align-items: flex-end; Same as flex-start but reverses the 
+            direction of the cross axis.
+
+            align-items: center; This will center flex items on the cross 
+            axis. 
+
+            align-items: baseline; This is very similar to flex-start 
+            except all flex items will line up with the item that 
+            requires the most space to contain it's content. So the 
+            edges of the flex items that are further down on the cross
+            axis will form a "baseline", with space left above the items
+            the the least space required for content.
+
+            Keep in mind that these properties affect the main and cross
+            axes, respectfully. If you change flex-direction to column, 
+            justify-content will affect items on the vertical axis and
+            align-content will affect items on the horizontal axis.
+
+            align-self is used on child elements to change individual
+            allignments of flex items along the cross axis.
+
+            The properties are the exact same as align-items, 
+            e.g. stretch, flex-start, flex-end, center, baseline.
+
+            justify-self does not exist. 
+
+            The most commonly used are justify-content and 
+            align-items.
+
+            gap: 10px; This will create an equal gap of 10px between 
+            flex items.
+
+            margin-left and margin-right are other useful tools with the
+            flexbox layout. Both values are 0px by default. You can 
+            specify the margin in pixels or use auto. Setting 
+            margin-right: auto; for the first flex item in the row/col 
+            will have that item start from the left edge and push the 
+            rest of the flex items to the right edge. Setting 
+            margin-left: auto; will have all flex items start from the 
+            right edge.
+            
+        Hypothetical Size
+            This refers to the size that an element would be, before being
+            affected by the layout mode. If you have two items, and set 
+            both to have a width of 2000 px, but one item is in the 
+            standard flow layout and the other is using Flexbox, the item
+            using flow layout will actually extend to 2000px even if it
+            runs off the page. The Flexbox item, however, will be 
+            constrained by the width of its parent container. So 2000px
+            becomes its 'hypothetical size'.
 
     
