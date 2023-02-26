@@ -1,0 +1,36 @@
+TheOdinProject Notes
+
+Problem Solving
+    Understand the Problem
+        - Don't waste time on the wrong solution
+
+        - Describe the problem in plain english. If you can explain a
+        problem to somebody else, you understand it.
+
+    Plan 
+        Early Stage Questions
+            - Will I have a user interface? What will it look like?
+            What functionality will it have? Sketch it out 
+
+            - What will the inputs be? Pulled in from a resource or 
+            entered manually?
+
+            - What are the outputs? What do they need to look like?
+
+            - What steps are necessary to get to your output by using your
+            inputs? Do you need additional resources?
+
+    Pseudocode 
+        Similar to planning step, helps to break project down into 
+        actionable steps. 
+
+        Also helps you find gaps in your plan where you may need further
+        research, different tools, or more inputs.
+
+    Divide and Conquer
+        There are probably a number of small problems identified through
+        planning and pseudocode that require solving. It is best to 
+        approach and solve one problem at a time to piece together your
+        overall solution.
+
+    
