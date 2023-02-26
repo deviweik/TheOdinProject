@@ -1,0 +1,543 @@
+
+
+Using with HTML
+    Embed js in html like this: (inside <body>)
+        <script>
+            //JS goes here
+            console.log("Hello, World!")
+        </script>
+        
+    or like this: (inside <body>)
+        <script src="javascript.js">//can also do this</script>
+
+Variables
+    You can now declare variables in three ways:
+        var: traditional way, now replaced by let
+        let: same as var but adapted to modern JS, most commonly used
+        const: lets you declare a constant (non-changing) variable
+    
+Numbers
+    Arithmetic operators in JS 
+        +, -, *, ** (exponent), /, % (modulus), ++ (increment), 
+        --(decrement)
+            increment/decrement can only be applied to variables
+                let num = 3;
+                num++; (returns 3, but applies +1)
+                num; (returns 4)
+
+                let num = 3;
+                ++num; (returns 4)
+
+        There are also assignment operators:
+            += num; (shortcut for x = x + num;)
+            -= num; (shortcut for x = x - num;)
+            *= num; (shortcut for x = x * num;)
+            /= num: (shortcut for x = x / num;)
+            these are most common ones but there are more
+
+            You can use variables on both sides of the assignment operator
+                let x = 3;
+                let y = 4;
+                x *= y; x now contains 12
+
+        Comparison operators
+            === | strict equality (compares value and datatype)
+            == | equality (compares value only)
+            !== | strict inequality
+            != | inequality
+            <, >, <=, >=
+            All return booleans
+
+        Bitwise operators
+            AND (&)
+            OR (|)
+            XOR (^)
+            NOT (~)
+            LEFT SHIFT (<<)
+            RIGHT SHIFT (>>)
+            ZERO-FILL RIGHT SHIFT (>>>)
+            
+        Comma operator
+            commas can be used to evalute multiple expressions on one line
+            ex: 
+                for (a = 1, b = 3, c = a * b; a < 10; a++) {
+                    ...
+                }
+
+        + can also be used as unary operator to change datatype to Number
+            alert(+true); = 1, alert(+""); = 0
+            (does the same thing as Number())
+            has the highest priority for order of operations
+
+    Numbers can be written with: 
+        decimals
+        exponent notation (123e4 = 1230000)
+
+    JS does not have multiple definitions for numbers based on size
+    (like other languages may have integers, short, long, double)
+        Instead always uses 64-bit floating position
+            value: bits 0-51 | exponent: bits 52-62 | sign: bit 63
+
+        integers are accurate up to 15 digits, then rounded
+        maximum # of decimals is 17
+
+        floating point arithmetic can lead to slight inaccuracies
+        (let x = 0.2 + 0.1; -> x = 0.30000000000000004) you can 
+        correct this by multiplying and dividing again: 
+        (let x = (0.2 * 10 + 0.1 * 10) / 10; -> x = 0.3)
+
+        The + operator is also used for concatenation in js
+        If you add a number and a string, it will result in string
+        concatenation: 10 + "20" = "1020";
+            Common mistake:
+                let x = 10;
+                let y = 20;
+                let z = "The result is: " + x + y;
+                (You may expect this to = "The result is: 30" but
+                it will be "The result is: 1020")
+
+            Another note:
+                It depends on the order of the operations so this 
+                (10 + 20 + "30") will = "3030"
+
+        JS will convert strings to numbers in all numeric operations:
+        "100" / "10" will = 10 (but this will not work with +)
+
+        Also Number("100") will return 100 with type Number
+        ex: "100" + 3 = 1003 but Number("100") + 3 = 103
+
+        NaN = Not a Number | this will result from trying to do 
+        arithmetic with non-numeric strings.
+            If NaN is used in a mathematical operation, the result
+            will also be NaN.
+                
+            typeof NaN returns number still
+            
+        Infinity (or -Infinity) is a number too
+            Returns if you calculate a number outside the largest
+            possible in js.
+
+            Division by 0 = Infinity too
+
+        Hexadecimal numbers can be used as well.
+            JS interprets numeric constants as hexadecimal if they are
+            preceded by 0x (eg. let x = 0xFF)
+
+        myNumber.toString(base) can be used to convert/output numbers from
+         base 2 to 36:
+            Decimal 32 =
+                Hexatrigesimal (base 36): w
+                Duotrigesimal (base 32): 10
+                Hexadecimal (base 16): 20
+                Duodecimal (base 12): 28
+                Decimal (base 10): 32
+                Octal (base 8): 40
+                Binary (base 2): 100000
+
+        Order of operations is followed as normal in JS (PEMDAS)
+
+Data Types 
+    Variables can store any datatype, a variable containing a string can
+    subsequently be assigned to contain a string
+        this is called a "dynamically typed" coding language
+
+    Number
+        Integers and floating point numbers
+
+        There are also special numeric values 
+            Infinity (and -Infinity)
+            NaN
+
+    BigInt
+        Number cannot contain integers great than 2**53 - 1 (or less than
+        -(2**53-1))
+            It can actually store larger integers but any larger than the
+            value stated above will result in precision errors
+
+        BigInt was added to handle large integers 
+            const bigInt = 129194871984721929847198274918721874n;
+            Note the "n" at the end of the integer, this creates a BigInt
+
+    String 
+        There is practically no difference between "" and '' in JS
+            You should pick and stick to one. But having both in JS lets
+            you have strings with " and ' inside as long as you use the
+            other one to contain the string.
+                ex: "I'm using an apostrophe" will work fine
+                ex: so will 'Quote: "quote"'
+
+        Backticks (``) are used to create strings with embeded variables
+        or expressions: `the result is ${1 + 2}` = "the result is 3"
+            Called a template literal
+
+            Template literals can also be used to concatenate strings:
+                const one = "Hello, ";
+                const two = "how are you?";
+                const joined = `${one}${two}`; -> "Hello, how are you?"
+
+                You can also concatenate numbers with strings this way
+
+            Template literals respect line breaks so you can write 
+            multi-line strings this way. (you can do this in normal
+            strings using the line break character: \n)
+
+        Escape characters
+            if you want something to be recognized as text rather than
+            part of the code, you can use an escape character (\)
+            ex: 'I\'m using an apostrophe for both'
+
+        toString() - like Number() but converts to string
+
+        String Methods 
+            length: text.length;
+                returns length of string
+
+            Extracting String Parts
+                slice(start, end)
+                    extracts from start to end (JS indexes from 0)
+
+                    slice(8) will extract everything from 8 to the end
+
+                    slice(-12) extracts the last 12 characters
+
+                substring(start, end)
+                    This is identical to slice but it will not take 
+                    negative inputs (treated as 0).
+                
+                substr(start, length)
+                    Also similar to slice but takes start and length as
+                    inputs.
+
+            Replacing String Content
+                text.replace(searchKey, newText)
+                    This will replace the FIRST instance of searchKey
+                    inside text with newText.
+
+                    Note: this returns a new string and does not modify 
+                    the original string `text` in this case
+
+                    Replace is case sensitive by default
+                        You can change this using an /i flag (insensitive)
+                            text.replace(/searchKey/i, newText)
+
+                    You can use a /g flag to replace all matches:
+                        text.replace(/searchKey/g, newText)
+                    
+            Converting to upper/lower case
+                text.toUpperCase()
+                text.toLowerCase()
+
+            Concatentation
+                text1.concat(" ", text2) will combine text1 and text2 with
+                a space in between.
+
+            Trim
+                text1.trim() removes the whitespace (spaces) from both
+                sides of a string.
+
+                text1.trimStart() only removes whitespace before string
+
+                text1.trimEnd() only removes whitespace after string
+
+            Padding
+                text.padStart(num, " ") adds num characters of " " before
+                string.
+
+                text.padEnd(num, " ") adds to the end
+
+            Extracting String Characters 
+                text.charAt(0); returns first character in text
+
+                text.charCodeAt(0); returns UTF-16 of first character
+
+                You can also index strings like arrays, but this can lead
+                to unpredictable results, it is also read only
+                    let char = text[0];
+                
+            Converting to an Array 
+                text.split(",") creates an array of text's elements after
+                splitting on commas
+
+    Boolean 
+        true/false
+
+        all comparisons return booleans
+
+        Falsy vs truthy
+            A number 0, an empty string "", null, undefined, and NaN all 
+            become false. Because of that they are called “falsy” values.
+
+            Other values become true, so they are called “truthy”.
+
+    Null
+        null is its own type of value.
+
+    undefined
+        undefined also has a type of its own.
+
+        undefined = "value not assigned"
+
+        let age, alert(age); returns "undefined"
+
+    Objects and Symbols
+        Objects can store collections of data, unlike the previous data 
+        types which can only store single values.
+
+        The symbol type is used to create unique identifiers for Objects
+
+    You can use the typeof operator to return the type of the operand
+        typeof 0 -> number, typeof "" -> string, typeof alert -> function
+
+        typeof null will return object (this is an error but is kept for
+        compatibility)
+
+Comparisons
+    Comparing Strings 
+        Strings are compared by looking at individual characters, for
+        string1 > string2, if the first character in string1 is greater
+        than the first character in string2, this will return true.
+        If the first characters are the same, it will move on to the
+        second character in both strings. If the strings are the same up 
+        until a certain length, the longer string is greater.
+
+        Note: 'A' < 'a' = true (unicode order)
+
+    In comparisons of values with different types, JS will convert all to
+    numbers. true -> 1, '2' -> 2, '01' -> 1, false -> 0
+
+    Strict vs non strict equality operators
+        use === if you need to distinguish between 0/''/'0' and false
+
+    Notes:
+        null == 0 -> false, but null >= 0 -> true 
+        this is because >= converts null to 0 but == does not
+
+        undefined == null -> true 
+
+        Lesson: don't use comparisons when the operand may be undefined or
+        null. And use === when looking at equalities
+
+Conditional Statements
+    if/elseif/else Statements
+        if (condition) {
+            //code block, executed if condition is true
+        } elseif (condition2) {
+            //code block, executed if condition is false AND condition2 is
+            true
+        } else {
+            //code block, executed if condition is false AND condition2 is
+            false
+        }
+
+        note: else is not necessary, you can remove it from the code block
+        above and it will run the same way.
+
+    logical operators: AND (&&), OR (||), NOT (!)
+
+    switch Statements
+        switch (expression) {
+            case choice1:
+                // code
+                break;
+
+            case choice2:
+                // code
+                break;
+
+            default:
+                //run this code if no case matches
+        }
+
+        If you have many cases that should run the same code, you can
+        stack the case declarations:
+            case 0:
+            case 1:
+            case 2:
+                // 0, 1, and 2 will run this code
+
+    Ternary operator
+        pseudocode: condition ? run this code : run this code instead
+
+        ex:
+            condition
+              ?  run this code if true
+              :  run this code if false;
+    
+    Alternatives to if Statements
+        if (age > 18) {
+            return true;
+        } else {
+            return confirm('Did parents allow you?');
+        }
+
+        question operator: return (age > 18) ? true : confirm('Did parents
+        allow you?');
+
+        or operator: return (age > 18) || confirm('Did parents allow 
+        you?');
+
+Functions
+    Default Parameters
+        If you're creating a function and want to make use of an optional
+        parameter you can set a default value like this:
+            function hello(name = 'Chris') {
+                console.log(name);
+            }
+                hello('Devin') -> Devin
+                hello() -> Chris
+
+        You can also specify another function as the default parameter, 
+        meaning another function will be called when that parameter is not
+        specified in the original function call. 
+            function hello(name = goodbye()) {
+                console.log(name);
+            }
+                hello('Devin') -> Devin
+                hello() -> goodbye()
+        If you want to assign a default parameter later on in the function
+        body, you can do that in two ways: 
+            1. if (input == undefined){input = <default>;}
+
+            2. input = input || <default>;
+
+    Anonymous Functions
+        For example, say you are using an event listener to run some code
+        when the user types into a text box. This uses addEventListener(),
+        which expects two parameters: event to listen for, and function to
+        run when the event is observed. 
+
+        Before: 
+            function logKey(event) {
+                console.log(`You pressed "${event.key}".`);
+            }
+            textBox.addEventListener('keydown', logKey);
+
+        Now: 
+            textBox.addEventListener('keydown', function(event) {
+                console.log(`You pressed "${event.key}".`);
+            });
+    
+    Arrow Functions
+        If you're passing an anonymous function like this that only has
+        one line, you can instead use an arrowhead function.
+
+        Ex:
+            textBox.addEventListener('keydown', (event) => console.log
+            (`You pressed "${event.key}".`));
+
+    Scope
+        Scope is used for security concerns as well as organization. It
+        allows you to call external functions without potential
+        overlapping of variable names. 
+
+        Function Scope
+            When you create a function, the variables and other things 
+            defined inside that function are inside their own scope. This
+            means they are inside their separate compartment and will not
+            be accessible by code outside that function. They can, 
+            however, be used if they are outputted by the function. These
+            variables are called inner variables.
+        
+        Global Scope
+            Anything defined in this top level outside all the functions
+            is called the global scope and can be accessed from anywhere 
+            else in the code. These variables are called outer variables.
+
+            Note: Inner variables will override outer variables if a
+            function that has an inner variable with the same name is
+            called. Calls made to this variable before the function is
+            called will still use the outer variable.
+                Subnote: This only happens if the function directly calls
+                the outer variable. If you have let variable = 1; outside
+                the function, then have let variable = 2; inside the 
+                function, the outer variable will not be affected.
+
+    Function Syntax
+        Creating a function
+            function <functionName>(<paramater>)
+
+        Calling a function
+            <functionName>(<argument>)
+
+    Returning a value
+        If you use `return` without a value, it will exit the function
+
+        A function that returns nothing is the same as if it returned
+        undefined. alert(function(){empty} === undefined); //true
+
+        If you want your return statement to span multiple lines you must
+        put the statement inside paranthesis:
+            return (
+                long expression
+            )
+
+    Naming Functions
+        Functions are typically named with a short verbal prefix to 
+        quickly and briefly explain what the function does:
+            get_, calc_, create_, check_, show_
+
+        Functions should do what they are named to do and nothing else. It
+        is better to have many helper functions than one large function
+        with everything included
+            This lets you write what is essentially pseudocode at first 
+            while naming all of the other functions you need to reach
+            your end goal. Then you can go back and construct all of the
+            necessary helper functions.
+
+            Helper functions also basically serve as comments when you 
+            contruct your functions this way.
+
+Javascript Call Stack 
+    This is the system javascript uses to keep track of its place when
+    executing functions that invoke other functions. 
+
+    Follows the Last In, First Out principle
+        When a function is called, it goes to the top of the stack, the 
+        highest up functions are completed first, but if another function
+        is called within this one, it must complete that function first.
+
+    The call stack has a set size and will result in a stack overflow 
+    error when too many calls are made. This happens most frequently due
+    to recursive functions with no exit condition, or an exit condition 
+    that is never met.
+
+    Javascript is single threaded, meaning it only operates on one call 
+    stack at a time.
+
+    Asynchronous javascript is used to execute tasks while waiting for 
+    another task to be completed, this can be used for things like loading
+    a spinner while a page is gathering information.
+
+For Loop Syntax
+    for (let i=0; i <= max; i++){
+        console.log(i); //prints from 0 to max
+    }
+
+Errors 
+    Error example
+        Uncaught ReferenceError: c is not defined
+            at <anonymous>:1:13
+
+        ReferenceError - type of error
+            In this case, the message is `c is not defined`
+                This is because I attempted to reference variable `c` 
+                without defining it.
+
+            There are other messages you can get for ReferenceError
+                ex: ReferenceError: can't access lexical declaration 'X' 
+                before initialization
+
+        at <anonymous>:1:13
+            This is the location of the error, formatted as:
+                at <fileName>:[line]:[character]
+            
+
+
+
+        
+
+
+
+
+
+
