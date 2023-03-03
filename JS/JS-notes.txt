@@ -514,6 +514,15 @@ For Loop Syntax
     }
 
 Errors 
+    General Error Types
+        Syntax errors - usually from spelling errors, will almost always
+        throw an error that makes it easy to fix.
+
+        Logic errors - not as easy to catch, errors with your code's logic
+        may not throw any actual errors, instead just resulting in
+        incorrect outputs. Requires debugging and stepping through code to
+        find the error and fix it.
+        
     Error example
         Uncaught ReferenceError: c is not defined
             at <anonymous>:1:13
@@ -530,8 +539,28 @@ Errors
         at <anonymous>:1:13
             This is the location of the error, formatted as:
                 at <fileName>:[line]:[character]
-            
+        
+        Stack Trace 
+            ex: Uncaught ReferenceError: c is not defined
+                    at add (<anonymous>:5:3)
+                    at print (<anonymous>:9:3)
+                    at <anonymous>:12:1
 
+            This tells us that c is not defined in scope of add(), which
+            was called by print(), which was called on line 12
+        
+        Common Error Types
+            SyntaxError - code is not written correctly
+
+            ReferenceError - referencing something that does not exisit
+                usually from spelling error or changed variable name
+            
+            TypeError - thrown from many variable type related errors
+                - an operand or argument passed to a function is 
+                incompatible with the type expected by that operator or 
+                function
+                - when attempting to modify a value that cannot be changed
+                - when attempting to use a value in an inappropriate way
 
 
         
