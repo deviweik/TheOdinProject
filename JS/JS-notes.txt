@@ -522,7 +522,7 @@ Errors
         may not throw any actual errors, instead just resulting in
         incorrect outputs. Requires debugging and stepping through code to
         find the error and fix it.
-        
+
     Error example
         Uncaught ReferenceError: c is not defined
             at <anonymous>:1:13
@@ -562,8 +562,191 @@ Errors
                 - when attempting to modify a value that cannot be changed
                 - when attempting to use a value in an inappropriate way
 
+JavaScript Components (arrays, loops)
+    Arrays 
+        const array_name = [item1, item2, ...];   
+            If you declare with an array with const, you can add values to
+            the end of the array using array_name.push(item3);. But you 
+            cannot reassign values like this: array_name = [itemA, itemB];
 
+            In order to do that, you need to declare the array with let.
+
+        You can also declare arrays this way:
+            const array_name = new Array("item1", "item2", "item3");
+
+        Arrays are indexed from 0 with brackets:
+            console.log(array_name[1]); // "item2"
+
+            You can also change values by setting the index = new value:
+                array_name[0] = "itemA";
+                
+                Be careful setting values at high indicies, you will
+                create undefined "holes" in arrays if you assign a 
+                value at an index greater than array.length
+            
+        console.log(typeof myArray); // object
+            Arrays are objects but they're kind of in their own class.
+
+            Arrays are basically objects that use numbers instead of names
+            to access its content.
+
+            Array Format:
+                const person = ["John", "Doe", 46];
+
+            Object Format: 
+                const person = {firstName:"John", lastName:"Doe", age:46};
+
+        You can store objects in arrays, you can also store other arrays 
+        and functions as well.
+
+        Array Properties/Methods
+            array_name.length // returns number of elements
+                you can access last array element with [array.length - 1]
+            
+            array_name.sort() // sorts array
+
+            .forEach - can use this instead of a for loop
+                const fruits = ["Banana", "Orange", "Apple", "Mango"];
+
+                let text = "<ul>";
+                fruits.forEach(myFunction);
+                text += "</ul>";
+
+                function myFunction(value) {
+                text += "<li>" + value + "</li>";
+                }
+            
+            .push() - add element to array (also returns new array length)
+                can also add like this:
+                    array_name[array_name.length] = "item"
+
+            .pop() - remove last element from array (also returns this 
+            value)
+
+            .shift() - same as pop() but removes first array element
+
+            .unshift() - same as push() but adds to the beginning of array
+
+            .slice(start_index, stop_index) - selects elements from array
+            from start_index UP TO stop_index (value at stop_index NOT 
+            included)
+                The slice method doesn't affect the original array, just
+                creates a new array with the selected elements
+
+            .splice(indexToAddFrom, #elementsToRemove, item1, item2)
+                so .splice(2, 0, item1, item2) would remove 0 items and 
+                add item1 and item2 at index 2 and index 3, shifting the
+                other elements down
+
+                splice changes the existing array directly and returns an
+                array with the deleted elements (if any).
+
+                you can also just remove elements with splice() similar to
+                shift. .splice(0, 1) will just remove the first value
+
+            .toString() - converts array to a comma-separated list
+
+            .join(", ") - does the same thing but lets you specify the 
+            separator
+
+            .concat - let newArray = array1.concat(array2); 
+                does not change existing array, creates a new one
+                
+                concat() can take any number of array arguments
+
+                it can also take strings and function similarly to push()
+
+    Loops 
+        Tasks loops are good for:
+            Repetetive tasks - ex: draw 100 cirlces
+
+            looping through a collection (for...of loop)
+                const myArray = ["one", "two", "three"];
+
+                for (const item of myArray) {
+                    console.log(item);
+                }
+
+                //output: one; two; three;
+
+        map() - run code on each item of a collection and create new 
+        collection with the changed items
+            ex:
+            function toUpper(string) {
+                return string.toUpperCase();
+            }
+
+            const cats = ['Leopard', 'Serval', 'Jaguar', 'Tiger', 'Caracal', 'Lion'];
+
+            const upperCats = cats.map(toUpper);
+
+            console.log(upperCats);
+            // [ "LEOPARD", "SERVAL", "JAGUAR", "TIGER", "CARACAL", "LION" ]
+
+        filter() - similar to map() but creates a new collection with all
+        items that match the criteria.
+            function lCat(cat) {
+                return cat.startsWith('L');
+            }
+
+            const cats = ['Leopard', 'Serval', 'Jaguar', 'Tiger', 'Caracal', 'Lion'];
+
+            const filtered = cats.filter(lCat);
+
+            console.log(filtered);
+            // [ "Leopard", "Lion" ]
         
+            same example with function expression:
+                const cats = ['Leopard', 'Serval', 'Jaguar', 'Tiger', 'Caracal', 'Lion'];
+
+                const filtered = cats.filter((cat) => cat.startsWith('L'));
+                console.log(filtered);
+                // [ "Leopard", "Lion" ]
+
+        Break statement
+            If you want to exit a loop before all iterations are complete,
+            you can exit with `break;`
+
+            Usually these will be contained within if/switch statements 
+            that will break out of the loop when those conditions are 
+            met.
+
+        Continue statement
+            similar to break except it will just skip to the next 
+            iteration. 
+
+        While loop 
+            syntax:
+                while (condition) {
+                    //code to run
+                }
+
+            do...while loop syntax:
+                do {
+                    //code to run 
+                } while (condition)
+
+            While loops are much easier to accidentally create infinite
+            loops. Always need to make sure you increment (or decrement)
+            the initializer
+
+        What loop should you use?
+            1. Need access to index/counter number -> for, while, or 
+            do...while
+            2. Don't need access to index/counter number -> for...of
+                using this method when you don't need to use the index of 
+                the object element is always preferred, helps limit 
+                potential for errors like not incrementing the counter or 
+                not initializing from 0.
+
+Test Driven Development
+    A good practice in the dev world is to first write automated tests for
+    your programs before writing the actual program. The tests should use
+    the function and see if it outputs the correct value. 
+
+    
+
+    
 
 
 
