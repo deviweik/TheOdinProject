@@ -291,7 +291,7 @@ Data Types
         typeof null will return object (this is an error but is kept for
         compatibility)
 
-Comparisons
+Operators/Comparisons
     Comparing Strings 
         Strings are compared by looking at individual characters, for
         string1 > string2, if the first character in string1 is greater
@@ -633,7 +633,7 @@ JavaScript Components (arrays, loops)
                 The slice method doesn't affect the original array, just
                 creates a new array with the selected elements
 
-            .splice(indexToAddFrom, #elementsToRemove, item1, item2)
+            .splice(indexToStartFrom, numOfElementsToRemove, item1, item2)
                 so .splice(2, 0, item1, item2) would remove 0 items and 
                 add item1 and item2 at index 2 and index 3, shifting the
                 other elements down
@@ -744,7 +744,7 @@ Test Driven Development
     your programs before writing the actual program. The tests should use
     the function and see if it outputs the correct value. 
 
-    
+
 
     
 
