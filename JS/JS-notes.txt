@@ -744,8 +744,292 @@ Test Driven Development
     your programs before writing the actual program. The tests should use
     the function and see if it outputs the correct value. 
 
+DOM Manipulation and Events 
+    DOM - Document Object Model 
+        Tree-like representation of the contents of a webpage.
 
+        Tree of "nodes" with different relationships depending on how they
+        are arranged in the HTMl document.
 
+        You can think of it like a bunch of divs in an HTML document with
+        parnet, child, and sibling relationships.
+
+        HTML code is converted to the DOM when it is parsed by a web 
+        browser. The nodes have many properties and methods attached that
+        we can use with javascript.
+
+    Targeting Nodes with Selectors
+        Review CSS-notes.txt for this, but there are a number of different
+        ways you can use CSS to reference nodes.
+
+    DOM Methods
+        Query Selectors
+            element.querySelector(selector) - returns a reference to 
+            the first match of selector
+
+            element.querySelectorAll(selectors) - returns a "nodelist" of
+            references to all matches of the selectors
+                This "nodelist" resembles an array but it is not one. 
+                Mostly important because it is missing many array methods.
+                
+                You can convert a nodelist to an array using Array.from()
+        
+        Element Creation 
+            document.createElement(tagName, [options])
+                ex: const div = document.createElement('div');
+
+                Creates a new element with tag `tagName`, [options] gives 
+                you some optional parameters to worry about later.
+
+                This DOES NOT place the element in the DOM, just creates 
+                it in memory. See appending below
+
+        Append Elements
+            parentNode.appendChild(childNode)
+                Appends childNode as the last child of parentNode
+            
+            parentNode.insertBefore(newNode, referenceNode)
+                Inserts newNode into parentNode before referenceNode.
+
+        Remove Elements
+            parentNode.removeChild(child)
+                Removes child from parentNode on the DOM and returns a 
+                reference to child.
+            
+        Altering Elements
+            You can make many changes to an element once you have a 
+            reference to it.
+
+            Getting a reference: 
+                const div = document.createElement('div');                     
+                // creates a new div referenced in the variable 'div'
+            
+            Adding Inline Style
+                div.style.color = 'blue';
+
+                div.style.cssText = 'color: blue; background: white;';
+
+                div.setAttribute('style', 'color: blue; background: white;');
+
+                Note: 'background-color' (with a hyphen) is how CSS labels
+                its attributes, but you have to use camelCase to access 
+                CSS attributes. You can also use bracket notation instead 
+                of dot notation.
+                    Doesn't work: div.style.background-color
+                    Does work: div.style.backgroundColor
+                    Does work: div.style.['background-color']
+                    Does work: div.style.cssText = "background-color: white;" 
+                
+            Editing Attributes 
+                div.setAttribute('id', 'theDiv');                              
+                // if id exists, update it to 'theDiv', else create an id
+                // with value "theDiv"
+
+                div.getAttribute('id');                                        
+                // returns value of specified attribute, in this case
+                // "theDiv"
+
+                div.removeAttribute('id');                                     
+                // removes specified attribute
+
+            Working with Classes
+                div.classList.add('new');                                      
+                // adds class "new" to your new div
+
+                div.classList.remove('new');                                   
+                // removes "new" class from div
+
+                div.classList.toggle('active');                                
+                // if div doesn't have class "active" then add it, or if
+                // it does, then remove it
+
+                Note: It is generally cleaner/preferred to toggle a CSS 
+                class rather than adding/removing inline CSS
+            
+            Adding Text Content
+                div.textContent = 'Hello World!'                               
+                // creates a text node containing "Hello World!" and
+                // inserts it in div
+
+            Adding HTML Content
+                div.innerHTML = '<span>Hello World!</span>';                   
+                // renders the HTML inside div
+
+                Note: Using div.textContent is preferred, using innerHTML
+                can lead to security risks somehow if misused.
+            
+            Example:
+                <!-- your HTML file: -->
+                <body>
+                <h1>
+                    THE TITLE OF YOUR WEBPAGE
+                </h1>
+                <div id="container"></div>
+                </body>
+
+                // your JavaScript file
+                const container = document.querySelector('#container');
+
+                const content = document.createElement('div');
+                // create new div, store reference in content variable
+
+                content.classList.add('content');
+                // adds class 'content' to new div 
+
+                content.textContent = 'This is the glorious text-content!';
+                // adds textContent to new div
+
+                container.appendChild(content);
+                // append new div to existing container div
+
+                New DOM Tree:
+                <!-- The DOM -->
+                <body>
+                <h1>
+                    THE TITLE OF YOUR WEBPAGE
+                </h1>
+                <div id="container">
+                    <div class="content">
+                    This is the glorious text-content!
+                    </div>
+                </div>
+                </body>
+
+                Note: Javascript will not alter your HTML code at all, it
+                will only make changes to the DOM
+
+    Adding JS to your HTML
+        If you add your JS to your HTML file in the body before the nodes 
+        are created in the DOM, none of your DOM manipulation methods will
+        work. You can solve this by linking your JS file at the bottom of 
+        the HTML body or by linking it in the HTML <head> like this:
+            <head>
+                <script src="js-file.js" defer></script>
+            </head>
+            (the `defer` keyword is what tells the browser to load the JS
+            file after the HTML is parsed.) 
+
+    Events
+        Events are actions that occur on webpages such as mouse-clicks or
+        keypresses. We can make the webpage listen and react to these 
+        events using JS.
+
+        Three Methods:  1. specify directly on HTML elements
+                        2. set properties on the DOM nodes in JS
+                        3. Attach event listeners to DOM nodes in JS
+            Method 1.
+                <button onclick="alert('Hello World')">Click Me</button>
+
+                Not an ideal solution because we clutter the HTML file 
+                with javascript. Also limits our usage to one property per 
+                DOM element per click which would make things even more 
+                messy/complicated.
+            
+            Method 2.
+                <!-- the HTML file -->
+                <button id="btn">Click Me</button>
+
+                // the JavaScript file
+                const btn = document.querySelector('#btn');
+                btn.onclick = () => alert("Hello World");
+
+                This solution is cleaner for the HTML file, but still has 
+                the issue of only being able to have one `onclick`
+                property.
+            
+            Method 3. (preferred)
+                <!-- the HTML file -->
+                <button id="btn">Click Me Too</button>
+
+                // the JavaScript file
+                const btn = document.querySelector('#btn');
+                btn.addEventListener('click', () => {
+                alert("Hello World");
+                });
+
+            Summary/example:
+                <!-- the HTML file -->
+                <!-- METHOD 1 -->
+                <button onclick="alertFunction()">CLICK ME BABY</button>
+
+                // the JavaScript file
+                function alertFunction() {
+                alert("YAY! YOU DID IT!");
+                }
+
+                // METHOD 2
+                btn.onclick = alertFunction;
+
+                // METHOD 3
+                btn.addEventListener('click', alertFunction);
+        
+        Attaching Listeners to Groups of Nodes
+            You can make use of the querySelectorAll() function to get a 
+            nodelist which you can iterate through and add event listeners
+            to multiple elements that match the selector(s) in the 
+            original selection.
+                Example:
+                HTML
+                <div id="container">
+                    <button id="1">Click Me</button>
+                    <button id="2">Click Me</button>
+                    <button id="3">Click Me</button>
+                </div>
+
+                Javascript
+                // buttons is a node list. It looks and acts much like an array.
+                const buttons = document.querySelectorAll('button');
+
+                // we use the .forEach method to iterate through each button
+                buttons.forEach((button) => {
+
+                    // and for each one we add a 'click' listener
+                    button.addEventListener('click', () => {
+                        alert(button.id);
+                    });
+                });
+        
+        Other Events you can Listen for
+            click, dblclick, keydown, keyup, drag, error, input, invalid, 
+            load, mousedown, mouseenter, mouseleave, scroll, wheel, 
+            select (many more here 
+            https://www.w3schools.com/jsref/dom_obj_event.asp)
+
+        Wes Bos - Event Capture, Propagation, and Bubbling
+            Bubbling - when you click on an element, you are also clicking
+            on the element that contains that one, and the element that 
+            contains the containing element, and the one containing that 
+            element, and the HTML tag, and the browser window, etc.
+                It registers clicks on elements from the top down. 
+                After capturing all of the clicks by bubbling down, it 
+                will start triggering events associated with those clicks 
+                by bubbling up. (so the deepest cascaded element you click 
+                on will have its event triggered first)
+
+            capture: true - this is an option that tells the event 
+            listener to trigger its action while bubbling down, instead of
+            waiting to bubble back up. (defaults to false)
+                ex: 
+                divs.forEach(div => div.addEventListener('click', 
+                function, {
+                    capture: true
+                }));
+
+            e.stopPropagation(); - stopPropagation is an event method that
+            you can use to tell your event to not bubble up after clicking
+            on an element. So this will only trigger events associated 
+            with the element you act on directly, and not its containing 
+            element(s).
+                You can also use this with capture: true to only trigger
+                the outer-most containing element.
+
+                Or you can just use an if statement to stop it on the 
+                element you want.
+
+            once: true - another useful eventListener option, this will 
+            cause the eventListener to remove itself after being clicked
+            the first time.
+        
     
 
 
