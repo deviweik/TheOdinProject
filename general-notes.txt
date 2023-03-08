@@ -1,5 +1,46 @@
 TheOdinProject Notes
 
+Git
+    Commits
+        git add .
+
+        git commit .
+
+        git push
+
+    Branches
+        git branch <branch_name> 
+            creates a new branch
+        
+        git checkout <branch_name>
+            change branches
+        
+        git checkout -b <branch_name>
+            create and change branch on one line
+
+        git push origin <branch_name>
+            push new branch to github
+
+        git branch
+            shows all current branches
+
+        git checkout main  
+            go back to main branch
+
+        git merge <branch_name> 
+            Merge the changes you made on <branch_name> into your current 
+            branch (usually should be main)
+        
+        git branch -d <branch_name> 
+            delete branch after you've merged its changes and don't need 
+            it anymore. (-d will only delete after branch has been fully
+            merged)
+
+        git branch -D <branch_name> 
+            If you haven't already merged the changes from a branch and 
+            don't plan to, you can use this to force delete the branch.
+
+
 Problem Solving
     Understand the Problem
         - Don't waste time on the wrong solution
