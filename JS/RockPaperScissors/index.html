@@ -4,10 +4,73 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rock, Paper, Scissors</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src = "./rps.js" defer></script>
 </head>
+
 <body>
-    <script src = "./rps.js"></script>
+    <!-- needs:
+            3 buttons
+                rock
+                paper
+                scissors
+
+                per button
+                    event listener for clicks
+                    calls playRound function with correct playerSelection
+            
+            div for displaying results
+                show running score
+                announce winner of game once 5 points reached 
+    -->
+    <div class="header" id="main-header">
+        <h1 class="header-title" id="title1">Welcome to...</h1>
+        <div class="header-title" id="title2">
+            <h1 class="header-title-spacing" id="header-rock-title">Rock,</h1>
+            <h1 class="header-title-spacing" id="header-paper-title">Paper,</h1>
+            <h1 class="header-title-spacing" id="header-scissors-title">Scissors</h1>
+        </div>
+    </div>
+    <div class="container" id="main-container">
+        <div class="left" id="main-left">
+            <div class="button-container" id="btn-container-left">
+                <button class="element-button" id="player-scissors">Scissors</button>
+                <button class="element-button" id="player-paper">Paper</button>
+                <button class="element-button" id="player-rock">Rock</button>
+            </div>
+            <img class="selection-photo" id="player-selection-photo" src="./Images/rps_player.jpeg"></img>
+        </div>
+        <div class="center" id="main-center">
+            <div class="center-content" id="scoreboard">
+                <h3 class="scoreboard" id="scoreboard-title">Scoreboard</h3>
+                <div class="scoreboard-content" id="scoreboard-names">
+                    <p class="scoreboard-score" id="player-name"></p>
+                    <p class="scoreboard-score" id="comp-name"></p>
+                </div>
+                <div class="scoreboard-content" id="scoreboard-scores">
+                    <p class="scoreboard-score" id="player-score"></p>
+                    <p class="scoreboard-score" id="comp-score"></p>
+                </div>
+            </div>
+            <div class="center-content" id="winner">
+
+            </div>
+            <div class="center-content" id="settings">
+                <button class="settings-button" id="new-game">New Game</button>
+                
+            </div>
+        </div>
+        <div class="right" id="main-right">
+            <img class="selection-photo" id="comp-selection-photo" src="./Images/rps_comp.jpeg"></img>
+            <div class="button-container" id="btn-container-right">
+                <p class="element-button" id="comp-scissors">Scissors</p>
+                <p class = "element-button" id="comp-paper">Paper</p>
+                <p class="element-button" id="comp-rock">Rock</p>
+            </div>
+        </div>
+    </div>
     
 </body>
+
 </html>
