@@ -32,13 +32,16 @@ Git
             branch (usually should be main)
         
         git branch -d <branch_name> 
-            delete branch after you've merged its changes and don't need 
+            delete branch (locally) after you've merged its changes and don't need 
             it anymore. (-d will only delete after branch has been fully
             merged)
 
         git branch -D <branch_name> 
             If you haven't already merged the changes from a branch and 
             don't plan to, you can use this to force delete the branch.
+
+        git push --delete origin <branch_name>
+            Delete branch from remote repo on github as well.
 
 
 Problem Solving
