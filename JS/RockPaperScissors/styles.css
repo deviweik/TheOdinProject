@@ -52,8 +52,13 @@ p.element-button {
     background-color: #a2b1e6 ;
 }
 
-button.element-button:hover {
+button.element-button:not(:disabled):hover {
     background-color:  #da7575;
+}
+
+button.element-button:disabled {
+    background-color:  #bebebe;
+    color: black;
 }
 
 .center {
@@ -116,8 +121,21 @@ p.scoreboard-score {
     padding: 1rem;
     border: 2px solid black;
     background-color: #0ea22174;
+    font-size: 24px;
 }
 
-.settings-button:hover {
+.settings-button:not(:disabled):hover {
     background-color: #0ea222c6;
+}
+
+.image-container {
+    min-width: 350px;
+    min-height: 700px;
+    justify-content: center;
+}
+
+.single-image {
+    flex-grow: 0;
+    max-height: 300px;
+    margin: 4rem 0;
 }
