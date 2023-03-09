@@ -1,0 +1,8 @@
+[submodule "JS/EventListenerExercises"]
+    path = JS/EventListenerExercises
+    url = https://github.com/wesbos/JavaScript30
+
+[submodule "JS/javascript-exercises"]
+    path = JS/javascript-exercises
+    url = https://github.com/TheOdinProject/javascript-exercises
+
