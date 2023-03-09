@@ -1,3 +1,7 @@
+window.addEventListener('load', function () {
+    localStorage.clear(); //clears playerName from local storage on page load so new player can enter name.
+  });
+
 const choices = ["rock", "paper", "scissors"];
 
 function getUserChoice() {
@@ -67,6 +71,9 @@ function game() {
     let nameInput = localStorage.getItem("playerName"); // try to get the name from localStorage
     if (!nameInput && gameCount === 0) { // if it's not in localStorage and it's the first game
         nameInput = prompt("Welcome to Rock, Paper, Scissors. \nWhat is your name?");
+        if (nameInput == null) {
+            nameInput = "Player";
+        }
         localStorage.setItem("playerName", nameInput); // save the name to localStorage
     }
     const playerName = document.getElementById("player-name");
