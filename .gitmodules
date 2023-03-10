@@ -6,3 +6,6 @@
     path = JS/javascript-exercises
     url = https://github.com/TheOdinProject/javascript-exercises
 
+[submodule "JS/etch-a-sketch"]
+	path = JS/etch-a-sketch
+	url = git@github.com:deviweik/etch-a-sketch.git
