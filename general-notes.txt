@@ -1,5 +1,50 @@
 TheOdinProject Notes
 
+HTML
+    <input> element
+        type attribute `<input type='x'>`
+
+            text: A single-line text input field.
+            password: A single-line text input field where the input is obscured, usually for password entry.
+            checkbox: A checkbox input field that can be checked or unchecked.
+            radio: A set of radio buttons, where only one option can be selected.
+            submit: A button that submits the form to the server.
+            reset: A button that resets the form to its default values.
+            button: A button that can trigger a custom action, such as opening a modal or navigating to a different page.
+            color: A control for selecting a color from a color picker.
+            date: A control for selecting a date, displayed as a calendar widget.
+            datetime-local: A control for selecting a date and time, displayed as a date and time picker.
+            email: A single-line text input field for email addresses, with built-in validation to ensure that the input is a valid email address.
+            file: A control for selecting a file from the user's device.
+            hidden: A hidden input field that can be used to store data that is not displayed to the user.
+            image: A button that displays an image and submits the form when clicked.
+            month: A control for selecting a month, displayed as a dropdown list of months.
+            number: A control for entering a number, with built-in validation to ensure that the input is a number.
+            range: A control for selecting a value from a range of values, displayed as a slider.
+            search: A single-line text input field for entering search terms.
+            tel: A single-line text input field for telephone numbers.
+            time: A control for selecting a time, displayed as a time picker.
+            url: A single-line text input field for URLs, with built-in validation to ensure that the input is a valid URL.
+            week: A control for selecting a week, displayed as a dropdown list of weeks.
+            form: Used to specify the ID of the form that the input element belongs to. Example: form="my-form"
+
+        value: Specifies the initial value of the input element. Example: value="john.doe@example.com"
+
+        disabled: Specifies whether the input element is disabled, meaning that the user cannot interact with it. Example: disabled
+
+        placeholder: Specifies a short hint that describes the expected value of the input element. Example: placeholder="Enter your email address"
+
+        size: Specifies the width of the input element, measured in characters. Example: size="30" or size="100x100" for images
+
+        maxlength: Specifies the maximum number of characters that the user can enter into the input element. Example: maxlength="100"
+
+        `min` and `max`: Used with the number, range, date, datetime-local, month, time, and week input types
+
+        multiple: allows multiple uploads on file input type
+
+
+
+
 Git
     Commits
         git add .
