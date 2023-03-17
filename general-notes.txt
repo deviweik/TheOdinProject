@@ -92,7 +92,7 @@ Git
             Adding a Submodule
                 - Create repository
                 - navigate to desired parent folder
-                - git submodule add <ssh link to repo>
+                - git submodule add --init <ssh link to repo>
 
             Removing a Submodule
                 # Remove the submodule entry from .git/config
