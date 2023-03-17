@@ -508,7 +508,6 @@ Javascript Call Stack
     another task to be completed, this can be used for things like loading
     a spinner while a page is gathering information.
 
-For Loop Syntax
     for (let i=0; i <= max; i++){
         console.log(i); //prints from 0 to max
     }
@@ -562,7 +561,7 @@ Errors
                 - when attempting to modify a value that cannot be changed
                 - when attempting to use a value in an inappropriate way
 
-JavaScript Components (arrays, loops)
+Arrays + Loops
     Arrays 
         const array_name = [item1, item2, ...];   
             If you declare with an array with const, you can add values to
@@ -1031,10 +1030,229 @@ DOM Manipulation and Events
             once: true - another useful eventListener option, this will 
             cause the eventListener to remove itself after being clicked
             the first time.
+    
+Objects
+    Store keyed collections of various data and more complex entities
+
+    Syntax 
+        let user = new Object(); // "object constructor" syntax
+        let user = {};  // "object literal" syntax
+
+        let user = {
+            name: "John",
+            age: 30 
+        }; // `property: value` separated by commas
+            value can be any data type (including another object)
+
+        The last property can also end with a comma, just to make it 
+        easier to add/remove/modify properties
+
+    Referencing values:
+        alert(user.name); //John
+
+    Removing a property
+        delete user.age; // deletes "30"
+
+    Can also use multiword property names, but they must be quoted
+        let user = {
+        name: "John",
+        age: 30,
+        "likes birds": true  // multiword property name must be quoted
+        };
+
+        however, those won't work with dot notation, have to use brackets
+        instead:
+            alert(user["likes birds"]); // true
+
+    You can also use bracket notation to access properties with keys:
+        let user = {
+        name: "John",
+        age: 30
+        };
+
+        let key = prompt("What do you want to know about the user?", "name");
+
+        // access by variable
+        alert( user[key] ); // John (if enter "name")
+
+        This example shows getting a key from a prompt, but you could also
+        get keys from another function or some other source, very flexible
+
+        (this will not work with dot notation)
+
+    You can use this method in object literals as well, when creating an 
+    object 
+        let fruit = prompt("Which fruit to buy?", "apple");
+
+        let bag = {
+        [fruit]: 5, // the name of the property is taken from the variable fruit
+        };
+
+        alert( bag.apple ); // 5 if fruit="apple"
+    
+        Can also make more complex expressions 
+            let fruit = 'apple';
+            let bag = {
+            [fruit + 'Computers']: 5 // bag.appleComputers = 5
+            };
+    
+    Summary
+        Dot notation - easier to use, less functionality
+
+        Bracket notation - much greater functionality, slightly more code 
+        to write
+    
+    Property Value Shorthand
+        ex:
+            function makeUser(name, age) {
+            return {
+                name: name,
+                age: age,
+                // ...other properties
+            };
+            }
+
+            let user = makeUser("John", 30);
+            alert(user.name); // John
+
+        This can just be written as:
+            function makeUser(name, age) {
+            return {
+                name, // same as name: name
+                age,  // same as age: age
+                // ...
+            };
+            }
+
+        It is so common that properties are given the same names as 
+        variables that contain the values that a shorthand was 
+        implemented that just takes the variable name.
+
+    "in" operator  
+        Essentially, the in operator does this:
+            let user = {};
+            alert( user.noSuchProperty === undefined ); // true means "no such property"
         
+        Syntax:
+            "key" in object
+
+        ex:
+            let user = { name: "John", age: 30 };
+
+            alert( "age" in user ); // true, user.age exists
+            alert( "blabla" in user ); // false, user.blabla doesn't exist
+
+            Usually the property (left of in) will be a quoted string, but
+            you can also use a variable with the property name:
+                let key = "age";
+                alert( key in user )
+
+        The reason it's better to use "in" than the first alternative, is 
+        the method originally proposed will show the same result if the 
+        property does exist but is storing `undefined`
+
+    "for ... in" loop   
+        for (key in object) {
+            //executes body for each key
+        }
+
+        ex: 
+            let user = {
+            name: "John",
+            age: 30,
+            isAdmin: true
+            };
+
+            for (let key in user) { //key can be any new variable name
+            // keys
+            alert( key );  // name, age, isAdmin
+            // values for the keys
+            alert( user[key] ); // John, 30, true
+            }
+
+    Ordering in Objects
+        Objects have special ordering: integer properties are sorted in 
+        ascending order, but others appear in creation order
+            Keep in mind, the integers are still stored as strings as an 
+            object property, but any property name that can be converted 
+            to and from an integer without change is called an integer
+            property
+                You can use this to prevent numbers from sorting if you 
+                don't want them to, like for example adding a "+" in front
+                of phone numbers if you want to keep them in their
+                creation order.
+
+    Special Objects: Array, Date, Error
+        (not formal types, even though some people may call them that)
+        
+Array Methods
+    See TheOdinProject/JS/EventListenerExercises/04 for exercises using 
+    all these methods
+
+    Array.prototype.filter()
+        ex: const fifteen = inventors.filter(inventor => (inventor.year >= 1500 && inventor.year < 1600));
+        
+        sort object using boolean statement. Evaluate one by one with 
+        function (or use arrow function like example)
+
+    Array.prototype.map()
+        ex: const fullNames = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
+            this example creates a new array from an object `inventors` 
+            with the first and last names of each inventor.
+
+        Allows you to create a new array by applying a function to each 
+        element in an existing array.
+        
+    Array.prototype.sort()
+        ex: const ordered = inventors.sort(function(firstPerson, secondPerson) {
+            if(firstPerson.year > secondPerson.year) {
+                return 1;
+            } else {
+                return -1;
+            }
+            })
+
+        By default, this will sort the elements in ascending order based 
+        on their string Unicode values. 
+
+        Double check this, but my understanding is that the function 
+        basically works by comparing each element to it's neighbor one at 
+        a time until each is in the correct position. 
+        That is why the example is formatted in that way with returning 
+        1 or -1 for move to higher index or move to lower index.
+
+    Array.prototype.reduce()
+        syntax: array.reduce(callbackFunction, initialValue) 
+        [initial value is an optional parameter]
+
+        Allows you to iteratively reduce an array to a single value using 
+        a callback function
+
+        The callback function should take two parameters, an accumulator 
+        and the current element being iterated over. 
+            accumulator- the value being updated on each iteration and 
+            what will likely be returned eventually
+
+        If initialValue is not provided, it will use the first element
+        of the array as the initial value of the accumulator
+
+        ex: 
+            const totalYears = inventors.reduce((total, inventor) => {
+            return total + (inventor.passed - inventor.year);
+            }, 0);
+
+            in this example, we use the reduce method to add up all of the
+            years that each of the inventors lived, using their birth year
+            and death year.
+
+    There are more examples on the exercise mentioned above.
+        
+        
+
+
     
 
-
+    
 
 
 
