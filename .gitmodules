@@ -9,3 +9,7 @@
 [submodule "JS/etch-a-sketch"]
 	path = JS/etch-a-sketch
 	url = git@github.com:deviweik/etch-a-sketch.git
+
+[submodule "JS/calculator"]
+	path = JS/calculator
+	url = git@github.com:deviweik/calculator.git
