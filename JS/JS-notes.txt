@@ -1247,7 +1247,19 @@ Array Methods
 
     There are more examples on the exercise mentioned above.
         
-        
+    Array.prototype.some()
+        Checks if at least 1 element of the array meets the provided 
+        criteria.
+
+    Array.prototype.every()
+        Checks if every element of the array meets the provided criteria
+
+    Array.prototype.find()
+        Finds the first element that matches the criteria
+
+    Array.prototype.findIndex()
+        Finds the first element that matches the criteria and returns it's
+        index
 
 
     
