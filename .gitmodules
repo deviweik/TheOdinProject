@@ -13,3 +13,6 @@
 [submodule "JS/calculator"]
 	path = JS/calculator
 	url = git@github.com:deviweik/calculator.git
+[submodule "Ruby/Ruby/ruby-exercises"]
+	path = Ruby/Ruby/ruby-exercises
+	url = https://github.com/TheOdinProject/ruby-exercises.git
