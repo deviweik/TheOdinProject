@@ -1,0 +1,535 @@
+Syntax
+  tab - 2 spaces
+
+  comments - `# this is a comment`
+
+  always use snake_case for variables, methods, and files
+
+  Use PascalCase (camelCase with first word capitalized as well) for 
+  declaring class names
+
+  semicolons are never required in Ruby, but they allow you to write 
+  multiple lines of code on one line.
+
+  Constant variables - all caps 
+    FOUR = 'four'
+    FIVE = 5
+
+  puts vs return
+    Every expression (pretty much anything written in Ruby) will return 
+    something. It may return an error or nil, but it will return something.
+
+    puts - telling Ruby to print something to the screen, but puts will not 
+    return that value. It returns nil instead
+      ex:
+        > a = puts "stuff"
+        "stuff"
+        => nil
+        > puts a 
+        # blank space here from printing `nil`
+        => nil
+
+  Tips on reading documentation pages:
+    https://launchschool.com/books/ruby/read/preparations#usingacodeeditor
+  
+Data Types
+  Numbers, Strings, Symbols, Booleans, Literals, Basic Data Structures (
+  arrays, hashes)
+
+  Numbers 
+    Operators
+      +, -, *, /, modulus: %, exponent: **
+
+      Equality - Ruby uses `==` for equality comparisions, returns T/F
+        Like === in JS, == in Ruby will return false if the operands' types
+        are different, ex: '4' == 4 => false
+
+    Number Types
+      Integers: whole Numbers
+        arithmetic with integers will always result in an integer
+      Floats: decimals
+
+      Converting Number Types
+        # To convert an integer to a float:
+        13.to_f   #=> 13.0
+
+        # To convert a float to an integer:
+        13.0.to_i #=> 13
+        13.9.to_i #=> 13
+        # As shown here, it will simply cut off the decimal, no rounding
+
+        Some interesting details on string -> number conversions
+          irb :001 > '4'.to_i
+          => 4
+
+          irb :002 > '4 hi there'.to_i
+          => 4
+
+          irb :003 > 'hi there 4'.to_i
+          => 0
+
+          irb :004 > '4'.to_f
+          => 4.0
+
+          irb :005 > '4 hi there'.to_f
+          => 4.0
+
+          irb :006 > 'hi there 4'.to_f
+          => 0.0
+      
+    Number Methods 
+      #even? and #odd?
+        6.even? # => true
+        6.odd? # => false
+
+      Remainder Methods
+        #remainder - computes and returns the remainder of an integer 
+        division operation
+          16.remainder(5) => 1
+        
+        #divmod - computes both the integer result and the modulo value
+          16.divmod(5) => [3,1]
+
+        Modulo vs remainder operations
+          Modulo - returns a positive integer when the 2nd operand is 
+          positive, and a negative integer when the 2nd operand is negative
+
+          Remainder ops- return a + integer when the 1st operand is +, a 
+          - integer when the 1st operand is negative.
+
+          Only matters if you need to use negative integers with these 
+          functions for some reason, so best practice is to try to only
+          use positive integers if possible.
+    
+  Strings
+    Syntax
+      Like JS, can use single or double quotation marks
+      Difference: string interpolation and escape characters will only work
+      inside double quotation marks
+
+    Concatenation
+      # With the plus operator:
+      "Welcome " + "to " + "Odin!"    #=> "Welcome to Odin!"
+
+      # With the shovel operator:
+      "Welcome " << "to " << "Odin!"  #=> "Welcome to Odin!"
+
+      # With the concat method:
+      "Welcome ".concat("to ").concat("Odin!")  #=> "Welcome to Odin!"
+
+      Note: adding numbers as strings will result in string concatenation 
+        '1' + '1' => '11'
+
+      Unlike JS, you cannot add a number to a string or vice versa.
+        'one' + 1 => error
+        1 + 'one' => error
+        1 + '1' => error
+        1 + '1'.to_i => 2
+        1.to_s + '1' => "11"
+
+    Substrings
+      "hello"[0]      #=> "h"
+
+      "hello"[0..1]   #=> "he"
+
+      "hello"[0, 4]   #=> "hell"
+
+      "hello"[-1]     #=> "o"
+
+    Escape Characters 
+      \\  #=> Need a backslash in your string?
+      \b  #=> Backspace
+      \r  #=> Carriage return, for those of you that love typewriters
+      \n  #=> Newline. You'll likely use this one the most.
+      \s  #=> Space
+      \t  #=> Tab
+      \"  #=> Double quotation mark
+      \'  #=> Single quotation mark
+
+    Interpolation - evaluating strings with placeholder variables
+      name = "Odin"
+
+      puts "Hello, #{name}" #=> "Hello, Odin"
+      puts 'Hello, #{name}' #=> "Hello, #{name}"
+
+    String Methods
+      #capitalize
+        "hello".capitalize #=> "Hello"
+
+      #include?
+        "hello".include?("lo")  #=> true
+
+        "hello".include?("z")   #=> false
+      
+      #upcase
+        "hello".upcase  #=> "HELLO"
+
+      #downcase
+        "Hello".downcase  #=> "hello"
+
+      #empty?
+        "hello".empty?  #=> false
+
+        "".empty?       #=> true
+
+      #length
+        "hello".length  #=> 5
+
+      #reverse
+        "hello".reverse  #=> "olleh"
+
+      #split
+        "hello world".split  #=> ["hello", "world"]
+
+        "hello".split("")    #=> ["h", "e", "l", "l", "o"]
+
+      #strip
+        " hello, world   ".strip  #=> "hello, world"
+
+      These are only a few examples, here are some more to show the 
+      possibilities with ruby:
+        "he77o".sub("7", "l")           #=> "hel7o"
+
+        "he77o".gsub("7", "l")          #=> "hello"
+
+        "hello".insert(-1, " dude")     #=> "hello dude"
+
+        "hello world".delete("l")       #=> "heo word"
+
+        "!".prepend("hello, ", "world") #=> "hello, world!"
+
+    Converting other objects to strings
+      5.to_s        #=> "5"
+
+      nil.to_s      #=> ""
+
+      :symbol.to_s  #=> "symbol"
+  
+  Symbols
+    Basically, strings are data types that store a collection of characters 
+    that can be changed. So every time a string is used, Ruby has to store
+    it in memory, even if that same string has already been stored 
+    somewhere else. Symbols differ from strings in that they are only 
+    stored in memory once, which can greatly increase performance in some
+    cases. 
+    
+    Here is some code displaying this difference:
+      "string" == "string"  #=> true
+
+      "string".object_id == "string".object_id  #=> false
+
+      :symbol.object_id == :symbol.object_id    #=> true
+
+    An example of where symbols are preferred is for keys in hashes.
+
+    Symbols are created by putting a colon at the beginning of some text:
+      `:my_symbol`
+
+  Booleans
+    True and False 
+      these are true and false, very standard
+
+    Nil 
+      In Ruby, nil = nothing
+
+      Everything in Ruby will have a return value, so when any code has
+      nothing to return, it will return `nil`.
+
+      You can check if something is a nil type using .nil?
+        "Hello, World".nil? => false
+
+      When used in an expression, nil will be treated as false
+        Despite this, false == nil => false
+
+  Literals - any notation that represents a fixed value in source code
+    examples:
+      'Hello, world!'          # string literal
+      375                      # integer literal
+      3.141528                 # float literal
+      true                     # boolean literal
+      { 'a' => 1, 'b' => 2 }   # hash literal
+      [ 1, 2, 3 ]              # array literal
+      :sym                     # symbol literal
+      nil                      # nil literal
+
+  Basic Data Structures (Array/Hashes introduction)
+    Arrays
+      Syntax - array literal denoted by square brackets `[]`, comma-separated
+
+      Ruby indexes from 0: [1,2,3,4,5][0] => 1
+
+    Hashes - a hash is a set of key-value pairs
+      Syntax - hash literal denoted by curly braces `{}`
+
+      irb :001 > {:dog => 'barks', :cat => 'meows', :pig => 'oinks'}[:cat]
+      => "meows"
+
+Variables 
+  variable names are always reusable
+  age = 18 => 18
+  age = 18 + 5 => 23
+  age += 5 => 28 (can also use -=, *=, /=)
+  
+  Variable naming
+    Ruby was created to read and write as naturally as possible, so var 
+    names should describe what the variable represents as clearly as 
+    possible.
+
+    snake_case
+
+  Variables are references to a location in your computers memory
+    This can lead to some unexpected results
+      ex:
+        string_location = "here"
+        copy_location = string_location
+        string_location.upcase!
+
+        string_location => "HERE"
+        copy_location => "HERE"
+
+        string_location = "moved over there"
+        copy_location => "HERE" 
+          # changing the first var to reference a new place in comp's 
+          # memory will not change the reference stored in second var
+
+        Be careful assigning variables to other variables
+  
+  Getting Data from a User 
+    gets - "get string"
+
+    irb(main):008:0> name = gets
+    Devin
+    => "Devin\n"    
+
+    irb(main):009:0> name = gets.chomp
+    Devin
+    => "Devin"  #chomp method can remove the new line
+
+  Variable Scope 
+    Blocks - blocks are pieces of code that follow a method's invocation
+      ex:
+        total = 0
+        [1, 2, 3].each { |number| total += number }
+        puts total # 6
+        # the block here is inside the curly braces {}
+          common practice is to use {} for one liners, 
+          do |var| ... end for more
+
+        total = 0
+        [1, 2, 3].each do |number|
+          total += number
+        end
+        puts total # 6
+        # the block here is: do |number| ... end
+
+      Variables defined outside the block (total) can be used inside the
+      block, but any variables defined inside the block (number) cannot be
+      used outside of the block. 
+        Overall: Inner scope can access vars from outer scope, but not 
+        vice versa.
+
+  Variable Types
+    Constants - created by capitalizing every letter in the var name
+      note: constants can be reassigned in Ruby, but it will throw a 
+      warning to let you know there was a previous definition
+
+    Global Variables - available throughout the whole app, overriding all
+    scope boundaries
+      Defined by adding a $ before the var name
+        $var = "global var"
+
+      Generally avoided because they can lead to unexpected complications
+
+    Class Variables - accessible by instances of your class, as well as 
+    the class itself.
+      Used when you need to declare a var that is related to a class, but
+      each instance of that class does not need its own value for the var
+
+      declared with two @ symbols before the var name
+        @@instances = 0
+
+    Instance Variables - Available throughout the current instance of the
+    parent class.
+      Declared with one @ symbol before the var name
+        @var = 'instance var'
+
+    Local Variables - most common, obey all scope boundaries
+
+Inputs and Outputs
+  Outputs
+    print vs puts
+      both output to irb/ REPL environment or into the command line and 
+      return nil
+
+      The difference is that puts will append a new line (\n) to the end of
+      the output, while print will not.
+
+    puts
+      puts will attempt to convert everything into a string 
+      (by calling to_s).
+        important because if you’re trying to puts an array with nil 
+        values it will show some blanks lines
+          Example:
+            puts [1,nil,nil,2]
+            1
+
+            
+            2
+          
+      puts has a shorthand `p`
+        puts "Hello, World!" is basically the same as:
+        p "Hello, World!"
+
+        there are some differences though:
+          irb(main):008:0> puts "Hello"
+          Hello
+          => nil                                                         
+          irb(main):009:0> p "Hello"
+          "Hello" 
+          => "Hello"
+            # p will also show things like escape characters that 
+          would not otherwise be clearly visible (useful for debugging)
+  
+    putc - only prints one character (the first) but returns the whole
+    string.
+
+  Inputs
+    gets - causes program execution to stop and wait for user input, 
+    continues after the user presses enter
+
+    Unlike print/puts, gets will return what it outputs instead of just 
+    returning nil
+
+    gets also appends a new line (\n) to the end of whatever you input. 
+    (the value that gets returns also has the \n)
+
+    Full example of getting an input:
+      puts "Enter a value :"
+      val = gets
+      puts val
+
+      This will produce the following result −
+      Enter a value :
+      This is entered value
+      This is entered value
+
+Conditionals in Ruby 
+  false
+    Ruby only reads `nil` and `false` as falsy values
+      Unlike other languages, 0 or empty strings ("") won't read as false
+
+  if statement
+    Syntax:
+      if statement_to_be_evaluated == true
+        # do something here...
+      elsif another_statement_to_be_evaluated == true
+        # do something else here...
+      else
+        # do something else here..
+      end
+    
+    If there's only one line in the block of code you can write it this
+    way:
+      puts "example" if 1 < 2
+
+  Boolean Logic
+    equals ( == )
+
+    not equal ( != )
+
+    greater than ( > ) or equal to ( >= )
+
+    less than ( < ) or equal to ( <= )
+
+    #eql? - checks value type and actual value
+      5.eql?(5.0) => false  # 5 is integer, 5.0 is float
+      5.eql?(5) => true
+
+    #equal? - checks if values are the exact same object in memory
+      This has some interesting complications:
+        Integers
+          Computers store integers in memory differently
+            a = 5
+            b = 5
+            a.equal?(b) #=> true
+      
+      Example:
+        a = "hello"
+        b = "hello"
+        a.equal?(b) #=> false
+
+    Spaceship operator 
+      This is a unique operator that doesn't return true/false, instead it
+      returns three numberical values
+
+      Example:
+        5 <=> 10    #=> -1    (-1 when left is less than right)
+        10 <=> 10   #=> 0     (0 when left is equal to the right)
+        10 <=> 5    #=> 1     (1 when left is greater than right)
+
+      Most commonly used in sorting functions
+
+  Logical Operators
+    and (&&), or (||), not (!)
+      Short circuit evaluation
+        && and || will not evaluate the second expression if the first does
+        not meet their criteria.
+          If the first expression in an && operator evaluates to false, it
+          will not even check the second.
+
+          If the first expression in an || operator evaluates to true, it 
+          will not check the second expression.
+
+  Case Statements (like switch)
+    ex: 
+      grade = 'F'
+
+      did_i_pass = case grade #=> create a variable `did_i_pass` and assign
+      the result of a call to case with the variable grade passed in
+        when 'A' then "Hell yeah!"
+        when 'D' then "Don't tell your mother."
+        else "'YOU SHALL NOT PASS!' -Gandalf"
+      end
+
+    If you have more complex code, just remove the `then` and put the code
+    on the next line.
+      ex: 
+        grade = 'F'
+
+        case grade
+        when 'A'
+          puts "You're a genius"
+          future_bank_account_balance = 5_000_000
+        when 'D'
+          puts "Better luck next time"
+          can_i_retire_soon = false
+        else
+          puts "'YOU SHALL NOT PASS!' -Gandalf"
+          fml = true
+        end
+
+  Unless Statement 
+    Works in the opposite way as an if statement, only processes the code
+    if the statement evaluates to false
+    
+    age = 19
+    puts "Welcome to a life of debt." unless age < 18
+
+    unless age < 18
+      puts "Down with that sort of thing."
+    else
+      puts "Careful now!"
+    end
+
+  Ternary Operator 
+    Syntax
+      conditional statement ? <execute if true> : <execute if false>
+    
+
+
+
+
+  
+    
+
+  
