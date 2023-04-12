@@ -524,7 +524,171 @@ Conditionals in Ruby
   Ternary Operator 
     Syntax
       conditional statement ? <execute if true> : <execute if false>
+
+Loops in Ruby
+  `loop` - Ruby has a loop initiated with `loop` that will continue 
+  looping until you specifically tell it to stop with `break`
+    Example for syntax:
+      i = 0
+      loop do
+        puts "i is #{i}"
+        i += 1
+        break if i == 10
+      end
+
+    In general, this loop is not really used, if you are using it, there's
+    probably a better solution available.
+
+  While loop
+    Example for syntax:
+      i = 0
+      while i < 10 do
+        puts "i is #{i}"
+        i += 1
+      end
     
+    Like `loop` loop except more readable with the break condition 
+    declared in the initializer
+
+    One common use case is repeatedly prompting a question until an 
+    acceptable answer is provided:
+      while gets.chomp != "yes" do
+        puts "Will you go to prom with me?"
+      end
+    
+  Until Loop
+    Example for syntax:
+      i = 0
+      until i >= 10 do
+        puts "i is #{i}"
+        i += 1
+      end
+    
+    This is the opposite of a while loop, it will continue as long as the
+    provided conditional statement evaluates to false
+
+    This makes them relatively interchangable. Ultimately the better one
+    to use is dictated by the break condition; if you find yourself using
+    a while loop with a `!` to negate the condition, it makes more sense
+    to just use an until loop.
+
+  Ranges
+    Ranges can be used like for loops in matlab(/python maybe?) where you 
+    loop over an array, but it's honestly not very similar to that syntax/
+    usage wise.
+
+    You can make the ranges inclusive or exclusive:
+      Inclusive: (1..5) #=> 1, 2, 3, 4, 5 
+      Exclusive: (1...5) #=> 1, 2, 3, 4
+
+      You have to use other looping methods to actually implement these in
+      a looping application:
+        ex 1 - for:
+          for n in 1..5
+            puts n
+          end
+        
+        ex 2 - each:
+          (1..5).each do |n|
+            puts n
+          end
+
+        These will both output:
+          1
+          2
+          3
+          4
+          5
+        
+    You can also make ranges with letters: ('a'..'z') => 'a', 'b', ... 'z'
+
+  For Loop
+    Example for syntax:
+      for i in 0..5
+        puts "#{i} zombies incoming!"
+      end
+
+  Times Loop  (`#times` loop)
+    Example for syntax:
+      5.times do
+        puts "Hello, world!"
+      end
+
+    IMPORTANT: all loops will start counting from 0
+    (also you can access the current iteration number like below)
+      so this code:
+        3.times do |n|
+          puts n
+        end
+      
+      would output:
+        0
+        1
+        2
+
+  Upto and Downto Loops
+    #upto - iterate from start # up to another #
+    #downto - iterate from start # down to another #
+
+    Syntax examples:
+      5.upto(10) {|num| print "#{num} " }     #=> 5 6 7 8 9 10
+
+      10.downto(5) {|num| print "#{num} " }   #=> 10 9 8 7 6 5
+  
+  Keywords
+    break - exits the loop whenever executed, usually blocked inside 
+    conditional statement
+
+    next - skips the rest of the current iteration and continues with the
+    next.
+      ex:
+        (1..10).each do |n|
+          next if n % 2 == 0
+          puts n
+        end
+      
+    redo - repeats current iteration from the beginning
+      ex:
+        i = 0
+        while i < 5
+          i += 1
+          redo if i == 3
+          puts i
+        end
+
+    retry - restarts the entire loop from the beginning
+      ex: 
+        i = 0
+        while i < 5
+          begin
+            i += 1
+            raise if i == 3
+            puts i
+          rescue
+            retry
+          end
+        end
+
+        This example also uses other keywords `raise` and `rescue`
+        Raise raises an exception, which is caught by the rescue block, 
+        which then calls retry to restart from the beginning
+
+    Here's another example that shows how raise and rescue can be used:
+      (thanks chatGPT)
+
+      def divide(numerator, denominator)
+        raise ZeroDivisionError, "Cannot divide by zero" if denominator == 0
+        numerator / denominator
+      rescue ZeroDivisionError => e
+        puts "Error: #{e.message}"
+      end
+
+      puts divide(10, 0) # Outputs "Error: Cannot divide by zero"
+
+
+
+    
+
 
 
 
