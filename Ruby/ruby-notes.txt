@@ -1,3 +1,6 @@
+irb - type irb in console to open Interactive Ruby, lets you interactively
+execute Ruby code and see the results immediately.
+
 Syntax
   tab - 2 spaces
 
@@ -684,6 +687,501 @@ Loops in Ruby
       end
 
       puts divide(10, 0) # Outputs "Error: Cannot divide by zero"
+
+Arrays
+  Syntax
+    num_array = [1, 2, 3, 4, 5]
+    str_array = ["This", "is", "a", "small", "array"]
+
+  Creating Arrays
+    [] - creating an array this way is called an 'array literal'
+
+    Array.new - method to create an array
+      you can also include up to 2 optional arguments 
+      (initial size and default value):
+        Array.new               #=> []
+        Array.new(3)            #=> [nil, nil, nil]
+        Array.new(3, 7)         #=> [7, 7, 7]
+        Array.new(3, true)      #=> [true, true, true]
+
+    Arrays use 0-based indexing in Ruby
+
+    Attempting to index an invalid position results in 'nil'
+
+    Arrays can also take negative indices which start from the end of an 
+    array, starting with [-1]
+
+    #first and #last methods - returns a new array containing the first or
+    last n elements of the array
+      myArray.first(n) -> new array with first n elements of myArray
+
+  Adding/Removing from Arrays
+    #push - can take multiple inputs and returns a new array with those 
+    inputs appended.
+
+    << shovel operator - appends one element to the end of your array
+      myArray = [1,2]
+      myArray << 3 => [1, 2, 3]
+
+      You can also add more than 1 element by using the splat operator (*)
+      before the input array to split it into individual elements:
+        num_array = [1, 2]
+        num_array << *[3, 4, 5] => [1, 2, 3, 4, 5]
+
+    #pop - removes the element at the end of the array and returns the 
+    element that was removed:
+      num_array.pop => 5
+      num_array => [1, 2, 3, 4]
+
+    #shift - remove from the beginning of an array
+      num_array.shift => 1
+      num_array => [2, 3, 4]
+    
+    #unshift - add to the beginning of an array
+      num_array.unshift(1) => [1, 2, 3, 4]
+
+    #pop and #shift can also take integer elements that will result in 
+    that many elements being removed from the array
+
+  Adding and Subtracting Arrays
+    [1, 2, 3] + [3, 4, 5] => [1, 2, 3, 3, 4, 5]
+
+    #concat works the same way:
+      a = [1, 2, 3]
+      b = [3, 4, 5]
+
+      a + b         #=> [1, 2, 3, 3, 4, 5]
+      a.concat(b)   #=> [1, 2, 3, 3, 4, 5]
+
+    Subtracting arrays will remove any elements from the first array that 
+    appear in the second:
+      [1, 1, 1, 2, 2, 3, 4] - [1, 4]  #=> [2, 2, 3]
+
+  Basic Array Methods
+    num_array.methods => gives a very long list of available methods
+
+    Method examples:
+      [].empty?               #=> true
+      [[]].empty?             #=> false
+      [1, 2].empty?           #=> false
+
+      [1, 2, 3, 4].first      #=> 1
+      [1, 2, 3, 4].last       #=> 4
+
+      a = [1, 2, [3, 4], [5, 6, 7]]
+      a.last.delete(a.last.first) #=> 5
+      a                       #=> [1, 2, [3, 4], [6, 7]]
+
+      [1, 2, 3].length        #=> 3
+
+      [1, 2, 3].reverse       #=> [3, 2, 1]
+
+      [1, 2, 3].include?(3)   #=> true
+      [1, 2, 3].include?("3") #=> false
+
+      [1, 2, 3].join          #=> "123"
+      [1, 2, 3].join("-")     #=> "1-2-3"
+
+      #sort - sorts the array, not destructive (errors if comparing 
+      differing data types like an array with a number)
+      a = [5, 3, 8, 2, 4, 1]  #=> [5, 3, 8, 2, 4, 1]
+      a.sort                  #=> [1, 2, 3, 4, 5, 8]
+
+      #product - combine two arrays by returning an array that is a 
+      combination of all elements from all arrays
+      [1, 2, 3].product([4, 5]) 
+      #=> [[1, 4], [1, 5], [2, 4], [2, 5], [3, 4], [3, 5]]
+
+      a = [1, 2, [3, 4, 5], [6, 7]]   #=> [1, 2, [3, 4, 5], [6, 7]]
+      a.flatten                       #=> [1, 2, 3, 4, 5, 6, 7]
+      #flatten is not destructive
+
+      #delete_at() - permanently removes the array element at the index 
+      that is inputted
+
+      #delete - if you don't know the index of the value you want to 
+      delete, you can use the delete method to remove any instances of the
+      provided value from an array
+
+      #uniq - iterates through an array and deletes any duplicate elements
+        myArray = [1, 1, 2, 3, 4, 4]
+        myArray.bang! => [1, 2, 3, 4]
+        myArray => [1, 1, 2, 3, 4, 4]
+
+        This is not a destructive method, but you can make it one by 
+        adding a bang suffix (!) to the method:
+          myArray = [1, 1, 2, 3, 4, 4]
+          myArray.bang! => [1, 2, 3, 4]
+          myArray => [1, 2, 3, 4]
+
+      #select - iterate over an array and return a new array that only 
+      contains elements that return true to the provided expression
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        numbers.select { |number| number > 4 }
+          => [5, 6, 7, 8, 9, 10]
+        numbers
+          => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+      #to_s - returns a string representation of an array (not destructive)
+
+      Methods that use blocks
+        Blocks
+          Can be passed using the 'do...end' syntax
+            example using #each:
+              array = [1, 2, 3, 4, 5]
+              array.each do |element|
+                puts "The element is #{element}"
+              end
+            
+          Also passed using curly braces '{}'
+            array.each_index { |i| puts "This is index #{i}" }
+              |i| - this is the block parameter
+              the next part is the block of code that gets executed for 
+              each index
+
+            Here's an example using #map:
+              array = [1, 2, 3, 4, 5]
+              doubled_array = array.map { |element| element * 2 }
+
+              puts doubled_array => [2, 4, 6, 8, 10]
+
+        #each_index - iterates through an array like #each but the 
+        variable represents the index of the element as opposed to the 
+        value. 
+
+        #each_with_index - can use value and index as block parameters
+          arr.each_with_index{|value, index| puts "#{value}, #{index}"}
+
+        #map - invokes the given block once for each element in the 
+        collection, creates and returns a new array containing the values 
+        returned by the block
+
+        #map vs #each
+          #each example:
+            a = [1, 2, 3]
+            a.each { |e| puts e + 2 }
+            3
+            4
+            5
+            => [1, 2, 3]
+
+          #map example:
+          a = [1, 2, 3]
+          a.map { |x| puts x**2 }
+          1
+          4
+          9
+          => [nil, nil, nil]
+          
+          puts will always return nil when the block is invoked, which 
+          makes up the values in the newly created array.
+
+        Overall Rule: use each for iteration and map for transformation.
+
+
+
+  Comparing Arrays 
+    == operator - compare arrays for equality
+
+Hashes
+  Similar to objects in JS
+
+  Hashes are like arrays (collection of values) that are indexed by key 
+  rather than index. The two main advantages of this are 1. being able to 
+  select the value you want without figuring out the numerical index, and 
+  2. values stored in hashes don't need to be stored in any particular 
+  order.
+
+  Hashes vs Arrays
+    When deciding whether to use a hash or an array, ask yourself a few questions:
+      Does this data need to be associated with a specific label? If yes, 
+      use a hash. If the data doesn't have a natural label, then typically 
+      an array will work fine.
+
+      Does order matter? If yes, then use an array. As of Ruby 1.9, hashes
+      also maintain order, but usually ordered items are stored in an 
+      array.
+
+      Do I need a "stack" or a "queue" structure? Arrays are good at 
+      mimicking simple "first-in-first-out" queues, or "last-in-first-out" 
+      stacks.
+
+  Creating Hashes
+    Hash literal - "{}" curly braces
+      Ex: 
+        my_hash = {
+          "a random word" => "ahoy",
+          "Dorothy's math test score" => 94,
+          "an array" => [1, 2, 3],
+          "an empty hash within a hash" => {}
+        }
+
+      key => value (=> is called a hash rocket)
+
+    ::new method 
+      my_hash = Hash.new
+      my_hash               #=> {}
+
+  Accessing Hash Values 
+    Syntax is very similar to indexing arrays:
+      shoes = {
+        "summer" => "sandals",
+        "winter" => "boots"
+      }
+
+      shoes["summer"]   #=> "sandals"
+
+    Attempting to access a key that doesn't exist will return nil:
+      shoes["hiking"]   #=> nil
+
+      If you need to return an error when the key does not exist, you can
+      use the fetch method:
+        shoes.fetch("hiking")   #=> KeyError: key not found: "hiking"
+
+        This method can also be given a default value to return instead of
+        an error:
+          shoes.fetch("hiking", "hiking boots") #=> "hiking boots"
+
+  Adding and Changing Data
+    Can add data the same as you would to an array:
+      shoes["fall"] = "sneakers"
+
+      Can also change the values of existing keys this way:
+
+  Removing Data
+    #delete - shoes.delete("fall")    #=> "sneakers"
+
+  Methods
+    Hashes and arrays both employ Ruby's Enumerable module, not sure what
+    this means but it leads to them both responding to many of the same 
+    methods
+
+    Methods specific to hashes:
+      #keys - returns array of the keys from a hash
+
+      #values - returns array of the values from a hash
+
+      #key? - allows you to check if a hash contains a specific key,
+      returns a boolean
+
+      #select - pass it a block and it will return any key-value pairs 
+      that evalutate to true
+        name_and_age = { "Bob" => 42, "Steve" => 31, "Joe" => 19}
+        name_and_age.select { |k,v| k == "Bob" }  
+        => {"Bob"=>42}
+        name_and_age.select { |k,v| (k == "Bob") || (v == 19) }
+        => {"Bob"=>42, "Joe"=>19}
+
+      #fetch - defined above
+
+      #to_a - returns a nested array version of your hash, not destructive
+        name_and_age.to_a
+        => [["Bob", 42], ["Steve", 31], ["Joe", 19]]
+        name_and_age
+        => {"Bob"=>42, "Steve"=>31, "Joe"=>19}
+
+
+  Merging Two Hashes
+    #merge - merges two hashes, any duplicate keys will take on the value
+    of the hash getting merged in (hash2 in this case)
+      hash1.merge(hash2)
+
+  Symbols as Hash keys
+    symbols are commonly used as hash keys due to simplified syntax when 
+    defining hash literals:
+      # 'Rocket' syntax
+      american_cars = {
+        :chevrolet => "Corvette",
+        :ford => "Mustang",
+        :dodge => "Ram"
+      }
+      # 'Symbols' syntax      *ONLY WORKS FOR SYMBOLS*
+      japanese_cars = {
+        honda: "Accord",
+        toyota: "Corolla",
+        nissan: "Altima"
+      }
+    
+    When you use symbols as keys you also obviously have to use a symbol 
+    to access it's value:
+      american_cars[:ford]    #=> "Mustang"
+      japanese_cars[:honda]   #=> "Accord"
+
+  Iterating over Hashes 
+    Ex:
+      person = {name: 'bob', height: '6 ft', weight: '160 lbs', hair: 
+      'brown'}
+
+      person.each do |key, value|
+        puts "Bob's #{key} is #{value}"
+      end
+
+      Output:
+        Bob's name is bob
+        Bob's height is 6 ft
+        Bob's weight is 160 lbs
+        Bob's hair is brown
+
+Methods
+  Allow you to name sections of your code that can be called in other 
+  places in the program. DRY - Don't repeat yourself
+    if you find yourself rewriting sections of code, define it as a 
+    method instead and apply it that way.
+
+  In Ruby, methods and functions are essentially interchangable because 
+  ruby is purely object-oriented. The difference between functions and 
+  methods in other languages is that functions do not have an associated 
+  object. 
+
+  One of Ruby's main advantages is the large number of built in methods.
+
+  Creating a Method
+    Syntax
+      def my_name
+        "Joe Smith"
+      end
+
+      puts my_name    #=> "Joe Smith"
+
+    Naming Conventions
+      snake_case
+
+      Ruby has ~40 reserved words like end, while, for
+
+      ?, !, =, can only go at the end of the name
+
+      Cannot begin the name with a number
+
+      If it feels like the method does too many things to give it a simple
+      name, that is generally a sign that it should be broken up into 
+      several smaller/simpler methods
+
+  Parameters and Arguments - commonly used interchangably
+    Parameters - variables (or placeholder for variables) that your 
+    method receives when it is called
+
+    Argument - actual variables that get passed to the method
+
+    Default Parameters:
+      def greet(name = "stranger")
+        "Hello, " + name + "!"
+      end
+
+      puts greet("Jane") #=> Hello, Jane!
+      puts greet #=> Hello, stranger!
+  
+  Optional Parentheses 
+    Keep in mind that parentheses are optional when calling methods in 
+    Ruby, say("Hi") is the same as say "Hi"
+
+  Ways to call Methods
+    1. some_method(obj) - send arguments (obj) to a method call
+    2. a_caller.some_method(obj) - a_caller is called an explicit caller
+
+  What methods return
+    Implicit return - Methods in Ruby will return the output of the last 
+    expression that was evaluated even without the return keyword
+
+    Explicit return - using the return keyword will stop the method from 
+    evalutating any further lines. 
+      Useful for writing checks for input errors into your methods
+        def even_odd(number)
+          unless number.is_a? Numeric
+            return "A number was not entered."
+          end
+
+          if number % 2 == 0
+            "That is an even number."
+          else
+            "That is an odd number."
+          end
+        end
+
+  Chaining Methods
+    ex:
+      phrase = ["be", "to", "not", "or", "be", "to"]
+
+      puts phrase.reverse.join(" ").capitalize
+      #=> "To be or not to be"
+
+    You can also directly pass method calls as arguments to other methods.
+    That's kinda what's happening here but this is an example of what it 
+    looks like to pass the results of multiple methods to another:
+      multiply(add(20, 45), subtract(80, 10))
+      => 4550             *these aren't native methods*
+
+  Predictate Methods - methods that return a boolean
+    Usually denoted with a "?" at the end of the method name (not 
+    enforced)
+
+  Bang Methods - simultaneously perform their action and overwrite the 
+  value of the original object with the result
+    Dentoed with a "!" at the end of the method name
+
+    Writing 
+      string.downcase! 
+    is the equivalent of writing 
+      string = whisper.downcase
+
+Debugging 
+  p vs puts
+    puts is good for debugging, but the drawback is that anything that 
+    evaluates to nil or an empty string will just print a blank line to 
+    the terminal
+
+    Using p is the solution to this problem
+
+  Pry Gem
+    Pry is a Ruby Gem that lets you open an IRB-like session in your 
+    terminal while your program is running. 
+
+    To use, you have to include: require 'pry-byebug' at the top of your
+    program
+
+    Then the Pry-byebug will open whenever you call binding.pry in the 
+    program.
+
+    Once Pry is open, you can enter 'next' to step over to the next line
+
+  Debug Gem
+    Launch without configuration
+      Without any configuration, you can use this debugger by 
+      "Start Debugging" (F5 key) if you activate .rb file.
+
+      You will see the "Debug command line" input dialog. Please specify 
+      your favorite command line you want to debug.
+
+      For example:
+
+      ruby foo.rb (launch foo.rb)
+      ruby foo.rb 10 20 30 (launch foo.rb with options 10, 20 and 30)
+      rake taskA (launch rake task taskA)
+      bundle exec rspec (launch rspec command with bundle exec)
+      bin/rails s (launch bin/rails s)
+      When you select a command line, the specified command will run on 
+      rdbg debugger, and VSCode will connect to the rdbg debugger with 
+      UNIX domain socket.
+
+      And new terminal is created (named rdbg). You can see stdout/err 
+      outputs and you can input stdin on rdbg terminal.
+
+      You can stop the programs
+      - by setting breakpoints (F9) on source code.
+      - by exception (if you enable "rescue exception").
+      - by pushing the Pause button (F6).
+      
+      When the program stops, you can see "Call stack", "Variables" and 
+      you can set "Watch" expressions. On the debug console, you can input 
+      valid Ruby program and you will get an evaluation result on selected 
+      context ("Call stack").
+  
+
+
+
+      
+
+    
 
 
 
