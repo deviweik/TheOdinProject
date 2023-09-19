@@ -1,5 +1,5 @@
 irb - type irb in console to open Interactive Ruby, lets you interactively
-execute Ruby code and see the results immediately.
+execute Ruby code and see the results immediately. 'Exit' to exit
 
 Syntax
   tab - 2 spaces
@@ -1176,22 +1176,1000 @@ Debugging
       valid Ruby program and you will get an evaluation result on selected 
       context ("Call stack").
   
+Enumerables
+  Enumerable Iterators Cheat Sheet
+    - #each returns the original object it was called on because it's 
+      really used for its side effects and not what it returns
+    - #each_with_index passes not just the current item but whatever 
+      position in the array it was located in.
+    - #select returns a new object (e.g. array) filled with only those 
+      original items where the block you gave it returned true
+    - #map returns a new array filled with whatever gets returned by the 
+      block each time it runs.
 
+  docs - https://ruby-doc.org/core-3.1.2/Enumerable.html
 
+  #select - iterate through array using a provided condition to filter 
+  contents (also called #filter)
+    Before #select:
+      friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+      invited_list = []
+
+      for friend in friends do
+        if friend != 'Brian'
+        invited_list.push(friend)
+        end
+      end
+
+      invited_list #=> ["Sharon", "Leo", "Leila", "Arun"]
+
+    With #select:
+      friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+
+      friends.select { |friend| friend != 'Brian' }
+      #=> ["Sharon", "Leo", "Leila", "Arun"]
+
+    You can also use #select on hashes but you need to remember to set a 
+    variable for the key and the value:
+      responses = { 'Sharon' => 'yes', 'Leo' => 'no', 'Leila' => 'no', 'Arun' => 'yes' }
+      responses.select { |person, response| response == 'yes'}
+      #=> {"Sharon"=>"yes", "Arun"=>"yes"}
+    
+  #reject is a bit more to the point 
+    friends.reject { |friend| friend == 'Brian' }
+
+  #each - the main enumerable method, can do almost anything but not 
+  always the best to use
+    Will iterate through an array and feed each element to a code block
+
+    Example:
+      friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+
+      friends.each { |friend| puts "Hello, " + friend }
+
+      #=> Hello, Sharon
+      #=> Hello, Leo
+      #=> Hello, Leila
+      #=> Hello, Brian
+      #=> Hello, Arun
+
+      #=> ["Sharon", "Leo", "Leila", "Brian" "Arun"]
+
+    What about when you need your code block to be more than one line
+      do ... end 
+        my_array = [1, 2]
+
+        my_array.each do |num|
+          num *= 2
+          puts "The new number is #{num}."
+        end
+
+        #=> The new number is 2.
+        #=> The new number is 4.
+
+        #=> [1, 2]
+
+    You can also use most of these methods with hashes
+      my_hash = { "one" => 1, "two" => 2 }
+
+      my_hash.each { |key, value| puts "#{key} is #{value}" }
+
+      one is 1
+      two is 2
+      #=> { "one" => 1, "two" => 2}
+
+      my_hash.each { |pair| puts "the pair is #{pair}" }
+
+      the pair is ["one", 1]
+      the pair is ["two", 2]
+      #=> { "one" => 1, "two" => 2}
+
+    You can see above that #each returns the original array/hash 
+      Here's an example of how you can output an array of the modified 
+      elements:
+        friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+        shouting_at_friends = []
+
+        friends.each { |friend| shouting_at_friends.push(friend.upcase) }
+        #=> ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+
+        shouting_at_friends #=> ['SHARON', 'LEO', 'LEILA', 'BRIAN', 'ARUN']
+
+  #map - you can also use #map to do what was done above with #each 
+    map will automatically return the transformed elements in a new 
+    array 
+      example:
+        friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+
+        friends.map { |friend| friend.upcase }
+        #=> `['SHARON', 'LEO', 'LEILA', 'BRIAN', 'ARUN']`
+
+    #map + #gsub example:
+      my_order = ['medium Big Mac', 'medium fries', 'medium milkshake']
+
+      my_order.map { |item| item.gsub('medium', 'extra large') }
+      #=> ["extra large Big Mac", "extra large fries", "extra large milkshake"]
+
+    You can use #map.with_index if you need an index with your values 
+      ex:
+        array = %w(a b c)
+        array.map.with_index { |ch, idx| [ch, idx] }
+        # [["a", 0], ["b", 1], ["c", 2]]
+
+  #reduce - reduces an array or hash down to a single object
+    example - obtain a sum of an array of numbers
+      with #each:
+        my_numbers = [5, 6, 7, 8]
+        sum = 0
+        my_numbers.each { |number| sum += number }
+        sum
+        #=> 26
+
+      with #reduce:
+        my_numbers = [5, 6, 7, 8]
+        my_numbers.reduce { |sum, number| sum + number }
+        #=> 26
+
+    The first block variable in the example above (sum) is called the 
+    accumulator. The result of each iteration is stored in the accumulator 
+    and then passed to the next iteration. #reduce will also return this 
+    value after completion. 
+
+    By default, the initial value of the accumulator will be the first 
+    element in the input collection.  But you can also set a different 
+    initial value for the accmulator by passing in a value to #reduce.
+      my_numbers = [5, 6, 7, 8]
+      my_numbers.reduce(1000) { |sum, number| sum + number }
+      #=> 1026
+
+    You can also set a Hash object as your accumulator. Here's an 
+    example where this is used to analyze/summarize data:
+      votes = ["Bob's Dirty Burger Shack", "St. Mark's Bistro", "Bob's 
+      Dirty Burger Shack"]
+      votes.reduce(Hash.new(0)) do |result, vote|
+        result[vote] += 1
+        result
+      end
+      #=> {"Bob's Dirty Burger Shack"=>2, "St. Mark's Bistro"=>1}
+
+      hash.new(0) creates a new hash with an initial value of 0 that is 
+      passed to #reduce as the intial value for the accumulator.
+
+  Bang Methods
+    add ! to the end of your method declaration to make it a bang method 
+    which will cause it to overwrite the array that the method was called 
+    on rather than creating a new array. (ex: #map!)
+
+    Best practice is to avoid these methods unless necessary.
+
+  Return Values of Enumerables
+    Without using bang methods, you will need to assign your method 
+    outputs to something.
+
+    Option 1: local variable
+      invited_friends = friends.select { |friend| friend != 'Brian' }
+
+    Option 2: Wrap the enumerable in a method definition
+      friends = ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+
+      def invited_friends(friends)
+        friends.select { |friend| friend != 'Brian' }
+      end
+
+      friends
+      #=> ['Sharon', 'Leo', 'Leila', 'Brian', 'Arun']
+
+      invited_friends(friends)
+      #=> ["Sharon", "Leo", "Leila", "Arun"]
+
+  Other Enumerables:
+    #any? returns true/false (see the question mark?) and answers the 
+      question, "do ANY of the elements in this object pass the test in my 
+      block?". If your block returns true on any time it runs, any? will 
+      return true.
+
+    #all? is the same thing but will only return true if the block returns
+      true for every element.
+
+    #none? - u get the idea 
+
+    #find - returns the first item in your object for which the block 
+      returns true.
+
+    #group_by will run your block and return a hash that groups all the 
+      different types of returns from that block. For example:
+      > names = ["James", "Bob", "Joe", "Mark", "Jim"]
+      > names.group_by{|name| name.length}
+      => {5=>["James"], 3=>["Bob", "Joe", "Jim"], 4=>["Mark"]} 
+
+    #include?, #sort, #count
+
+  Enumerable examples:
+    Doubling numbers:
+      array = [1,2,3]
+      array.map { |n| n * 2 }
+      # [2, 4, 6]
+
+    Convert strings to integers:
+      array = ["11", "21", "5"]
+      array.map { |str| str.to_i }
+      # [11, 21, 5]
+
+    Convert hash values to symbols:
+      hash = { bacon: "protein", apple: "fruit" }
+      hash.map { |k,v| [k, v.to_sym] }.to_h
+      # {:bacon=>:protein, :apple=>:fruit}
+
+  Predicate enumerable methods
+    Refresh: a predicate method is indicated by a question mark at the end 
+    of the method name and returns either true or false.
+
+    #include? - returns true if the element you pass as an argument exists 
+    in the array or hash 
+      numbers = [5, 6, 7, 8]
+      numbers.include?(6)
+      #=> true
+      numbers.include?(3)
+      #=> false
+
+    #any? - returns true if any elements in the array or hash match the 
+    conditions within the block
+      numbers = [21, 42, 303, 499, 550, 811]
+      numbers.any? { |number| number > 500 }
+      #=> true
+      numbers.any? { |number| number < 20 }
+      #=> false
+
+    #all? - same as any but will only return true if all elements match 
+    the block conditions
+      fruits = ["apple", "banana", "strawberry", "pineapple"]
+      fruits.all? { |fruit| fruit.length > 3 }
+      #=> true
+      fruits.all? { |fruit| fruit.length > 6 }
+      #=> false
+
+      #all? will return true by default unless the block returns false or 
+      nil, so calling #all? on an empty array or hash will result in true 
+
+    #none? - true if no elements match the block conditions
+      fruits = ["apple", "banana", "strawberry", "pineapple"]
+      fruits.none? { |fruit| fruit.length > 10 }
+      #=> true
+      fruits.none? { |fruit| fruit.length > 6 }
+      #=> false
+
+Nested Arrays
+  Useful to store groups of similar data or positional data
+
+  Accessing Elements
+    Accessing a specific element within a nested array is as simple as 
+    calling array[x][y], where x is the index of the nested element and y 
+    is the index inside of the nested element.
+
+    If you try to access an index of a nonexistent nested element, it will 
+    raise an NoMethodError, because the nil class does not have a [] 
+    method. However, just like a regular array, if you try to access a 
+    nonexistent index inside of an existing nested element, it will return 
+    nil.
+      teacher_mailboxes[3][0]
+      #=> NoMethodError (nil[0] -> NoMethodError)
+      teacher_mailboxes[0][4]
+      #=> nil
+
+    If you want a nil value returned when trying to access an index of a 
+    nonexistent nested element, you can use the #dig method. This method 
+    can also be used when accessing a nonexistent index inside of an 
+    existing nested element.
+      teacher_mailboxes.dig(3, 0)
+      #=> nil
+      teacher_mailboxes.dig(0, 4)
+      #=> nil
+
+  Creating a Nested Array
+    Array.new needs to be called with a block to create a nested array, 
+    trying to add an array as the default value for a new array will lead 
+    to an array of pointers that all direct towards the same array. So 
+    changing one of the nested arrays will change all of them. Using a 
+    block calls Array.new() once per element in the encompassing array.
+
+    Correct Syntax:
+      immutable = Array.new(3) { Array.new(2) }
+      #=> [[nil, nil], [nil, nil], [nil, nil]]
+      immutable[0][0] = 1000
+      #=> 1000
+      immutable
+      #=> [[1000, nil], [nil, nil], [nil, nil]]
+
+  Adding and Removing Elements
+    #push - my_array[0].push(100) will add 100 to the end of the first array 
+    in my_array
+      You can also use the shovel operator: my_array[0] << 100
+
+    #pop - my_array[0].pop will remove 100 from the array (last element) 
+    and return it
+
+  Iterating over a Nested Array
+    Here's an example where you are just iterating through the outside 
+    array and referencing the nested arrays as rows
+      teacher_mailboxes.each_with_index do |row, row_index|
+        puts "Row:#{row_index} = #{row}"
+      end
+      #=> Row:0 = ["Adams", "Baker", "Clark", "Davis"]
+      #=> Row:1 = ["Jones", "Lewis", "Lopez", "Moore"]
+      #=> Row:2 = ["Perez", "Scott", "Smith", "Young"]
+
+    To iterate over the individual elements inside of each row, you will 
+    need to nest another enumerable method inside.
+      teacher_mailboxes.each_with_index do |row, row_index|
+        row.each_with_index do |teacher, column_index|
+          puts "Row:#{row_index} Column:#{column_index} = #{teacher}"
+        end
+      end
+      #=> Row:0 Column:0 = Adams, #=> Row:0 Column:1 = Baker
+      #=> Row:0 Column:2 = Clark, #=> Row:0 Column:3 = Davis
+      #=> Row:1 Column:0 = Jones, #=> Row:1 Column:1 = Lewis
+      #=> Row:1 Column:2 = Lopez, #=> Row:1 Column:3 = Moore
+      #=> Row:2 Column:0 = Perez, #=> Row:2 Column:1 = Scott
+      #=> Row:2 Column:2 = Smith, #=> Row:2 Column:3 = Young
+      #=> [["Adams", "Baker", "Clark", "Davis"], ["Jones", "Lewis", 
+      "Lopez", "Moore"], ["Perez", "Scott", "Smith", "Young"]]
+
+    If you only need the values and don't care about the indicies, you can 
+    use #flatten:
+      teacher_mailboxes.flatten.each do |teacher|
+        puts "#{teacher} is amazing!"
+      end
+      #=> Adams is amazing!
+      #=> Baker is amazing!
+      #=> Clark is amazing! ... etc
+
+  Nested Array Examples:
+    Using any? and all?:
+      test_scores.any? do |scores|
+        scores.all? { |score| score > 80 }
+      end
+
+      This code would run through an array of arrays of test scores, and 
+      return true if ANY of the score arrays contain values that are ALL 
+      above 80.
+  
+Nested Hashes
+  Nested hashes are a very common way to store complex associated data.
+    vehicles = {
+      alice: {year: 2019, make: "Toyota", model: "Corolla"},
+      blake: {year: 2020, make: "Volkswagen", model: "Beetle"},
+      caleb: {year: 2020, make: "Honda", model: "Accord"}
+    }
+  
+  Accessing Data 
+    hash[:x][:y], where :x is the key of the hash and :y is the key of the 
+    nested hash.
+      vehicles[:alice][:year]
+      #=> 2019
+
+    Similar to nested arrays, if you try to access a key in a nonexistent 
+    nested hash, it will raise an NoMethodError, therefore you may want to 
+    use the #dig method
+  
+  Adding and Removing Data
+    You can add a new nested hash just like you would expect:
+      vehicles[:dave] = {year: 2021, make: "Ford", model: "Escape"}
+
+    You can also add an element to a single nested hash like this:
+      vehicles[:dave][:color] = "red"
+
+    You can delete a nested hash like this:
+      vehicles.delete(:blake) (returns deleted nested hash)
+
+    You can delete a specific key-value pair from a nested hash like this: 
+      vehicles[:dave].delete(:color)
+
+  Methods 
+    Example: find who owns a vehicle from 2020 or newer
+      vehicles.select { |name, data| data[:year] >= 2020 }
+      This would return the entire nested hash though...
+    What if you only want the name and not the whole hash?
+    #collect can do that
+      vehicles.collect { |name, data| name if data[:year] >= 2020 }
+      #=> [nil, :caleb, :dave]
+
+      returns the value of each iteration, so iterations when the block 
+      results in false will return nil
+        #compact will return an array or hash without nil values
+          vehicles.collect { |name, data| name if data[:year] >= 2020 }.compact
+          #=> [:caleb, :dave]
+      
+        You can also do this with #filter_map
+          vehicles.filter_map { |name, data| name if data[:year] >= 2020 }
+          #=> [:caleb, :dave]
+
+Classes / Modules
+  Classes vs Modules 
+    Modules are packages of methods that can be loaded into classes. 
+    Classes can also be collections of methods, so what's the difference?
+      Firstly, a class is much more than a module, it can hold it's state,
+      be instantiated, duplicated, hold countless objects and other classes.
+
+      The main difference that makes modules useful is that they can never 
+      be instantiated. It will never be anything other than a collection of
+      methods that can be called when loaded in.
+
+  Example to explain:
+    module Speak
+      def speak(sound)
+        puts sound
+      end
+    end
+
+    class GoodDog
+      include Speak
+    end
+
+    class HumanBeing
+      include Speak
+    end
+
+    sparky = GoodDog.new
+    sparky.speak("Arf!")        # => Arf!
+    bob = HumanBeing.new
+    bob.speak("Hello!")         # => Hello!
+
+  Classes
+    Classes are used to create objects.
+
+    Two things are typically focused on when created classes, state and 
+    behaviors.
+      State - data associated with the individual object
+        Tracked by instance variables, which are scoped at the object level 
+      Behaviors - what the objects are capable of doing 
+
+    Initializing a new object
+      #initialize - this method gets called every time you create a new 
+      object. 
+
+      Example:
+        class GoodDog
+          def initialize
+            puts "This object was initialized!"
+          end
+        end
+
+        sparky = GoodDog.new    # => "This object was initialized!"
+
+    Instance Variables 
+      class GoodDog
+        def initialize(name)
+          @name = name  # @name here creates an Instance Variable, it can 
+          be referenced until the object instance is destroyed. 
+        end
+      end
+
+      sparky = GoodDog.new("Sparky") # passes "Sparky" from #new to 
+      #initialize and is assigned to the local variable name. Then @name
+      is set to name. 
+
+    Instance Methods
+      You can define methods within classes as well 
+
+      Example
+        class GoodDog
+          def initialize(name)
+            @name = name
+          end
+
+          def speak
+            "Arf!"
+          end
+        end
+
+        sparky = GoodDog.new("Sparky")
+        sparky.speak # this would actually do nothing since "Arf!" is 
+        returned but not printed
+
+    Accessor Methods 
+      Getting variables
+        Use a normal method like you would expect:
+          def get_name
+            @name
+          end
+          sparky = GoodDog.new("Sparky")
+          puts sparky.get_name   # => "Sparky"
+      
+      Setting variables
+        Slightly different:
+          def set_name=(name)
+            @name = name
+          end
+          sparky.set_name = "Spartacus"
+          puts sparky.get_name     # => "Spartacus"
+
+      It is common practice to name these methods the same:
+        def name
+          @name
+        end
+        def name=(name)
+          @name = name
+        end
+        sparky.name = "Scoot"
+        puts sparky.name    # => "Scoot"
+    
+      #attr_accessor - takes a symbol as an input that is used to create 
+      the method name for the getter and setter methods
+        #attr_reader - only creates getter 
+        #attr_writer - only creates setter
+
+        Example:
+          class GoodDog
+            attr_accessor :name
+
+            def initialize(name)
+              @name = name
+            end
+
+            def speak
+              "#{@name} says arf!"
+            end
+          end
+
+          sparky = GoodDog.new("Sparky")
+          puts sparky.speak
+          puts sparky.name            # => "Sparky"
+          sparky.name = "Spartacus"
+          puts sparky.name            # => "Spartacus"
+
+        Usually you would change your other methods defined within the 
+        class to use these intance methods as well rather than directly 
+        referencing the instance variables
+          For example, #speak could be rewritten to this:
+            def speak
+              "#{name} says arf!"
+            end
+        
+        This lets you save a lot of space with multiple instance variables:
+          class Person
+            attr_accessor :name, :height, :weight
+
+            def initialize(name, height, weight)
+              @name = name
+              @height = height
+              @weight = weight
+            end
+          end
+
+        If you want to use these getter/setter methods in other methods 
+        within the class, you can use self.name= :
+          def change_info(n, h, w)
+            self.name = n
+            self.height = h
+            self.weight = w
+          end
+
+    Class Methods
+      Methods that are called directly on a class itself 
+
+      Example:
+        def self.what_am_i         # Class method definition
+          "I'm a GoodDog class!"
+        end
+        GoodDog.what_am_i          # => I'm a GoodDog class!
+      
+      Class Methods are for any functionality that does not pertain to 
+      individual objects
+
+    Class Variables
+      Example:
+        class GoodDog
+          @@number_of_dogs = 0
+
+          def initialize
+            @@number_of_dogs += 1   # When a new object is added to the class it increases the class variable
+          end
+
+          def self.total_number_of_dogs
+            @@number_of_dogs   # defines class method to return class variable
+          end
+        end
+
+        puts GoodDog.total_number_of_dogs   # => 0
+
+        dog1 = GoodDog.new
+        dog2 = GoodDog.new
+
+        puts GoodDog.total_number_of_dogs   # => 2
+
+      Class variables are defined with 2 @'s. This example shows how you 
+      can use class variables and methods to keep track of class level 
+      data that pertains only to the class, and not to individual objects 
+
+    Constants 
+      If you have a class level variable that never needs to change, you 
+      can define it as a constant variable like this: (DOG_YEARS)
+        class GoodDog
+          DOG_YEARS = 7
+
+          attr_accessor :name, :age
+
+          def initialize(n, a)
+            self.name = n
+            self.age  = a * DOG_YEARS
+          end
+        end
+
+        sparky = GoodDog.new("Sparky", 4)
+        puts sparky.age             # => 28
+
+      Constants have to start with a capital letter but good practice is 
+      to captialize the whole word. 
+
+    The to_s method
+      this instance method is built in to every class in Ruby, it is 
+      automatically called whenever you call'puts sparky' for example
+
+      Output without defining to_s:
+        puts sparky      # => #<GoodDog:0x007fe542323320>
+
+        returns the name of the object's class and an encoding of the
+        object id
+
+      You can also define your own code block to run for to_s:
+        class GoodDog
+          DOG_YEARS = 7
+
+          attr_accessor :name, :age
+
+          def initialize(n, a)
+            @name = n
+            @age  = a * DOG_YEARS
+          end
+
+          def to_s
+            "This dog's name is #{name} and it is #{age} in dog years."
+          end
+        end
+        puts sparky  # => This dog's name is Sparky and is 28 in dog years.
+
+        Needs to return a string though, otherwise will search up the 
+        inheritance chain for another verion of #to_s
+
+      Calling p will automatically call the inspect method which returns this:
+        p sparky   # => #<GoodDog:0x007fe54229b358 @name="Sparky", @age=28>
+      
+    Self
+      Uses:
+        Calling instance methods from within their class. 
+          Calling self.name= acts the same as calling sparky.name= from 
+          outside the class. You can't call sparky.name= inside the class 
+          because it is not within the scope. 
+        
+        Defining a class method
+          def self.method is the same as def ClassName.method but if you 
+          use the second version and end up wanting to change the class 
+          name, you would have to change every class method definition 
+
+    ChatGPT Class Exercise Prompts
+      Bank Account Management:
+        Create a BankAccount class that allows you to create and manage 
+        bank accounts. The class can have methods for depositing, 
+        withdrawing, checking the balance, and displaying account 
+        information. You can also have a separate Transaction class 
+        to record and manage transactions.
+
+        Completed: bank_management.rb
+
+      Library Management:
+        Create a Library class that manages books and patrons. 
+        You can have separate classes for Book and Patron. The Library 
+        class can handle checking out, returning, and displaying book 
+        information.
+
+      Inventory Management:
+        Create an Inventory class for managing products in a store. You 
+        can have separate classes for Product and Supplier. The Inventory 
+        class can handle adding, removing, and updating product 
+        information.
+
+  Modules 
+    Modules are used to mix behaviors between classes that may not follow 
+    the same natural hierarchical model that the general classes themselves 
+    follow. For example, let's say you define a class Animal with subclasses 
+    Mammal and Fish, and further subclasses under those for specific animals.
+    You may want to add #swim to Fish, because most Animals in the Fish 
+    class will need to swim. But there are a lot of mammals who also swim and 
+    would need access to this method. Not all Animals swim so we don't want
+    to move it there, but we also don't want to recreate #swim in each 
+    Mammal subclass. 
+      Example:
+        module Swimmable
+          def swim
+            "I'm swimming!"
+          end
+        end
+
+        class Animal; end
+
+        class Fish < Animal
+          include Swimmable         # mixing in Swimmable module
+        end
+
+        class Mammal < Animal
+        end
+
+        class Cat < Mammal
+        end
+
+        class Dog < Mammal
+          include Swimmable         # mixing in Swimmable module
+        end
+    
+    Syntax convention: use the "able" suffix on whatever verb describes the
+    behavior that the module is modeling. e.g: Swimmable for #swim
+
+    Namespacing - Module Classes
+      Similar classes can be defined within a module to keep them organized.
+
+      These classes are used like this: with Mammal being the module and 
+      Dog/Cat being classes within the module.
+        buddy = Mammal::Dog.new
+        kitty = Mammal::Cat.new
+    Module Methods
+      Modules can also be used as a container for methods. This is commonly 
+      used for methods that do not have a clear home within other Classes or
+      Objects. 
+
+      Example of defining a method within a module:
+        module Mammal
+          ...
+
+          def self.some_out_of_place_method(num)
+            num ** 2
+          end
+        end
+      
+      methods within modules are calling like this:
+        value = Mammal.some_out_of_place_method(4)
+      
+  Method Access Control - Private, Protected, Public
+    Public - Methods are public by default, available to anyone who knows 
+    either the class name or the object's name
+
+    Private - Sometimes you need methods that do work within a class but 
+    should not be or do not need to be accessible to the rest of the program.
+      Private methods are only accessible from other methods in the class
+
+      Anything below a #private call will be private, so if you want to
+      return to public methods you need to call #public.
+
+      Example:
+        class GoodDog
+          DOG_YEARS = 7
+
+          attr_accessor :name, :age
+
+          def initialize(n, a)
+            self.name = n
+            self.age = a
+          end
+
+          private
+
+          def human_years
+            age * DOG_YEARS
+          end
+        end
+
+        sparky = GoodDog.new("Sparky", 4)
+        sparky.human_years
+
+        NoMethodError: private method `human_years' called for
+        #<GoodDog:0x007f8f431441f8 @name="Sparky", @age=4>
+    
+    Protected - Cannot be called from outside the class, but allow access 
+    between class instances
+      Exampe:
+        class Person
+          def initialize(age)
+            @age = age
+          end
+
+          def older?(other_person)
+            age > other_person.age
+          end
+
+          protected
+
+          attr_reader :age
+        end
+
+        malory = Person.new(64)
+        sterling = Person.new(42)
+
+        malory.older?(sterling)  # => true
+        sterling.older?(malory)  # => false
+
+        malory.age
+          # => NoMethodError: protected method `age' called for #<Person: @age=64>
+        
+      The above code shows us that like private methods, protected methods 
+      cannot be invoked from outside of the class. However, unlike private 
+      methods, other instances of the class (or subclass) can also invoke 
+      the method. This allows for controlled access, but wider access 
+      between objects of the same class type.
+
+Inheritance
+  Inheritance is when a class inherits behavior from another class. The 
+  class that is inheriting behavior is called the subclass and the class 
+  it inherits from is called the superclass.
+
+  Syntax
+    Class MyClass < SubClass
+    SubClass.superclass  # => SubClass
+
+  Class Inheritance
+    Example: extracting #speak from GoodDog class (prior example) to 
+    superclass Animal, then using inheritance to make that behavior 
+    available in the GoodDog and Cat classes.
+      class Animal
+        def speak
+          "Hello!"
+        end
+      end
+
+      class GoodDog < Animal
+      end
+
+      class Cat < Animal
+      end
+
+      sparky = GoodDog.new
+      paws = Cat.new
+      puts sparky.speak           # => Hello!
+      puts paws.speak             # => Hello!
+
+    What if you want the GoodDog class to use its own #speak:
+      class Animal
+        def speak
+          "Hello!"
+        end
+      end
+
+      class GoodDog < Animal
+        attr_accessor :name
+
+        def initialize(n)
+          self.name = n
+        end
+
+        def speak
+          "#{self.name} says arf!"
+        end
+      end
+
+      class Cat < Animal
+      end
+
+      sparky = GoodDog.new("Sparky")
+      paws = Cat.new
+
+      puts sparky.speak           # => Sparky says arf!
+      puts paws.speak             # => Hello!
+
+      Ruby will check the object's class before looking in the superclass.
+
+    Encapsulation
+      If you are establishing a new class that you want to inherit methods 
+      from an existing class, you can also created a nested class. 
+
+      Nested Classes are just classes that are defined within the 
+      definition of another class. It is similar to a subclass except that
+      it is encapsulated within it's container (the class it is defined 
+      within)
+
+  super - keyword that searches the method lookup path for a method with 
+  the same name and invokes it. 
+    Example: 
+      class Animal
+        def speak
+          "Hello!"
+        end
+      end
+
+      class GoodDog < Animal
+        def speak
+          super + " from GoodDog class"   # calls speak from Animal and adds a string
+        end
+      end
+
+      sparky = GoodDog.new
+      sparky.speak        # => "Hello! from GoodDog class"
+    
+    A common use for super is in initialize methods:
+      class Animal
+        attr_accessor :name
+
+        def initialize(name)
+          @name = name
+        end
+      end
+
+      class GoodDog < Animal
+        def initialize(color)
+          super
+          @color = color
+        end
+      end
+
+      bruno = GoodDog.new("brown")        # => #<GoodDog:0x007fb40b1e6718 @color="brown", @name="brown">
+
+      class BadDog < Animal
+        def initialize(age, name)
+          super(name)
+          @age = age
+        end
+      end
+
+      BadDog.new(2, "bear")        # => #<BadDog:0x007fb40b2beb68 @age=2, @name="bear">
+
+      The first GoodDog example doesn't work as intended because it passes 
+      "brown" to @name as well as @color. BadDog works as intended because
+      it takes two arguments.
+
+      If you want (or need) to call an initialize method (or any inherited 
+      method) with no arguments, you need to use super() with parantheses.
+        Example: 
+          class Animal
+            def initialize
+            end
+          end
+
+          class Bear < Animal
+            def initialize(color)
+              super()
+              @color = color
+            end
+          end
+
+          bear = Bear.new("black")        # => #<Bear:0x007fb40b1e6718 @color="black">
+
+          If you forget to use the parentheses here, Ruby will raise an 
+          ArgumentError exception since the number of arguments is 
+          incorrect.
+  
+  Module Inheritance - mixins
+      The order in which you include modules is important to the method 
+      lookup path.
+
+      Ruby will look at the last module included first. So if there are 
+      methods with the same name, it will use the method from the last 
+      module mixed in.
+
+      Another important thing to note is that methods from modules included 
+      in classes will be accessible by their subclasses as well.
+
+      Understanding the method lookup path is important when working on 
+      large projects. 
+
+  When to use class inheritance vs mixins. Here are a couple of things to 
+  consider when evaluating these choices.
+    You can only subclass (class inheritance) from one class. You can mix 
+    in as many modules (interface inheritance) as you'd like.
+
+    If there's an "is-a" relationship, class inheritance is usually the 
+    correct choice. If there's a "has-a" relationship, interface 
+    inheritance is generally a better choice. For example, a dog "is an" 
+    animal and it "has an" ability to swim.
+
+    You cannot instantiate modules. In other words, objects cannot be 
+    created from modules.
+
+  Accidental Method Overriding
+    Remember that every class inherently subclasses from class Object. So 
+    as you created classes and subclasses you may accidentally overwrite 
+    methods originally defined in the Object Class since your classes will
+    come first in the method lookup path. 
+  
 
       
 
-    
-
 
 
     
-
-
-
-
-
-  
-    
-
-  
