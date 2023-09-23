@@ -2076,7 +2076,15 @@ Inheritance
       class GoodDog < Animal
         def speak
           super + " from GoodDog class"   # calls speak from Animal and adds a string
+          # => "Hello! from GoodDog class"
         end
+      end
+
+    Important use: If you want a class to copy its parent's initialize 
+    method with a few tweaks
+      def initialize(name, health, age, strength, weapon)
+          super(name, health, age, strength)
+          @weapon = weapon
       end
 
       sparky = GoodDog.new
@@ -2167,8 +2175,71 @@ Inheritance
     methods originally defined in the Object Class since your classes will
     come first in the method lookup path. 
   
+Error Handling
+  begin/rescue block - used when you anticipate errors 
+    basic example:
+      a = 10
+      b = "42"
 
-      
+      begin
+        a + b 
+      rescue 
+        puts "Could not add variables a (#{a.class}) and b (#{b.class})"
+      else 
+        puts "a + b is #{a + b}"
+      end
+
+    more detailed example:
+      require 'open-uri'
+      require 'timeout'
+
+      remote_base_url = "http://en.wikipedia.org/wiki"
+
+      start_year = 1900
+      end_year = 2000
+
+      (start_year..end_year).each do |yr|
+      begin
+        rpage = open("#{remote_base_url}/#{yr}")
+      rescue StandardError=>e   
+      # the StandardError=>e specifies the type of error that should cause this rescue block to run
+      # the actual error gets stored in e
+        puts "Error: #{e}"
+      else # code that runs if no error
+        rdata = rpage.read
+      ensure   # code that runs regardless of error or no error
+        puts "sleeping"
+        sleep 5
+      end
+          
+      if rdata
+        File.open("copy-of-#{yr}.html", "w"){|f| f.write(rdata) }
+      end
+      end  
+
+      You can also use the `retry` statement which redirects the program 
+      back to the begin statement. 
+        good to put this in an if statement that is counting number of retries
+
+        need to be careful because nothing below retry will run if it is called
+
+      You can also use `raise` to create your own Exception (similar to error but different)
+      for testing purposes or whatever.
+
+  Exception and Error Classes
+    All errors are defined under the Exception class
+      Exception family tree: http://ruby.bastardsbook.com/chapters/exception-handling/#exception-tree 
+
+    Often you will want to specify the type of error you want to rescue, 
+    not doing so can lead to adverse effects. For example, if you run code 
+    that ends up requiring you to use cmd + c to break out, but you have a 
+    rescue block that is set to catch any Exception, it won't let you break
+    out because cmd + c uses an Interrupt exception which is defined under 
+    the Exception class.
+
+    StandardError covers just about any kind of syntax type error, usually 
+    this is what you're looking for. You can get even more specific within 
+    that if needed.
 
 
 
