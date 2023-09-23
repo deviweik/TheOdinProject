@@ -21,3 +21,7 @@
 [submodule "CSS/css-exercises"]
 	path = CSS/css-exercises
 	url = https://github.com/deviweik/css-exercises
+
+[submodule "CSS/first-landing-page"]
+	path = CSS/first-landing-page
+	url = https://github.com/deviweik/first-landing-page
