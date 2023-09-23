@@ -1,10 +1,10 @@
 [submodule "JS/EventListenerExercises"]
-    path = JS/EventListenerExercises
-    url = https://github.com/wesbos/JavaScript30
+  path = JS/EventListenerExercises
+  url = https://github.com/wesbos/JavaScript30
 
 [submodule "JS/javascript-exercises"]
-    path = JS/javascript-exercises
-    url = https://github.com/TheOdinProject/javascript-exercises
+  path = JS/javascript-exercises
+  url = https://github.com/TheOdinProject/javascript-exercises
 
 [submodule "JS/etch-a-sketch"]
 	path = JS/etch-a-sketch
@@ -13,6 +13,11 @@
 [submodule "JS/calculator"]
 	path = JS/calculator
 	url = git@github.com:deviweik/calculator.git
-[submodule "Ruby/Ruby/ruby-exercises"]
-	path = Ruby/Ruby/ruby-exercises
+
+[submodule "Ruby/ruby-exercises"]
+	path = Ruby/ruby-exercises
 	url = https://github.com/TheOdinProject/ruby-exercises.git
+
+[submodule "CSS/css-exercises"]
+	path = CSS/css-exercises
+	url = https://github.com/deviweik/css-exercises
