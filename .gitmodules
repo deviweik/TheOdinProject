@@ -25,3 +25,10 @@
 [submodule "CSS/first-landing-page"]
 	path = CSS/first-landing-page
 	url = https://github.com/deviweik/first-landing-page
+
+[submodule "HTML/odin-recipes"]
+	path = HTML/odin-recipes
+	url = https://github.com/deviweik/odin-recipes
+
+	
+
