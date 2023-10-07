@@ -29,6 +29,7 @@
 [submodule "HTML/odin-recipes"]
 	path = HTML/odin-recipes
 	url = https://github.com/deviweik/odin-recipes
-
 	
-
+[submodule "Ruby/projects/event-manager"]
+	path = Ruby/projects/event-manager
+	url = https://github.com/deviweik/event-manager
