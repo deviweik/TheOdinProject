@@ -2241,6 +2241,171 @@ Error Handling
     this is what you're looking for. You can get even more specific within 
     that if needed.
 
+Serialization
+  JSON Serializer module example:
+    require 'json'
+
+    #mixin
+    module BasicSerializable
+
+      #should point to a class; change to a different
+      #class (e.g. MessagePack, JSON, YAML) to get a different
+      #serialization
+      @@serializer = JSON
+
+      def serialize
+        obj = {}
+        instance_variables.map do |var|
+          obj[var] = instance_variable_get(var)
+        end
+
+        @@serializer.dump obj
+      end
+
+      def unserialize(string)
+        obj = @@serializer.parse(string)
+        obj.keys.each do |key|
+          instance_variable_set(key, obj[key])
+        end
+      end
+    end
+  
+    # Should be able to change serialization method (to YAML, etc.) easily 
+    # by changing @@serializer 
+
+  Writing an array of objects to YAML one at a time:
+    When you do it one object at a time, it is a little more complicated, 
+    since we don't want to write it out to a whole bunch of files, but rather 
+    all of them to one file. It is a little more complicated since you want 
+    to be able to easily read your objects back in again which can be tricky 
+    as <span style="font-style: italic;"></span>_YAML_ serialization creates 
+    multiple lines per object. Here is a trick you can use, when you write 
+    the objects out, separate them with two newlines e.g.:
+
+    ```ruby
+    File.open("/home/alan/tmp/blah.yaml", "w") do |file|
+      (1..10).each do |index|
+        file.puts YAML::dump(A.new("hello world", index))
+        file.puts ""
+      end
+    end```
+
+    The file will look like this:
+
+    <pre>--- !ruby/object:A
+    number: 1
+    string: hello world
+
+    --- !ruby/object:A
+    number: 2
+    string: hello world
+
+    ...</pre>
+
+    Then when you want to read all the objects back, simply set the input record separator to be two newlines e.g.:
+
+    ```ruby
+    array = []
+    $/="\n\n"
+    File.open("/home/alan/tmp/blah.yaml", "r").each do |object|
+      array &lt;&lt; YAML::load(object)
+    end
+
+    puts array```
+
+  Serialization Method Comparison - Speed 
+    I will create 500000 objects (a relatively small set of data) and 
+    serialize them all to a file using all three methods.
+
+    Serializing
+      Code 
+        require "benchmark"
+
+        def benchmark_serialize(output_file)
+          Benchmark.realtime do
+            File.open(output_file, "w") do |file|
+              (1..500000).each do |index|
+                yield(file, A.new("hello world", index))
+              end
+            end
+          end
+        end
+
+        puts "YAML:"
+        time = benchmark_serialize("/home/alan/tmp/yaml.dat") do |file, object|
+          file.puts YAML::dump(object)
+          file.puts ""
+        end
+        puts "Time: #{time} sec"
+
+        puts "JSON:"
+        time = benchmark_serialize("/home/alan/tmp/json.dat") do |file, object|
+          file.puts object.to_json
+        end
+        puts "Time: #{time} sec"
+
+        puts "Marshal:"
+        time = benchmark_serialize("/home/alan/tmp/marshal.dat") do |file, object|
+          file.print Marshal::dump(object)
+          file.print "---_---"
+        end
+        puts "Time: #{time} sec"
+
+      Result
+        YAML:
+        Time: 45.9780583381653 sec
+        JSON:
+        Time: 5.44697618484497 sec
+        Marshal:
+        Time: 2.77714705467224 sec
+
+    Deserializing
+      Code 
+        def benchmark_deserialize(input_file, array, input_separator)
+          $/=input_separator
+          Benchmark.realtime do
+            File.open(input_file, "r").each do |object|
+              array &lt;&lt; yield(object)
+            end
+          end
+        end
+
+        array1 = []
+        puts "YAML:"
+        time = benchmark_deserialize("/home/alan/tmp/yaml.dat", array1, "\n\n") do |object|
+          YAML::load(object)
+        end
+        puts "Array size: #{array1.length}"
+        puts "Time: #{time} sec"
+
+        array2 = []
+        puts "JSON:"
+        time = benchmark_deserialize("/home/alan/tmp/json.dat", array2, "\n") do |object|
+          JSON.parse(object)
+        end
+        puts "Array size: #{array2.length}"
+        puts "Time: #{time} sec"
+
+        array3 = []
+        puts "Marshal:"
+        time = benchmark_deserialize("/home/alan/tmp/marshal.dat", array3, "---_---") do |object|
+          Marshal::load(object.chomp)
+        end
+        puts "Array size: #{array3.length}"
+        puts "Time: #{time} sec"
+        
+      Result
+        YAML:
+        Array size: 500000
+        Time: 19.4334170818329 sec
+        JSON:
+        Array size: 500000
+        Time: 18.5326402187347 sec
+        Marshal:
+        Array size: 500000
+        Time: 14.6655268669128 sec
 
 
     
+
+  
