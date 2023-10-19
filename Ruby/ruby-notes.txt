@@ -2405,7 +2405,8 @@ Serialization
         Array size: 500000
         Time: 14.6655268669128 sec
 
-
+Pattern Matching
+  
     
 
   
