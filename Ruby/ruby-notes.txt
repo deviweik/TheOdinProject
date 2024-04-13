@@ -2637,5 +2637,169 @@ Recursion
     end
   
 *Code Efficiency
+  Time Complexity (speed of the algorithm)
+    Efficiency of an algorithm is measured by evaluating the number of steps
+    it takes to complete. 
+    
+    You cannot measure efficiency by measuring how long
+    the algorithm takes to execute, because different computers run at 
+    different speeds
+
+    What if the number of steps depends on the input(s) of the algorithm?
+      This is usually the case, and why we need to use Asymptotic Notations,
+      like Big O.
+
+    Asymptotic Notations
+      Three most common:
+        Big O Notation - represents the upper bound of an algorithm. Worst
+        case scenario for performance
+
+        Omega Notation - Represents the lower bound, best case scenario
+
+        Theta Notation - Represents both upper and lower bound, analyzes the
+        average case complexity of an algorithm
+
+    Big O - worst case scenario
+      Gives a measurement for the time it takes for an algorithm to run as 
+      the input grows towards infinity
+
+      Big O Notations (Fastest to Slowest):
+        1. O(1) - Constant complexity
+        2. O(log N) - Logarithmic complexity
+        3. O(N) - Linear complexity 
+        4. O(N log N) - N x log N complexity
+        5. O(n^2) - Quadratic complexity
+        6. O(n^3) - Cubic complexity
+        7. O(2^n) - Exponential complexity
+        8. O(N!) - Factorial complexity 
+      
+      O(1) - Constant Complexity
+        Any algorithm that requires the same number of steps regardless of 
+        the input size 
+
+      O(log N) - Logarithmic Complexity
+        This means that the number of steps an algorithm takes increases by 1
+        as the data doubles.
+
+        An example of this is binary search. It only works on sorted arrays, 
+        but by continuing to divide the array in half you can eliminate half 
+        of the remaining array elements per step.
+
+      O(N) - Linear Complexity
+        Number of steps grows at the same exact rate as number of input items 
+        grows.
+
+        Iterating over an array is an example of linear complexity.
+
+      O(N log N) - N x log N Complexity 
+        This can be thought of as having one sub algorithm that is O(log N), 
+        but with each iteration also being processed by another algorithm of 
+        complexity O(N)
+
+        An example of this is the merge sort algorithm 
+
+      O(n^2) - Quadratic Complexity 
+        Frequently seen as a nested loops
+
+      O(n^3) - Cubic Complexity 
+        Triple nested loops
+
+      O(2^n) - Exponential Complexity
+        The number of steps doubles with each item added to the input size 
+
+        Should always be avoided if possible, quickly gets out of hand with
+        large input sizes
+
+      O(N!) - Fatorial Complexity 
+        An example of factorial complexity is anytime you need to calculate 
+        all permutations or combinations of a set of data.
+
+        This also gets out of hand extremely quickly, simple factorials:
+          n = 3 -> 3! = 6
+          n = 4 -> 4! = 24
+          n = 10 -> 10! = 3,628,800 (oof)
+    
+    Omega Notation - best case scenario (Big-Ω)
+      Take a linear search algorithm for a simple example. Since it has to 
+      iterate through every item in the given array, the worst case scenario,
+      or Big O, is if the item being searched for is not in the array. This 
+      would be O(N). But the best case scenario would be if the item being 
+      searched for is the first item in the array, so it would also have a 
+      complexity of Ω(1).
+
+      Not as useful because it is unlikely that the item being searched for
+      would be the first item in the array. While not every algorithm is as 
+      simple as a linear search, the point still stands that considering the 
+      best case scenario usually doesn't give any idea how well the 
+      algorithm will scale.
+
+    Theta Notation - Big-Θ
+      Theta notation looks to give the exact value or a useful range between 
+      the upper and lower bounds to understand an algoithm's efficiency.
+
+      If you have an algorithm that always iterates through an entire array, 
+      then the size of the area doesn't matter. Best and worst cases are both
+      O(N), so the exact performance is Θ(N).
+
+    Typically only Big O is used to consider algorithm efficiency unless 
+    you're really diving into the details.
+
+  Space Complexity (memory usage of the algorithm)
+    Total space used by an algorithm relative to the size of the input
+
+    Auxilary space - extra space used by the algorithm
+      Things like temporary variables
+
+      Space complexity considers the space used by the algorithm input as 
+      well as any auxilary space used.
+
+    Time complexity is typically talked about more because processing power
+    is more expensive than memory, so it's easier to get around space 
+    constraints by increasing primary memory (like buying more RAM). Also,
+    you'll typically always have problems with speed before memory becomes 
+    a serious concern.
+
+    Something to consider is that space constraints are more absolute than 
+    time constraints. If space is the issue, it's usually not an option to 
+    expand memory access on the fly. But when time is the issue you can 
+    just allow the program to run for longer.
+
+    Measuring Space Complexity 
+      Big O notation is still used for this
+
+      O(1) - this is an algorithm where the memory usage remains constant 
+      regardless of input size. For example most algorithms where only a 
+      single value is created are O(1)
+
+      O(N) - most data structures have linear space complexity. In other 
+      words, required space is usually proportional to the number of 
+      elements in the input.
+
+      Higher than O(N) - not commonly seen. Examples would be some types of
+      complex data structures like trees, graphs, or hash tables, which 
+      can have higher complexities depending on how they are handled. 
+      Recursive algorithms can also lead to higher space complexities. 
+
+    Three main factors in space complexity:
+      Variables and constants
+
+      Inputs
+
+      Execution - recursive functions, calling other functions, these 
+      things use up space.
+
+Common Data Structures and Algorithms
+  Data structures are used to store data in a way that meets the needs of 
+  the particular application.
+
+  Main considerations when picking a data structure:
+    - How long it takes to populate the structure
+    - How long it takes to add/find elements 
+    - How much memory the structure takes up 
+
+    Also important to make sure the structure logically makes sense with 
+    any internal relationships between the data
+
   
 
+  

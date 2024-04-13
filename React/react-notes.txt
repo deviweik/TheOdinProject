@@ -1,0 +1,33 @@
+Library vs Framework
+  Inversion of control
+    Library - you are in charge of the flow of the application, you choose 
+    when and where to call the library.
+
+    Framework - framework is in charge of the flow. It tells you where you 
+    can plug in your own code, but it decides when to call this code.
+
+  Opinionated
+    The degree of freedom a library or framework gives the developer 
+    dictates how "opinionated" it is. 
+
+    More freedom = less opinionated
+
+Vite 
+  Used to quick start React projects
+  
+  Minimum steps required to configure your own project and development 
+  environment:
+    - Package Management (NPM, Yarn)
+    - Module Bundling (Webpack, Parcel)
+    - Compilation (Babel)
+    - React itself 
+
+    Vite can do most of this with a single terminal command
+      npm create vite@latest my-first-react-app -- --template react
+
+Default React Project Directory
+  /public - static assests, i.e. images, icons, information files 
+
+  /src - code that runs the app
+    main.jsx - entry point of the application 
+  
