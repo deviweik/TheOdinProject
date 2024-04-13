@@ -2406,7 +2406,236 @@ Serialization
         Time: 14.6655268669128 sec
 
 Pattern Matching
-  
-    
+  Important basics but didn't seem useful to take notes
 
+Blocks
+  Syntax:
+    # Single-line block
+    [1,2,3].each { |num| puts num }
+
+    # Multi-line block
+    [1,2,3].each do |num|
+      puts num
+    end
+
+  Blocks are commonly used with enumerable methods but they can also be 
+  used with your own methods that accept blocks. 
+
+  Yield 
+    yield is a keyword that can be called inside a method to relinquish
+    execution to the accompanying block. 
+
+    Example: This example shows how yield can be used to create a method 
+    that prints to console regardless of whether you use #p or #puts 
+      def logger
+        yield
+      end
+
+      logger { puts 'hello from the block' }
+      #=> hello from the block
+
+      logger do
+        p [1,2,3]
+      end
+      #=> [1,2,3]
+    
+    You can also provide arguments to the block by passing them as 
+    arguments to yield. You can also call yield more than once.
+      Example: This example shows how yield can be used in a banking 
+      application to output transations while allowing the recipient to 
+      process them however they want/need.
+        @transactions = [10, -15, 25, 30, -24, -70, 999]
+
+        def transaction_statement
+          @transactions.each do |transaction|
+            yield transaction # You just yield the transaction amount.
+          end
+        end
+
+        transaction_statement do |transaction|
+          p "%0.2f" % transaction # The bank that calls the method can define how it is handled.
+        end
+        #=> ["10.00", "-15.00", "25.00", "30.00", "-24.00", "-70.00", "999.00"]
+
+      You can also move the #p to in front of the yield call in 
+      #transaction_statement. This would allow the banks to provide a block
+      that specifies how each transaction should be formatted. Writing the 
+      method that way allows yeild to capture the returned value of the 
+      block and print it.
+
+      Example: You can also store the returned value of the block by 
+      assigning yield to a variable or by collecting it in a data structure
+        With an array:
+          @transactions = [10, -15, 25, 30, -24, -70, 999]
+
+          def transaction_statement
+            formatted_transactions = []
+            @transactions.each do |transaction|
+              formatted_transactions << yield(transaction)
+            end
+
+            p formatted_transactions
+          end
+
+          transaction_statement do |transaction|
+            "%0.2f" % transaction
+          end
+          #=> ["10.00", "-15.00", "25.00", "30.00", "-24.00", "-70.00", "999.00"]
+
+        With a hash:
+          def awesome_method
+            hash = {a: 'apple', b: 'banana', c: 'cookie'}
+
+            hash.each do |key, value|
+              yield key, value
+            end
+          end
+
+          awesome_method { |key, value| puts "#{key}: #{value}" }
+          #=> a: apple
+          #=> b: banana
+          #=> c: cookie
+
+      If the block expects an argument but does not receive one, the 
+      argument is assigned nil.
+
+    Yield can also be called multiple times to run the code in the block 
+    more than once
+      def print_twice
+        yield
+        yield
+      end
+      print_twice { puts "Hello" }
+      # "Hello"
+      # "Hello"
+
+  Explicit vs Implicit Blocks
+    Explicit - block is given a name in parameter list
+      def explicit_block(&block)
+        block.call # same as yield
+      end
+      explicit_block { puts "Explicit block called" }
+
+    Implicit - 
+
+  Block Control:
+    Methods written to rely on yield are assuming the person using the 
+    method will provide a block.
+      It will error if they dont:
+        def simple_method
+          yield
+        end
+
+        simple_method
+        # => `simple_method': no block given (yield) (LocalJumpError)
+
+    #block_given? - this is a method that returns true if a block was included
   
+  Lambdas
+    lambda is a keyword used to assign a block to a variable
+
+    Syntax:
+      my_lambda = lambda { puts "my lambda" }
+
+      my_other_lambda = -> { puts "hello from the other side" }
+      # -> {} is a shorthand syntax called a stabby lambda 
+
+      my_lambda = -> { puts "high five" }
+      my_lambda.call
+      # => high five
+
+    Syntax for providing arguments:
+      my_name = ->(name) { puts "hello #{name}" }
+
+      my_age = lambda { |age| puts "I am #{age} years old" }
+
+      my_name.call("tim")
+      #=> hello tim
+      my_age.call(78)
+      #=> I am 78 years old
+
+    Syntax for calling lambdas:
+      my_name = ->(name) { puts "hello #{name}" }
+
+      my_name.call("tim") # best to stick with #call
+      my_name.("tim")
+      my_name["tim"]
+      my_name.=== "tim"
+    
+  Procs 
+    A proc is an object that is used to store blocks and pass them around 
+    like variables.
+
+    A lambda is actually a type of proc object.
+
+    Syntax:
+      a_proc = Proc.new { puts "this is a proc" }
+
+      # can also use this:
+      a_proc = proc { puts "this is a proc" }
+
+      a_proc.call
+      #=> this is a proc
+
+    Arguments declared inside pipes (||)
+      a_proc = Proc.new { |name, age| puts "name: #{name} --- age: #{age}" }
+
+      a_proc.call("tim", 80)
+      #=> name: tim --- age: 80
+    
+  Procs vs lambdas 
+    Procs will not throw an error if they receive less arguments than 
+    expected, but lambdas will.
+      Procs behave like blocks, assigning nil to any parameters that are 
+      not passed through as arguments.
+
+      Methods like #select use procs so that the number of arguments can 
+      vary, see example:
+        nested_array = [[1, 2], [3, 4], [5, 6]]
+        nested_array.select {|a, b| a + b > 10 }
+
+        # => [5, 6]
+
+        I could also do this:
+        nested_array = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        nested_array.select {|a, b, c| a + b + c > 10 }
+
+        # => [[4, 5, 6], [7, 8, 9]]
+
+        if #select used a lambda
+
+  Capturing Blocks
+    You can capture a block in a method definition using a special 
+    argument &. Ex:
+      def cool_method(&my_block)
+        my_block.call
+      end
+
+      cool_method { puts "cool" }
+
+      this will also work:
+      def cool_method
+        yield
+      end 
+
+Recursion
+  Recursion is where a function calls itself
+
+  Frequently, the same outcome can be achieved using a loop. Need to be 
+  cautious of this because most of the time the loop solution is easier 
+  and more efficient.
+
+  A common use of recursion are divide and conquer algorithms
+
+  Ex: Recursive function that finds the factorial of a number
+    def factorial(n)
+      if n == 0
+        1
+      else
+        n * factorial(n-1)
+      end
+    end
+  
+*Code Efficiency
+  
+
