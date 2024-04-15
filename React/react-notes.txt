@@ -31,3 +31,600 @@ Default React Project Directory
   /src - code that runs the app
     main.jsx - entry point of the application 
   
+Components - break UI down into independent reusable chunks
+  Components are javascript functions that return jsx (markup/js)
+
+  Example: 
+    function Greeting() {
+      return <h1>&quot;Hello, World!&quot;</h1>;
+    }
+
+    export default Greeting;
+
+  Components need to be exported (see example above)
+    Make sure to capitalize!
+
+  After being exported, Components can be imported to other React files
+    Example from main.jsx:
+      import Greeting from "./Greeting.jsx";
+
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <React.StrictMode>
+          <Greeting />
+        </React.StrictMode>,
+      );
+  
+JSX - syntax extension that allows HTML-like markup inside a js file
+  compiles down to plain javascript objects 
+
+  JSX allows React to separate concerns by containing both rendering logic 
+  and content in the same place (a component).
+
+  There are other ways to write components but most devs prefer JSX for 
+  it's conciseness. Most codebases use it 
+
+  Rules of JSX:
+    1. Return a single root element.
+      You can return more than one element by wrapping them in a <div> or 
+      by using a React fragment
+        Example:
+          return (
+            <>
+              HTML to return
+            <>
+          );
+          // Could replace <></> with <div></div>
+
+        *Note: Using a fragment will be invisible in the DOM, so the 
+        elements within the fragment will be registered as their own 
+        elements
+          So this way the elements of the component are direct children of 
+          the container.
+
+          Using a div makes the div the direct child of the container, 
+          while the individual elements are just children of the div
+
+    2. Close all Tags.
+      In HTML, many tags are self-closing and self-wrapping.
+      
+      In JSX however, we must explicitly close and wrap these tags.
+        Examples:
+          <input> would become <input />
+          <li> would become <li></li>
+
+    3. camelCase Most things.
+      JSX turns to javascript, and attributes of elements become keys of 
+      js objects
+
+      For this reason, cannot use dashes or reserved words like 'class'
+        Need to use className="class" instead
+          Example:
+            function App() {
+              return (
+              <div className="container">
+                <svg>
+                  <circle cx="25" cy="75" r="20" stroke="green" strokeWidth="2" />
+                </svg>
+              </div>
+              );
+            }
+    
+  Using Javascript within JSX
+    Attributes can be passed as strings by enclosing in double or single 
+    quotes
+
+    Can also pass variables by enclosing in curly braces: {variableName}
+
+    All javascript in JSX is contained within curly braces 
+      You can also call functions
+        Example: 
+          const today = new Date();
+
+          function formatDate(date) {
+            return new Intl.DateTimeFormat(
+              'en-US',
+              { weekday: 'long' }
+            ).format(date);
+          }
+
+          export default function TodoList() {
+            return (
+              <h1>To Do List for {formatDate(today)}</h1>
+            );
+          }
+    
+    Objects in JS are also denoted by enclosing in curly braces, so in JSX 
+    you need to enclose in double curly braces if you want to define an 
+    object 
+      Really just an object inside JSX curlies
+        Can also be written as so to make it easier to read:
+          <ul style={
+            {
+              backgroundColor: 'black',
+              color: 'pink'
+            }
+          }> 
+
+      Example: 
+        person={{ name: "Hedy Lamarr", inventions: 5 }};
+
+      Actual Use Case: 
+        export default function TodoList() {
+          return (
+            <ul style={{
+              backgroundColor: 'black',
+              color: 'pink'
+            }}>
+              <li>Improve the videophone</li>
+              <li>Prepare aeronautics lectures</li>
+              <li>Work on the alcohol-fuelled engine</li>
+            </ul>
+          );
+        }
+
+    You can create objects that contain not only content for your 
+    components but the style as well
+      Example: 
+        const person = {
+          name: 'Gregorio Y. Zara',
+          theme: {
+            backgroundColor: 'black',
+            color: 'pink'
+          }
+        };
+
+        export default function TodoList() {
+          return (
+            <div style={person.theme}>
+              <h1>{person.name}'s Todos</h1>
+              <img
+                className="avatar"
+                src="https://i.imgur.com/7vQD0fPs.jpg"
+                alt="Gregorio Y. Zara"
+              />
+            </div>
+          );
+        }
+
+Rendering Techniques
+  Rendering a list of elements in JSX
+    Example: (rendering a list of animals from an array)
+      function App() {
+        const animals = ["Lion", "Cow", "Snake", "Lizard"];
+        // the commented code works identically
+        // const animalsList = animals.map((animal) => <li key={animal}>{animal}</li>)
+
+        return (
+          <div>
+            <h1>Animals: </h1>
+            <ul>
+              {animals.map((animal) => {
+                return <li key={animal}>{animal}</li>;
+              })}
+              // {animalsList}
+            </ul>
+          </div>
+        );
+      }
+
+  Rendering a list of components in JSX 
+    props - props are arugments passed into components
+      <List animalList={animals} />
+        This is an example of calling a component with props. In this case, 
+        props.animalList would be called to retrieve the data that is 
+        stored in the animals variable within the scope of the component 
+        definition.
+
+    Example: (would be useful in a case where many different lists of 
+    animals are needed)
+      function ListItem(props) {
+        return <li>{props.animal}</li>
+      }
+
+      function List(props) {
+        return (
+          <ul>
+            {props.animals.map((animal) => {
+              return <ListItem key={animal} animal={animal} />;
+            })}
+          </ul>
+        );
+      }
+
+      function App() {
+        const animals = ["Lion", "Cow", "Snake", "Lizard"];
+
+        return (
+          <div>
+            <h1>Animals: </h1>
+            <List animals={animals} />
+          </div>
+        );
+      }
+    
+  Conditionally Rendering UI
+    Using ternary operator - return bool ? true_code : false_code;
+      Example altering code above:
+        return (
+          <ul>
+            {props.animals.map((animal) => {
+              return animal.startsWith("L") ? <li key={animal}>{animal}</li> : null;
+            })}
+          </ul>
+        );
+      
+    Using && operator - return bool && true_code;
+      Will only return second operand if the first evaluates to true 
+
+      Don't use directly use numbers on the left side of the && operator 
+    
+    Using if, if/else, or switch blocks 
+      Example: 
+        function List(props) {
+          if (!props.animals) {
+            return <div>Loading...</div>;
+          }
+
+          if (props.animals.length === 0) {
+            return <div>There are no animals in the list!</div>;
+          }
+
+          return (
+            <ul>
+              {props.animals.map((animal) => {
+                return <li key={animal}>{animal}</li>;
+              })}
+            </ul>
+          );
+        }
+
+        function App() {
+          const animals = [];
+
+          return (
+            <div>
+              <h1>Animals: </h1>
+              <List animals={animals} />
+            </div>
+          );
+        }
+
+      Same example with ternary operator:
+        function List(props) {
+          return (
+            <>
+              {!props.animals ? (
+                <div>Loading...</div>
+              ) : props.animals.length > 0 ? (
+                <ul>
+                  {props.animals.map((animal) => {
+                    return <li key={animal}>{animal}</li>;
+                  })}
+                </ul>
+              ) : (
+                <div>There are no animals on the list!</div>
+              )}
+            </>
+          );
+        }
+      
+      Same example with && operator:
+        function List(props) {
+          return (
+            <>
+              {!props.animals && <div>Loading...</div>}
+              {props.animals && props.animals.length > 0 && (
+                <ul>
+                  {props.animals.map((animal) => {
+                    return <li key={animal}>{animal}</li>;
+                  })}
+                </ul>
+              )}
+              {props.animals && props.animals.length === 0 && <div>There are no animals in the list!</div>}
+            </>
+          );
+        }
+
+      Nested ternaries and && operators can be tough to look at
+
+Keys - used for referencing elements
+  Each element needs to have a unique identifier
+
+  Using uuid package: 
+    Example:
+      // a list of todos, each todo object has a task and an id
+      const todos = [
+        { task: "mow the yard", id: uuid() },
+        { task: "Work on Odin Projects", id: uuid() },
+        { task: "feed the cat", id: uuid() },
+      ];
+
+      function TodoList() {
+        return (
+          <ul>
+            {todos.map((todo) => (
+              // here we are using the already generated id as the key.
+              <li key={todo.id}>{todo.task}</li>
+            ))}
+          </ul>
+        );
+      }
+
+  Using array index: 
+    Only do this if the list will never change
+      The index (key in this case) would change if elements are removed/ 
+      inserted/moved, but keys need to be unique to the element they are 
+      linked to in order to infer what was changed
+
+    Example:
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+      function MonthList() {
+        return (
+          <ul>
+            // here we are using the index as key
+            {months.map((month, index) => (<li key={index}>{month}</li>))}
+          </ul>
+        );
+      }
+
+  JSX elements directly inside a map() call always need keys
+
+  Keys can't be passed to short Fragment syntax (<>...</>)
+    Can wrap everything in a div 
+    
+    Can also use a more explicit Fragment syntax
+      <Fragment key={ele.id}> ... </Fragment>
+
+      Fragments disappear from the DOM, so this will produce a flat list 
+      of elements
+
+      Example: 
+        import { Fragment } from 'react';
+
+        const listItems = people.map(person =>
+          <Fragment key={person.id}>
+            <h1>{person.name}</h1>
+            <p>{person.bio}</p>
+          </Fragment>
+        );
+
+  Components won’t receive key as a prop. Only used as a hint by React
+    If your component needs an ID, you have to pass it as a separate prop: 
+      <Profile key={id} userId={id} />
+
+Props - used to pass data between components 
+  Unidirectional data transfer from parent components to child components 
+    Gives more explicit control over data, resulting in fewer errors 
+
+  Component functions accept a single argument, a props object
+
+  Props can be used to create very dynamic reusable components 
+    Example:
+      function Button(props) {
+        const buttonStyle = {
+          color: props.color,
+          fontSize: props.fontSize + 'px'
+        };
+
+        return (
+          <button style={buttonStyle}>{props.text}</button>
+        );
+      }
+
+      export default function App() {
+        return (
+          <div>
+            <Button text="Click Me!" color="blue" fontSize={12} />
+            <Button text="Don't Click Me!" color="red" fontSize={12} />
+            <Button text="Click Me!" color="blue" fontSize={20} />
+          </div>
+        );
+      }
+
+  Using destructuring and default variables
+    You can also destructure your props to make the code more readable 
+      Example: 
+        function Button({ text, color, fontSize }) {
+          const buttonStyle = {
+            color: color,
+            fontSize: fontSize + "px"
+          };
+
+          return <button style={buttonStyle}>{text}</button>;
+        }
+
+      It also lets you have easier access to the variables you're actually 
+      using, since it's rare that you'll want to use the whole props object 
+
+      Also lets you define default values at the same time 
+
+    You can also set default props to reduce need for repetition
+      Example: 
+        function Button({ text, color, fontSize }) {
+          const buttonStyle = {
+            color: color,
+            fontSize: fontSize + "px"
+          };
+
+          return <button style={buttonStyle}>{text}</button>;
+        }
+
+        Button.defaultProps = {
+          text: "Click Me!",
+          color: "blue",
+          fontSize: 12
+        };
+
+        export default function App() {
+          return (
+            <div>
+              <Button />
+              <Button text="Don't Click Me!" color="red" />
+              <Button fontSize={20} />
+            </div>
+          );
+        }
+
+      Default values for props are only used if a prop is missing or if it's 
+      passed as {undefined}
+        Note: {null} and {0} will not result in default values being used
+
+    You can combine these default props and prop destructuring as well 
+      Example: 
+        function Button({ text = "Click Me!", color = "blue", fontSize = 12 }) {
+          const buttonStyle = {
+            color: color,
+            fontSize: fontSize + "px"
+          };
+
+          return <button style={buttonStyle}>{text}</button>;
+        }
+
+  Passing functions as props
+    Example: 
+      function Button({ text = "Click Me!", color = "blue", fontSize = 12, handleClick }) {
+        const buttonStyle = {
+          color: color,
+          fontSize: fontSize + "px"
+        };
+
+        return (
+          <button onClick={handleClick} style={buttonStyle}>
+            {text}
+          </button>
+        );
+      }
+
+      export default function App() {
+        const handleButtonClick = () => {
+          window.location.href = "http://www.google.com";
+        };
+
+        return (
+          <div>
+            <Button handleClick={handleButtonClick} />
+          </div>
+        );
+      }
+
+    Note in the above example that handleButtonClick is a variable storing 
+    an anonymous function, not a function itself.
+      It's important to pass through a reference to a function in props, 
+      and not the actual function. If you had something like 
+        handleClick = {handleButtonClick()}
+      then the function would be called as the button renders, rather than 
+      when it is clicked.
+
+    You can also set the function to take an argument, but we need to 
+    change how the function is called in that case 
+      Example: 
+        function Button({ text = "Click Me!", color = "blue", fontSize = 12, handleClick }) {
+          const buttonStyle = {
+            color: color,
+            fontSize: fontSize + "px"
+          };
+
+          return (
+            <button onClick={() => handleClick('https://www.theodinproject.com')} style={buttonStyle}>
+              {text}
+            </button>
+          );
+        }
+
+        export default function App() {
+          const handleButtonClick = (url) => {
+            window.location.href = url;
+          };
+
+          return (
+            <div>
+              <Button handleClick={handleButtonClick} />
+            </div>
+          );
+        }
+
+      You can also do this using Curried functions 
+
+  Forwarding props with JSX spread syntax 
+    Example: 
+      No spread syntax:
+        function Profile({ person, size, isSepia, thickBorder }) {
+          return (
+            <div className="card">
+              <Avatar
+                person={person}
+                size={size}
+                isSepia={isSepia}
+                thickBorder={thickBorder}
+              />
+            </div>
+          );
+        }
+
+      Spread syntax: 
+        function Profile(props) {
+          return (
+            <div className="card">
+              <Avatar {...props} />
+            </div>
+          );
+        }
+    
+    Use spread syntax with restraint
+      If you’re using it in every other component, something is wrong
+      
+      Often, it indicates that you should split your components and pass 
+      children as JSX
+
+  Passing JSX as children 
+    Nesting built-in browser tags is incredibly common, for instance a div 
+    inside another div.
+
+    You'll want to nest Components the same way
+
+    Nested components are passed to parent components in a prop called 
+    children
+      Example: 
+        App.js:
+          import Avatar from './Avatar.js';
+
+          function Card({ children }) {
+            return (
+              <div className="card">
+                {children}
+              </div>
+            );
+          }
+
+          export default function Profile() {
+            return (
+              <Card>
+                <Avatar
+                  size={100}
+                  person={{ 
+                    name: 'Katsuko Saruhashi',
+                    imageId: 'YfeOqp2'
+                  }}
+                />
+              </Card>
+            );
+          }
+
+        Avatar.js:
+          import { getImageUrl } from './utils.js';
+
+          export default function Avatar({ person, size }) {
+            return (
+              <img
+                className="avatar"
+                src={getImageUrl(person)}
+                alt={person.name}
+                width={size}
+                height={size}
+              />
+            );
+          }
+    
+
+
