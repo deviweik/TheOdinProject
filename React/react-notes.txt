@@ -626,5 +626,49 @@ Props - used to pass data between components
             );
           }
     
+State - Provides memory for components 
+  Example: 
+    https://codesandbox.io/p/devbox/unruffled-pasteur-6h36wf?embed=1&file=%2Fsrc%2FApp.jsx
+    
+    Whenever 
+  
+  useState hook
+    Allows you to define state in a functional component 
 
+    Takes an intial value as a parameter
 
+    Returns an array with two elements, can be destructured to get:
+      The current state value
+
+      A function to update the state value 
+
+    Example: 
+      const [stateValue, setStateValue] = useState(initialValue);
+
+      // from example above:
+      const [backgroundColor, setBackgroundColor] = useState(initialColor);
+
+  Rerendering - entire components are recreated from scratch, but now 
+  returning the latest state value from useState 
+    Rerendering is a key feature of React, it is what enables efficient 
+    updates to the user interface in response to changes in the 
+    underlying data.
+
+  React reconciliation algorithm 
+    Whenever rerendering occurs a new lightweight representation of the DOM 
+    (Document Object Model) tree is created, this is called the virtual 
+    DOM.
+
+    The virtual DOM is used to track the current state of the UI 
+
+    When a new virtual DOM is created, it is compared with the existing 
+    virtual DOM and the minimal set of changes needed to update the actual 
+    DOM is calculated. This process aims to optimize performance by only 
+    applying necessary updates to the DOM, reducing unnecessary re-renders 
+    and improving efficiency.
+
+  How to define a state change function
+    explain the stuff about the outer and inner arrow functions, and how 
+    the state change function actually needs to return another function 
+    that can be called later on when necessary (like when a button is 
+    pressed)
