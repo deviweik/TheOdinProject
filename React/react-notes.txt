@@ -633,6 +633,9 @@ State - Provides memory for components
     Whenever 
   
   useState hook
+    import statement: 
+      import { useState } from "react";
+
     Allows you to define state in a functional component 
 
     Takes an intial value as a parameter
@@ -672,3 +675,23 @@ State - Provides memory for components
     the state change function actually needs to return another function 
     that can be called later on when necessary (like when a button is 
     pressed)
+
+  Hooks - Functions that use React features
+    All hooks have the 'use' prefix (seen in useState)
+
+    Hooks can only be called from the top level of a functional component 
+      only available while React is rendering
+
+    Hooks can't be called from inside loops or conditions 
+
+    Naming convention
+      const [something, setSomething] = useState(initialValue)
+
+  State is isolated and private 
+    State is local to the component instance on the screen 
+
+    if you render a component twice, each will have its own isolated state
+
+    If you want components to share state, the best way is to remove state 
+    from the individual components and add it to their closest shared 
+    parent
