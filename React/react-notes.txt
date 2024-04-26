@@ -695,3 +695,228 @@ State - Provides memory for components
     If you want components to share state, the best way is to remove state 
     from the individual components and add it to their closest shared 
     parent
+
+  How to structure state 
+    Don’t put values in state that can be calculated using existing values,
+    state, and/or props.
+
+    State shouldn't be mutated (directly modified or changed in place).
+      Example: 
+        function Person() {
+          const [person, setPerson] = useState({ name: "John", age: 100 });
+
+          // BAD - Don't do this!
+          const handleIncreaseAge = () => {
+            // mutating the current state object
+            person.age = person.age + 1;
+            setPerson(person);
+          };
+
+          // GOOD - Do this!
+          const handleIncreaseAge = () => {
+            // copy the existing person object into a new object
+            // while updating the age property
+            const newPerson = { ...person, age: person.age + 1 };
+            setPerson(newPerson);
+          };
+
+          return (
+            <>
+              <h1>{person.name}</h1>
+              <h2>{person.age}</h2>
+              <button onClick={handleIncreaseAge}>Increase age</button>
+            </>
+          );
+        }
+
+      Always use the setState functions provided by React for 
+      updating state. While these functions facilitate state updates, they 
+      don't guarantee immutable updates on their own. To ensure 
+      immutability, it's essential to use spread syntax (...) with objects 
+      to create a shallow copy of the state object. This shallow copy 
+      duplicates the top-level structure of the object and contains 
+      references to nested objects. By modifying this copy instead of the 
+      original state, you ensure that changes are isolated and do not 
+      affect the original data in memory."
+
+  How state updates 
+    State updates are asynchronous - so when setState functions are called,
+    React will apply the update in the next component render.
+
+    In React the state variables are not reactive, the components are.
+      The current state value will stay the same until the component has 
+      re-rendered completely.
+
+    Be sure not to create infinite loops 
+      Example: 
+        function Component() {
+          const [count, setCount] = useState(0);
+
+          setCount(count + 1);
+
+          return <h1>{count}</h1>;
+        }
+
+      This function will loop infinitely because the code inside the 
+      Component definition will be executed each time the component renders
+        This leads to the count increasing each time the count is 
+        increased, which is an infinite loop
+
+    State updater functions - functions that receive the previous state as
+    an argument
+      They ensure that you're working with the latest state when updating 
+      it, which is crucial for multiple state updates that depend on the 
+      previous state.
+
+      Best practice: State updater functions should make all changes to the
+      relevant state value in one go, ensuring that all updates are applied
+      in one setState call.
+
+      React's state update batching: React will combine multiple state 
+      updates made within the same synchronous execution context (such as 
+      within the same event handler) into one state update, optimizing 
+      performance. If conflicting updates are made, React executes the code
+      from the later call.
+
+  Controlled Components - React components where you control the value of
+  an HTML element using React state
+    Useful for managing user input and ensuring synchronization between 
+    the component's state and the HTML element's value 
+
+    Use a controlled component whenever you need to capture user input 
+    that can or will cause changes in the component or any other related 
+    components
+
+    Input elements are the easiest example to imagine. If the user input 
+    affects other parts of the component, it would be a problem if you 
+    had a native html input element whose value updates live with user 
+    inputs without updating the state of the component.
+
+    Example of a custom Input element: 
+      function CustomInput() {
+        const [value, setValue] = useState("");
+
+        return (
+          <input
+            type="text"
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+          />
+        );
+      }
+    
+    Other HTML elements/Use cases for controlled components:
+      Checkboxes, select dropdowns, text areas
+
+  State Structure - very important to setting yourself up for future 
+  success with modifying state and debugging
+    Guiding Principles:
+      1. Group related state
+        If variables are frequently updated at the same time, consider 
+        merging them into a single object
+
+        Keep in mind that if a state variable is an object, you can't 
+        update only one field without explicity copying the other fields.
+          setPosition({ x: 100 }) wouldn't work, need to use 
+          setPosition({ ...position, x: 100 }) or define x and y as 
+          separate state variables and use setX(100)
+
+      2. Avoid contradictions 
+        Don't structure state in a way where different pieces can 
+        "disagree" with each other 
+
+        Example: sometimes multiple boolean variables can be combined into 
+        one status variable, especially if none of the booleans are 
+        intended to be true or false at the same time.
+          For example, instead of isLoading, isError, and isSuccess, you 
+          could have a status variable with values like "loading", "error",
+          or "success"
+          
+          if booleans are necessary, you can use the status variable to 
+          define them without having them in state and worrying about them 
+          falling out of sync with each other.
+
+      3. Avoid redundancy 
+        If information can be calculated with a component's props or 
+        existing state, do that instead of adding it to that component's 
+        state
+
+        *Don't Mirror props in state
+          Example: 
+            Bad:
+              function Message({ messageColor }) {
+                const [color, setColor] = useState(messageColor);}
+            Good:
+              function Message({ messageColor }) {
+                const color = messageColor;}
+          
+          State is only initialized during the first render, so changes in 
+          the prop from the parent component will not trigger a state 
+          update in the child.
+
+          Mirroring should only be done when you WANT to ignore any updates
+          from the parent component. In this case you should name the prop 
+          with an 'initial' or 'default' prefix so this is clear.
+
+      4. Avoid duplication 
+        It's difficult to keep duplicated data in sync when updates are 
+        being made, better to structure in a way that removes any duplicate
+        data 
+
+        Example: Suppose you have a list of items stored in one state 
+        variable and a separate state variable to hold the value of the 
+        selected item from that list. This setup creates duplication 
+        because the selected item data is already present in the list 
+        itself.
+          A better approach is to structure your state in a way that 
+          removes any duplicate data. In the example provided, storing the 
+          selected item's ID in a separate state variable ensures that only
+          essential information (the ID) is stored independently, while the
+          actual item data remains within the items list. This approach 
+          avoids redundancy, improves data coherence, and simplifies state 
+          management.
+
+          This especially applies if you're going to make live updates to 
+          the items, so that the selected item will be triggered to update 
+          wherever it's being used/displayed
+
+      5. Avoid deep nesting 
+        Deeply hierarchical state is not convenient to update, try to make 
+        state flat when possible
+
+        
+Rendering steps
+  Any screen update in a React app happens in three steps:
+    Trigger
+      Only two things will trigger a render:
+        1. Initial render 
+        2. The component's, or one of its ancestors', state has been 
+        updated
+    Render
+      Initial render - call root component 
+
+      Re-renders - call the function component whose state update 
+      triggered the render. This process is recursive and will continue 
+      rendering any nested components next (components returned by the 
+      originally updated component)
+        This can be disabled if unnecessarily rendering nested components 
+        causes performance issues
+    Commit
+      Initial render - uses appendChild() to add all DOM nodes
+
+      Re-renders - Applies the minimal necessary operations to make the DOM
+      match the latest rendering output. These steps are calculated by 
+      React during rendering.
+
+      Browser paint - After everything is rendered and the DOM is updated, 
+      the browser will render the screen (called 'painting' to prevent 
+      confusion between rendering terms)
+
+  You can use Strict Mode to find mistakes in your components
+    Strict mode will result in React calling each component's function 
+    twice, which helps to identify mistakes if the output is not the same 
+
+    Components should always return the same outputs given the same inputs 
+
+  React does not touch the DOM if the rendering result is the same as last 
+  time
