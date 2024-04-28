@@ -696,48 +696,44 @@ State - Provides memory for components
     from the individual components and add it to their closest shared 
     parent
 
-  How to structure state 
-    Don’t put values in state that can be calculated using existing values,
-    state, and/or props.
+  State shouldn't be mutated (directly modified or changed in place).
+    Example: 
+      function Person() {
+        const [person, setPerson] = useState({ name: "John", age: 100 });
 
-    State shouldn't be mutated (directly modified or changed in place).
-      Example: 
-        function Person() {
-          const [person, setPerson] = useState({ name: "John", age: 100 });
+        // BAD - Don't do this!
+        const handleIncreaseAge = () => {
+          // mutating the current state object
+          person.age = person.age + 1;
+          setPerson(person);
+        };
 
-          // BAD - Don't do this!
-          const handleIncreaseAge = () => {
-            // mutating the current state object
-            person.age = person.age + 1;
-            setPerson(person);
-          };
+        // GOOD - Do this!
+        const handleIncreaseAge = () => {
+          // copy the existing person object into a new object
+          // while updating the age property
+          const newPerson = { ...person, age: person.age + 1 };
+          setPerson(newPerson);
+        };
 
-          // GOOD - Do this!
-          const handleIncreaseAge = () => {
-            // copy the existing person object into a new object
-            // while updating the age property
-            const newPerson = { ...person, age: person.age + 1 };
-            setPerson(newPerson);
-          };
+        return (
+          <>
+            <h1>{person.name}</h1>
+            <h2>{person.age}</h2>
+            <button onClick={handleIncreaseAge}>Increase age</button>
+          </>
+        );
+      }
 
-          return (
-            <>
-              <h1>{person.name}</h1>
-              <h2>{person.age}</h2>
-              <button onClick={handleIncreaseAge}>Increase age</button>
-            </>
-          );
-        }
-
-      Always use the setState functions provided by React for 
-      updating state. While these functions facilitate state updates, they 
-      don't guarantee immutable updates on their own. To ensure 
-      immutability, it's essential to use spread syntax (...) with objects 
-      to create a shallow copy of the state object. This shallow copy 
-      duplicates the top-level structure of the object and contains 
-      references to nested objects. By modifying this copy instead of the 
-      original state, you ensure that changes are isolated and do not 
-      affect the original data in memory."
+    Always use the setState functions provided by React for 
+    updating state. While these functions facilitate state updates, they 
+    don't guarantee immutable updates on their own. To ensure 
+    immutability, it's essential to use spread syntax (...) with objects 
+    to create a shallow copy of the state object. This shallow copy 
+    duplicates the top-level structure of the object and contains 
+    references to nested objects. By modifying this copy instead of the 
+    original state, you ensure that changes are isolated and do not 
+    affect the original data in memory."
 
   How state updates 
     State updates are asynchronous - so when setState functions are called,
@@ -884,7 +880,21 @@ State - Provides memory for components
         Deeply hierarchical state is not convenient to update, try to make 
         state flat when possible
 
-        
+        Two methods to make hierarchical state flat:
+          1. Flatten your state variable into a single-layer object. 
+          Instead of nesting children within their parent's object, each 
+          item should be an object within the root object. Each item should
+          contain at least three properties: its value, an ID, and an array
+          of its children's IDs. Ensure there's a root object at index 0, 
+          which contains the IDs of the outermost objects in its childIds 
+          array.
+
+          2. If your state comprises a few entities with intertwined 
+          relationships, consider structuring your state accordingly. Use 
+          arrays for each entity, containing objects representing 
+          individual items as well as their parents and/or children within 
+          other entities.
+
 Rendering steps
   Any screen update in a React app happens in three steps:
     Trigger
