@@ -895,6 +895,50 @@ State - Provides memory for components
           individual items as well as their parents and/or children within 
           other entities.
 
+  Sharing state between components 
+    If you want the state of two components to always change together, you 
+    should remove it from the individual components and add it to their 
+    closest common parent, then pass it down to them with props.
+
+    Controlled vs Uncontrolled components 
+      A component is "uncontrolled" if it contains any local state.
+
+      "Controlled" components receive important information through their 
+      props rather than their own local state. Their behavior is fully 
+      specified by their parents.
+
+      uncontrolled - easier to use within parents because less 
+      confirguration is required, but less flexible when multiple need to 
+      be coordinated together.
+
+      controlled - maximum flexibility for coordination, but require parent
+      components to fully configure them using props.
+    
+    Single source of truth 
+      For each piece of state, there is a specific component that holds 
+      that piece of information
+
+      State will commonly have to be moved up and down depending on where 
+      it is being used. You can imagine your component structure as a big 
+      tree of parents and children. In the ideal structure, each piece of 
+      state would be stored at the point on the tree where everywhere it's 
+      used is extends from that component. 
+
+      Deciding where state should live:
+        Often, you can put the state directly into their common parent.
+        
+        You can also put the state into some component above their common 
+        parent.
+        
+        If you can’t find a component where it makes sense to own the 
+        state, create a new component solely for holding the state and 
+        add it somewhere in the hierarchy above the common parent component
+
+        Ask these questions for each piece of state:
+          1. Which components use it?
+          2. What is their common parent?
+          3. Does it make sense for the state to live there, or should it 
+          be contained higher in the component tree?
 Rendering steps
   Any screen update in a React app happens in three steps:
     Trigger
