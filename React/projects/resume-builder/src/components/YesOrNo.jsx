@@ -17,10 +17,10 @@ const YesOrNo = ({question}) => {
     backgroundColor: '#3498db',
     color: '#fff',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease', // Smooth transition for hover effect
-    ':hover': {
-      backgroundColor: '#2980b9',
-    },
+    // transition: 'background-color 0.3s ease', // Smooth transition for hover effect
+    // ':hover': {
+    //   backgroundColor: '#2980b9',
+    // },
   };
 
   return (
