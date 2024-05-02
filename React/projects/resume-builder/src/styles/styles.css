@@ -85,3 +85,38 @@ body {
   box-sizing: border-box; /* Ensure padding doesn't increase width */
   color-scheme: light; 
 }
+
+
+/* Yes or No Component */
+
+.yesOrNoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.yesOrNoButton {
+  height: 32px;
+  padding: 8px 16px;
+  margin: 0 10px;
+  border-radius: 4px;
+  border: 1px solid #3498db;
+  text-align: center;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #3498db;
+}
+
+.yesOrNoButton:hover {
+  background-color: #e6e6e6;
+}
+
+.yesOrNoButton.selected {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+}
+
+.yesOrNoButton.selected:hover {
+  background-color: #3498db;
+}

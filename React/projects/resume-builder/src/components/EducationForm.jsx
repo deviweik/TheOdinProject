@@ -4,6 +4,8 @@ import YesOrNo from './YesOrNo';
 import '../styles/styles.css'; 
 
 const EducationForm = ({ onNextStep }) => {
+  const [isPursuing, setIsPursuing] = useState(true);
+
   return (
     <div className='formContainer'>
       <h2 className='defaultFormTitle'>Time for your education.</h2>
@@ -37,7 +39,11 @@ const EducationForm = ({ onNextStep }) => {
         value=""
         placeholder="Details (Honors, GPA, etc.)"
       />
-      <YesOrNo question={"Are you currently pursuing this degree?"}/>
+      <YesOrNo
+        question="Are you currently pursuing this degree?"
+        state={isPursuing}
+        setState={setIsPursuing}
+      />
     </div>
   );
 }

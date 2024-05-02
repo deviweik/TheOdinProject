@@ -1,33 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import '../styles/styles.css'; 
 
-const YesOrNo = ({question}) => {
-  const containerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+const YesOrNo = ({question, state, setState}) => {
 
-  const buttonStyle = {
-    height: '32px',
-    margin: '0 10px',
-    border: 'none',
-    borderRadius: '4px',
-    backgroundColor: '#3498db',
-    color: '#fff',
-    cursor: 'pointer',
-    // transition: 'background-color 0.3s ease', // Smooth transition for hover effect
-    // ':hover': {
-    //   backgroundColor: '#2980b9',
-    // },
+  const handleButtonClick = (value) => {
+    console.log('Clicked', value);
+    setState(value); // Update the state based on the button clicked
   };
 
   return (
-    <div style={containerStyle}>
+    <div className="yesOrNoContainer">
       <p>{question}</p>
-      <button style={buttonStyle}>Yes</button>
-      <button style={buttonStyle}>No</button>
+      <button 
+        className={`yesOrNoButton ${state === true ? 'selected' : ''}`}
+        onClick={() => handleButtonClick(true)}
+      >
+        Yes
+      </button>
+      <button 
+        className={`yesOrNoButton ${state === false ? 'selected' : ''}`}
+        onClick={() => handleButtonClick(false)}
+      >
+        No
+      </button>
     </div>
   );
 }
