@@ -3,8 +3,13 @@ import YesOrNo from './YesOrNo';
 
 import '../styles/styles.css'; 
 
-const EducationForm = ({ onNextStep }) => {
+const EducationForm = ({ formData, onChange, onNextStep }) => {
   const [isPursuing, setIsPursuing] = useState(true);
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    onChange({ ...formData, [name]: value });
+  };
 
   return (
     <div className='formContainer'>
@@ -12,32 +17,42 @@ const EducationForm = ({ onNextStep }) => {
       <input 
         className="defaultTextInput"
         type="text"
-        value=""
+        name='schoolName'
+        value={formData.schoolName}
         placeholder="School Name"
+        onChange={handleChange}
       />
       <input 
         className="defaultTextInput"
         type="text"
-        value=""
+        name='location'
+        value={formData.location}
         placeholder="Location (City, State)"
+        onChange={handleChange}
       />
       <input 
         className="defaultTextInput"
         type="text"
-        value=""
+        name='degree'
+        value={formData.degree}
         placeholder="Degree (Masters, Bachelors, Associate, etc.)"
+        onChange={handleChange}
       />
       <input 
         className="defaultTextInput"
         type="text"
-        value=""
+        name='major'
+        value={formData.major}
         placeholder="Major"
+        onChange={handleChange}
       />
       <input 
         className="defaultTextInput"
         type="text"
-        value=""
+        name='details'
+        value={formData.details}
         placeholder="Details (Honors, GPA, etc.)"
+        onChange={handleChange}
       />
       <YesOrNo
         question="Are you currently pursuing this degree?"

@@ -9,7 +9,35 @@ import '../styles/styles.css';
 
 const Stepper = () => {
   const [step, setStep] = useState(0); // Current step
-
+  const [formData, setFormData] = useState({
+    personalDetails: {
+      name: '',
+      address: '',
+      email: '',
+      phoneNumber: '',
+    },
+    personalDescription: {
+      personalDescription: ''
+    },
+    workExperience: [],
+    education: {
+      schoolName: '',
+      location: '',
+      degree: '',
+      major: '',
+      details: '',
+      isPursuing: '',
+      gradDate: '',
+      expGradDate: ''
+    },
+    skills: [
+      {
+        id: 0,
+        value: ''
+      }
+    ],
+  });
+  
   const nextStep = () => {
     setStep(step + 1);
   };
@@ -18,18 +46,55 @@ const Stepper = () => {
     setStep(step - 1);
   };
 
+  const handleFormChange = (formKey, newData) => {
+    setFormData({
+      ...formData,
+      [formKey]: newData,
+    });
+  };
+
   const renderStep = () => {
     switch (step) {
       case 0:
-        return <PersonalDetailsForm />;
+        return (
+          <PersonalDetailsForm 
+            formData={formData.personalDetails} 
+            onChange={(newData) => handleFormChange('personalDetails', newData)}
+            onNextStep={nextStep} 
+          />
+        );
       case 1:
-        return <PersonalDescriptionForm />;
+        return (
+          <PersonalDescriptionForm 
+            formData={formData.personalDescription} 
+            onChange={(newData) => handleFormChange('personalDescription', newData)}
+            onNextStep={nextStep} 
+          />
+        );
       case 2:
-        return <WorkExperienceForm onNextStep={nextStep}/>;
+        return (
+          <WorkExperienceForm 
+            formData={formData.workExperience} 
+            onChange={(newData) => handleFormChange('workExperience', newData)}
+            onNextStep={nextStep} 
+          />
+        );
       case 3:
-        return <EducationForm />;
+        return (
+          <EducationForm 
+            formData={formData.education} 
+            onChange={(newData) => handleFormChange('education', newData)}
+            onNextStep={nextStep} 
+          />
+        );
       case 4:
-        return <SkillsForm />;
+        return (
+          <SkillsForm 
+            formData={formData.skills} 
+            onChange={(newData) => handleFormChange('skills', newData)}
+            onNextStep={nextStep} 
+          />
+        );
       default:
         return null;
     }

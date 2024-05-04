@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import '../styles/styles.css'; 
 
-const WorkExperienceForm = ({ onNextStep }) => {
+const WorkExperienceForm = ({ formData, onNextStep }) => {
   const [roles, setRoles] = useState([]);
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
 

@@ -3,19 +3,27 @@ import TileSelector from './TileSelector';
 
 import '../styles/styles.css'; 
 
-const SkillsForm = ({ onNextStep }) => {
-  const [selectedSkill, setSelectedSkill] = useState(0);
+const SkillsForm = ({ formData, onNextStep }) => {
+  const [selectedSkillId, setSelectedSkillId] = useState(0);
   const [skills, setSkills] = useState([]);
 
   const onChange = (e) => {
     const { value } = e.target;
-    const updatedSkills = [...skills];
-    updatedSkills[selectedSkill] = { ...updatedSkills[selectedSkill], value };
+    let updatedSkills = [...skills];
+
+    if (skills.length === 0) {
+      const newId = updatedSkills.length; // Generate ID for the new option
+      updatedSkills = [...updatedSkills, { id: newId, value }]; // Add new option
+      setSelectedSkillId(newId); // Select the new option
+    } else {
+      updatedSkills[selectedSkillId] = { id: selectedSkillId, value }; // Update existing empty skill
+    }
+
     setSkills(updatedSkills);
   };
 
   console.log(skills);
-  console.log(selectedSkill);
+  console.log(selectedSkillId);
 
   return (
     <div className='formContainer'>
@@ -23,7 +31,7 @@ const SkillsForm = ({ onNextStep }) => {
       <h4 className='defaultFormSubtitle'>Try to enter at least three bullets about skills you've developed that you were either unable to mention earlier or that you would like to specifically highlight.</h4>
       <textarea 
         className='defaultLongTextInput' 
-        value={skills.length > 0 ? skills[selectedSkill].value : null}
+        value={selectedSkillId !== null && skills.length > selectedSkillId ? skills[selectedSkillId]?.value || '' : ''}
         placeholder="Enter your skills here." 
         onChange={onChange}
       />
@@ -31,8 +39,8 @@ const SkillsForm = ({ onNextStep }) => {
         className='defaultTileSelector'
         options={skills} 
         setOptions={setSkills} 
-        selectedId={selectedSkill} 
-        setSelectedId={setSelectedSkill}
+        selectedId={selectedSkillId} 
+        setSelectedId={setSelectedSkillId}
       />
     </div>
   );

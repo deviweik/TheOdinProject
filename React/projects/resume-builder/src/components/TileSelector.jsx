@@ -9,6 +9,7 @@ const TileSelector = ({ options, setOptions, selectedId, setSelectedId }) => {
     const newId = options.length; // Generate ID for the new option
     setOptions([...options, { id: newId, value: null }]); // Add new option
     setSelectedId(newId); // Select the new option
+    console.log('Selected Skill ID after adding:', newId); // Add this line
   };
 
   return (
@@ -22,7 +23,7 @@ const TileSelector = ({ options, setOptions, selectedId, setSelectedId }) => {
           {option.id + 1}
         </button>
       ))}
-      <button className="addButton" onClick={handleAddOption}>+</button>
+      <button className="tile addButton" onClick={handleAddOption}>+</button>
     </div>
   );
 };
