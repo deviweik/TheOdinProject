@@ -1,10 +1,67 @@
 import React, { useState } from 'react';
+import WorkExperienceFormGeneral from './WorkExperienceFormGeneral';
+import WorkExperienceFormDetails from './WorkExperienceFormDetails';
+import WorkExperienceFormRecap from './WorkExperienceFormRecap';
 
 import '../styles/styles.css'; 
 
-const WorkExperienceForm = ({ formData, onNextStep }) => {
-  const [roles, setRoles] = useState([]);
+const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
+  // const [roles, setRoles] = useState([]);
+  const roles = formData;
+  const [step, setStep] = useState(0); // Current step
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let updatedRoles = roles.map(role => 
+      role.id === currentRoleIndex ? { ...role, [name]: value } : role
+    );
+
+    // Clear endDate if currentlyEmployed is true
+    if (name === 'currentlyEmployed' && value === true) {
+      updatedRoles = updatedRoles.map(role => 
+        role.id === currentRoleIndex ? { ...role, ['endDate']: null } : role
+      );
+    }
+
+    onChange(updatedRoles);
+  };
+
+  const nextStep = () => {
+    setStep(step + 1);
+  };
+
+  const prevStep = () => {
+    setStep(step - 1);
+  };
+
+  const renderStep = () => {
+    switch (step) {
+      case 0: // WorkExperienceFormGeneral
+        return (
+          <WorkExperienceFormGeneral 
+            formData={formData[currentRoleIndex]}
+            onChange={handleChange}
+          />
+        );
+      case 1: // WorkExperienceFormDetails
+        return (
+          <WorkExperienceFormDetails 
+            formData={formData[currentRoleIndex]}
+            onChange={handleChange}
+          />
+        );
+      case 2: // WorkExperienceFormRecap
+        return (
+          <WorkExperienceFormRecap 
+            formData={formData[currentRoleIndex]}
+            onChange={handleChange}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   const handleAddRole = () => {
     setRoles([...roles, { title: '', description: '' }]);
@@ -32,30 +89,11 @@ const WorkExperienceForm = ({ formData, onNextStep }) => {
 
   return (
     <div>
-      {roles.map((role, index) => (
-        <div className="formContainer" key={index} style={{ display: index === currentRoleIndex ? 'block' : 'none' }}>
-          <h2 className="formTitle">Time for your work experience.</h2>
-          <input 
-            className="defaultTextInput"
-            type="text"
-            value={role.title}
-            onChange={(e) => handleRoleChange(e, 'title')}
-            placeholder="Role Title"
-          />
-          <textarea
-            className="defaultTextInput"
-            value={role.description}
-            onChange={(e) => handleRoleChange(e, 'description')}
-            placeholder="Role Description"
-          />
-        </div>
-      ))}
-      <button className="defaultButton" onClick={handleAddRole}>Add Role</button>
-      {currentRoleIndex > 0 && <button className="defaultButton" onClick={handlePreviousRole}>Previous Role</button>}
-      {currentRoleIndex === roles.length - 1 && (
-        <button className="defaultButton" onClick={handleFinish}>Finish Work Experience</button>
-      )}
-      {currentRoleIndex < roles.length - 1 && <button className="defaultButton" onClick={handleNextRole}>Next Role</button>}
+      {renderStep()}
+      <div>
+        <button className="defaultButton" onClick={step > 0 ? prevStep : onPrevStep}>Prev</button>
+        <button className="defaultButton" onClick={nextStep}>Next</button>
+      </div>
     </div>
   );
 };

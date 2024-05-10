@@ -3,27 +3,40 @@ import TileSelector from './TileSelector';
 
 import '../styles/styles.css'; 
 
-const SkillsForm = ({ formData, onNextStep }) => {
+const SkillsForm = ({ formData, onChange, onNextStep }) => {
   const [selectedSkillId, setSelectedSkillId] = useState(0);
-  const [skills, setSkills] = useState([]);
+  const skills = formData;
+  // const [skills, setSkills] = useState([]);
 
-  const onChange = (e) => {
-    const { value } = e.target;
-    let updatedSkills = [...skills];
-
-    if (skills.length === 0) {
-      const newId = updatedSkills.length; // Generate ID for the new option
-      updatedSkills = [...updatedSkills, { id: newId, value }]; // Add new option
-      setSelectedSkillId(newId); // Select the new option
-    } else {
-      updatedSkills[selectedSkillId] = { id: selectedSkillId, value }; // Update existing empty skill
-    }
-
-    setSkills(updatedSkills);
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    console.log(`New value for skill #${selectedSkillId}: ${newValue}`);
+    const updatedSkills = skills.map(skill => 
+      skill.id === selectedSkillId ? { ...skill, value: newValue } : skill
+    );
+    onChange(updatedSkills);
   };
 
-  console.log(skills);
-  console.log(selectedSkillId);
+  const initializeNewSkill = () => {
+    const newId = skills.length;
+    const updatedSkills = [...skills, { id: newId, value: '' }]; 
+    onChange(updatedSkills);
+  }
+
+  // const onChange = (e) => {
+  //   const { value } = e.target;
+  //   let updatedSkills = [...skills];
+
+  //   if (skills.length === 0) {
+  //     const newId = updatedSkills.length; // Generate ID for the new option
+  //     updatedSkills = [...updatedSkills, { id: newId, value }]; // Add new option
+  //     setSelectedSkillId(newId); // Select the new option
+  //   } else {
+  //     updatedSkills[selectedSkillId] = { id: selectedSkillId, value }; // Update existing empty skill
+  //   }
+
+  //   setSkills(updatedSkills);
+  // };
 
   return (
     <div className='formContainer'>
@@ -33,12 +46,12 @@ const SkillsForm = ({ formData, onNextStep }) => {
         className='defaultLongTextInput' 
         value={selectedSkillId !== null && skills.length > selectedSkillId ? skills[selectedSkillId]?.value || '' : ''}
         placeholder="Enter your skills here." 
-        onChange={onChange}
+        onChange={handleChange}
       />
       <TileSelector 
         className='defaultTileSelector'
         options={skills} 
-        setOptions={setSkills} 
+        onAddOption={initializeNewSkill} 
         selectedId={selectedSkillId} 
         setSelectedId={setSelectedSkillId}
       />

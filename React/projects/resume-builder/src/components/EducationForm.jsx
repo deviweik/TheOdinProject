@@ -4,7 +4,11 @@ import YesOrNo from './YesOrNo';
 import '../styles/styles.css'; 
 
 const EducationForm = ({ formData, onChange, onNextStep }) => {
-  const [isPursuing, setIsPursuing] = useState(true);
+  // const [isPursuing, setIsPursuing] = useState(true);
+
+  const setIsPursuing = (newValue) => {
+    onChange({ ...formData, 'isPursuing': newValue });
+  };
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -27,7 +31,7 @@ const EducationForm = ({ formData, onChange, onNextStep }) => {
         type="text"
         name='location'
         value={formData.location}
-        placeholder="Location (City, State)"
+        placeholder="Location (eg. New York City, NY)"
         onChange={handleChange}
       />
       <input 
@@ -56,7 +60,7 @@ const EducationForm = ({ formData, onChange, onNextStep }) => {
       />
       <YesOrNo
         question="Are you currently pursuing this degree?"
-        state={isPursuing}
+        state={formData.isPursuing}
         setState={setIsPursuing}
       />
     </div>

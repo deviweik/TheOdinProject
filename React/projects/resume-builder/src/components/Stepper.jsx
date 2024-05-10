@@ -16,17 +16,31 @@ const Stepper = () => {
       email: '',
       phoneNumber: '',
     },
-    personalDescription: {
-      personalDescription: ''
-    },
-    workExperience: [],
+    personalDescription: '',
+    workExperience: [
+      {
+        id: 0,
+        jobTitle: '',
+        companyName: '',
+        location: '',
+        currentlyEmployed: false,
+        startDate: '',
+        endDate: '',
+        bullets: [
+          {
+            id: 0,
+            value: ''
+          }
+        ]
+      }
+    ],
     education: {
       schoolName: '',
       location: '',
       degree: '',
       major: '',
       details: '',
-      isPursuing: '',
+      isPursuing: false,
       gradDate: '',
       expGradDate: ''
     },
@@ -47,15 +61,20 @@ const Stepper = () => {
   };
 
   const handleFormChange = (formKey, newData) => {
+    console.log('New Data:', newData);
     setFormData({
       ...formData,
       [formKey]: newData,
     });
+    console.log('Updated FormData:', formData);
   };
 
   const renderStep = () => {
+    console.log('Rendering Step:', step);
+    console.log('Current FormData:', formData);
+
     switch (step) {
-      case 0:
+      case 0: // PersonalDetailsForm
         return (
           <PersonalDetailsForm 
             formData={formData.personalDetails} 
@@ -63,7 +82,7 @@ const Stepper = () => {
             onNextStep={nextStep} 
           />
         );
-      case 1:
+      case 1: // PersonalDescriptionForm
         return (
           <PersonalDescriptionForm 
             formData={formData.personalDescription} 
@@ -71,15 +90,16 @@ const Stepper = () => {
             onNextStep={nextStep} 
           />
         );
-      case 2:
+      case 2: // WorkExperienceForm
         return (
           <WorkExperienceForm 
             formData={formData.workExperience} 
             onChange={(newData) => handleFormChange('workExperience', newData)}
+            onPrevStep={prevStep}
             onNextStep={nextStep} 
           />
         );
-      case 3:
+      case 3: // EducationForm
         return (
           <EducationForm 
             formData={formData.education} 
@@ -87,7 +107,7 @@ const Stepper = () => {
             onNextStep={nextStep} 
           />
         );
-      case 4:
+      case 4: // SkillsForm
         return (
           <SkillsForm 
             formData={formData.skills} 
@@ -103,7 +123,7 @@ const Stepper = () => {
   return (
     <div className='formMain'>
       {renderStep()}
-      <div>
+      <div className={step === 2 ? 'navButtonContainer hidden' : 'navButtonContainer'}>
         {step > 0 && <button className="defaultButton" onClick={prevStep}>Prev</button>}
         <button className="defaultButton" onClick={nextStep}>Next</button>
       </div>

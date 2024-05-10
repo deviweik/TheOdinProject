@@ -5,7 +5,7 @@ import '../styles/styles.css';
 const YesOrNo = ({question, state, setState}) => {
 
   const handleButtonClick = (value) => {
-    console.log('Clicked', value);
+    // console.log('Clicked', value);
     setState(value); // Update the state based on the button clicked
   };
 

@@ -1,15 +1,13 @@
 import React from 'react';
 
-const TileSelector = ({ options, setOptions, selectedId, setSelectedId }) => {
+const TileSelector = ({ options, onAddOption, selectedId, setSelectedId }) => {
   const handleOptionClick = (id) => {
     setSelectedId(id);
   };
 
   const handleAddOption = () => {
-    const newId = options.length; // Generate ID for the new option
-    setOptions([...options, { id: newId, value: null }]); // Add new option
-    setSelectedId(newId); // Select the new option
-    console.log('Selected Skill ID after adding:', newId); // Add this line
+    onAddOption();
+    setSelectedId(options.length);
   };
 
   return (
