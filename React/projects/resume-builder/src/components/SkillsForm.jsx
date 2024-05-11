@@ -3,7 +3,7 @@ import TileSelector from './TileSelector';
 
 import '../styles/styles.css'; 
 
-const SkillsForm = ({ formData, onChange, onNextStep }) => {
+const SkillsForm = ({ formData, onChange }) => {
   const [selectedSkillId, setSelectedSkillId] = useState(0);
   const skills = formData;
   // const [skills, setSkills] = useState([]);

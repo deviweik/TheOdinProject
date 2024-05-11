@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import TileSelector from './TileSelector';
+import YesOrNo from './YesOrNo';
 
 import '../styles/styles.css'; 
 
-const WorkExperienceFormDetails = ({formData, onChange}) => {
+const WorkExperienceFormDetails = ({formData, onChange, currentRoleIndex, hasNewRole, setHasNewRole}) => {
   const bullets = formData.bullets;
 
-  console.log(formData);
-
   const [selectedBulletId, setSelectedBulletId] = useState(0);
+
+  if (currentRoleIndex > 0) {
+    
+  }
 
   const updateBullets = (e) => {
     const newBullet = e.target.value;
@@ -53,6 +56,11 @@ const WorkExperienceFormDetails = ({formData, onChange}) => {
         onAddOption={initializeNewBullet} 
         selectedId={selectedBulletId} 
         setSelectedId={setSelectedBulletId}
+      />
+      <YesOrNo
+        question="Have another role to enter?"
+        state={hasNewRole}
+        setState={setHasNewRole}
       />
     </div>
   );

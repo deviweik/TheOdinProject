@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import '../styles/styles.css'; 
 
-const PersonalDescriptionForm = ({ formData, onChange, onNextStep }) => {
+const PersonalDescriptionForm = ({ formData, onChange }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     onChange(value);

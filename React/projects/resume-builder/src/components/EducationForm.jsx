@@ -3,7 +3,7 @@ import YesOrNo from './YesOrNo';
 
 import '../styles/styles.css'; 
 
-const EducationForm = ({ formData, onChange, onNextStep }) => {
+const EducationForm = ({ formData, onChange }) => {
   // const [isPursuing, setIsPursuing] = useState(true);
 
   const setIsPursuing = (newValue) => {

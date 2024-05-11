@@ -81,28 +81,30 @@ body {
   border-radius: 4px;
   resize: vertical; /* Allow vertical resizing */
   color-scheme: light; 
-
+  font-family: Arial, sans-serif;
 }
 
 /* Default Date Input */
 .defaultDateInput {
-  width: 70%;
-  width: 200px;
-  padding: 8px;
+  width: 10rem;
+  height: 2.5rem;
+  padding: 6px;
   margin: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box; /* Ensure padding doesn't increase width */
   color-scheme: light; 
+  font-family: Arial, sans-serif;
 }
 
 .dateInputTitle {
-
+  margin: 0 10px;
 }
 
 .dateInputContainer {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .dateInputContainer.hidden {

@@ -5,7 +5,7 @@ import '../styles/styles.css';
 const WorkExperienceFormRecap = ({formData, onChange}) => {
   return (
     <div>
-      
+      <p>WorkExperienceFormRecap</p>
     </div>
   );
 }

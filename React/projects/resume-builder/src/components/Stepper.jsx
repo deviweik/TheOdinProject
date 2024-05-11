@@ -17,23 +17,26 @@ const Stepper = () => {
       phoneNumber: '',
     },
     personalDescription: '',
-    workExperience: [
-      {
-        id: 0,
-        jobTitle: '',
-        companyName: '',
-        location: '',
-        currentlyEmployed: false,
-        startDate: '',
-        endDate: '',
-        bullets: [
-          {
-            id: 0,
-            value: ''
-          }
-        ]
-      }
-    ],
+    workExperience: {
+      currentRoleIndex: 0,
+      roles: [
+        {
+          id: 0,
+          jobTitle: '',
+          companyName: '',
+          location: '',
+          currentlyEmployed: false,
+          startDate: '',
+          endDate: '',
+          bullets: [
+            {
+              id: 0,
+              value: ''
+            }
+          ]
+        }
+      ]
+    },
     education: {
       schoolName: '',
       location: '',
@@ -61,25 +64,23 @@ const Stepper = () => {
   };
 
   const handleFormChange = (formKey, newData) => {
-    console.log('New Data:', newData);
+    // console.log('New Data:', newData);
     setFormData({
       ...formData,
       [formKey]: newData,
     });
-    console.log('Updated FormData:', formData);
+    // console.log('Updated FormData:', formData);
   };
 
   const renderStep = () => {
     console.log('Rendering Step:', step);
     console.log('Current FormData:', formData);
-
     switch (step) {
       case 0: // PersonalDetailsForm
         return (
           <PersonalDetailsForm 
             formData={formData.personalDetails} 
             onChange={(newData) => handleFormChange('personalDetails', newData)}
-            onNextStep={nextStep} 
           />
         );
       case 1: // PersonalDescriptionForm
@@ -87,7 +88,6 @@ const Stepper = () => {
           <PersonalDescriptionForm 
             formData={formData.personalDescription} 
             onChange={(newData) => handleFormChange('personalDescription', newData)}
-            onNextStep={nextStep} 
           />
         );
       case 2: // WorkExperienceForm
@@ -104,7 +104,6 @@ const Stepper = () => {
           <EducationForm 
             formData={formData.education} 
             onChange={(newData) => handleFormChange('education', newData)}
-            onNextStep={nextStep} 
           />
         );
       case 4: // SkillsForm
@@ -112,7 +111,6 @@ const Stepper = () => {
           <SkillsForm 
             formData={formData.skills} 
             onChange={(newData) => handleFormChange('skills', newData)}
-            onNextStep={nextStep} 
           />
         );
       default:

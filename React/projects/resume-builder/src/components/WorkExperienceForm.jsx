@@ -7,9 +7,14 @@ import '../styles/styles.css';
 
 const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
   // const [roles, setRoles] = useState([]);
-  const roles = formData;
+  const roles = formData.roles;
+  const currentRoleIndex = formData.currentRoleIndex;
   const [step, setStep] = useState(0); // Current step
-  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [hasNewRole, setHasNewRole] = useState(true);
+  // NEED TO MAKE IT SO THAT 'Have another role to enter?' doesn't stay 
+  // the same when going back through roles that were already entered. 
+  // Maybe I can have it check if it is the last role when rendering, and 
+  // set hasNewRole to true if it's not.
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,41 +25,103 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
     // Clear endDate if currentlyEmployed is true
     if (name === 'currentlyEmployed' && value === true) {
       updatedRoles = updatedRoles.map(role => 
-        role.id === currentRoleIndex ? { ...role, ['endDate']: null } : role
+        role.id === currentRoleIndex ? { ...role, endDate: '' } : role
       );
     }
 
-    onChange(updatedRoles);
+    const updatedFormData = {...formData, roles: updatedRoles};
+
+    onChange(updatedFormData);
+  };
+
+  const prevRole = () => {
+    let updatedFormData = {
+      ...formData,
+      currentRoleIndex: currentRoleIndex - 1
+    }
+    console.log('prevRole: ', updatedFormData);
+    onChange(updatedFormData);
+  }
+
+  const initializeNewRole = () => {
+    const newId = roles.length;
+    const updatedRoles = [
+      ...roles, 
+      {
+        id: newId,
+        jobTitle: '',
+        companyName: '',
+        location: '',
+        currentlyEmployed: false,
+        startDate: '',
+        endDate: '',
+        bullets: [
+          {
+            id: 0,
+            value: ''
+          }
+        ]
+      }
+    ];
+    const updatedFormData = {
+      currentRoleIndex: newId,
+      roles: updatedRoles
+    };
+    onChange(updatedFormData);
   };
 
   const nextStep = () => {
-    setStep(step + 1);
+    if (step === 0) {
+      setStep(1);
+    } else if (step === 1 && hasNewRole == false) {
+      setStep(2);
+    } else if (step === 1 && hasNewRole == true) {
+      setStep(0);
+      if (currentRoleIndex === roles.length - 1) {
+        initializeNewRole();
+      }
+    } else if (step === 2) {
+      onNextStep();
+    }
   };
 
   const prevStep = () => {
-    setStep(step - 1);
+    console.log('step: ', step, 'currentRoleIndex: ', currentRoleIndex);
+    if (step === 0 && currentRoleIndex === 0) {
+      onPrevStep();
+    } else if (step === 0 && currentRoleIndex !== 0) {
+      setStep(1)
+      prevRole();
+    } else {
+      setStep(step - 1)
+    } 
   };
 
   const renderStep = () => {
+    console.log('rendering WorkExperienceForm step: ', step);
     switch (step) {
       case 0: // WorkExperienceFormGeneral
         return (
           <WorkExperienceFormGeneral 
-            formData={formData[currentRoleIndex]}
+            formData={roles[currentRoleIndex]}
             onChange={handleChange}
           />
         );
+        
       case 1: // WorkExperienceFormDetails
         return (
           <WorkExperienceFormDetails 
-            formData={formData[currentRoleIndex]}
+            formData={roles[currentRoleIndex]}
             onChange={handleChange}
+            currentRoleIndex={currentRoleIndex}
+            hasNewRole={hasNewRole}
+            setHasNewRole={setHasNewRole}
           />
         );
       case 2: // WorkExperienceFormRecap
         return (
           <WorkExperienceFormRecap 
-            formData={formData[currentRoleIndex]}
+            formData={formData}
             onChange={handleChange}
           />
         );
@@ -67,31 +134,11 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
     setRoles([...roles, { title: '', description: '' }]);
   };
 
-  const handleNextRole = () => {
-    setCurrentRoleIndex(currentRoleIndex + 1);
-  };
-
-  const handlePreviousRole = () => {
-    setCurrentRoleIndex(currentRoleIndex - 1);
-  };
-
-  const handleRoleChange = (e, field) => {
-    const updatedRoles = [...roles];
-    updatedRoles[currentRoleIndex][field] = e.target.value;
-    setRoles(updatedRoles);
-  };
-
-  const handleFinish = () => {
-    // Validate work experience data if needed
-    // Save work experience data to state or send to server
-    onNextStep(); // Call onNextStep to move to the next step in the form
-  };
-
   return (
     <div>
       {renderStep()}
       <div>
-        <button className="defaultButton" onClick={step > 0 ? prevStep : onPrevStep}>Prev</button>
+        <button className="defaultButton" onClick={prevStep}>Prev</button>
         <button className="defaultButton" onClick={nextStep}>Next</button>
       </div>
     </div>
