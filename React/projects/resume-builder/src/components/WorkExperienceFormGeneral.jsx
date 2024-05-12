@@ -7,7 +7,7 @@ import '../styles/styles.css';
 
 const WorkExperienceFormGeneral = ({ formData, onChange }) => {
   const setCurrentlyEmployed = (newValue) => {
-    console.log(newValue);
+    // console.log(newValue);
     const event = {
       target: {
         value: newValue,

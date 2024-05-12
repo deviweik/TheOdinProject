@@ -60,6 +60,7 @@ const EducationForm = ({ formData, onChange }) => {
       />
       <YesOrNo
         question="Are you currently pursuing this degree?"
+        isInverted={false}
         state={formData.isPursuing}
         setState={setIsPursuing}
       />

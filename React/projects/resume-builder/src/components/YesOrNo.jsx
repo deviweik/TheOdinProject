@@ -2,24 +2,25 @@ import React from 'react';
 
 import '../styles/styles.css'; 
 
-const YesOrNo = ({question, state, setState}) => {
+const YesOrNo = ({question, isInverted, state, setState}) => {
 
   const handleButtonClick = (value) => {
     // console.log('Clicked', value);
-    setState(value); // Update the state based on the button clicked
+    const newValue = isInverted ? !value : value;
+    setState(newValue);
   };
 
   return (
     <div className="yesOrNoContainer">
       <p>{question}</p>
       <button 
-        className={`yesOrNoButton ${state === true ? 'selected' : ''}`}
+        className={`yesOrNoButton ${state === (!isInverted ? true : false) ? 'selected' : ''}`}
         onClick={() => handleButtonClick(true)}
       >
         Yes
       </button>
       <button 
-        className={`yesOrNoButton ${state === false ? 'selected' : ''}`}
+        className={`yesOrNoButton ${state === (!isInverted ? false : true) ? 'selected' : ''}`}
         onClick={() => handleButtonClick(false)}
       >
         No

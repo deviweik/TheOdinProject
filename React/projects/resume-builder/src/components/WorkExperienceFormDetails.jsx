@@ -4,14 +4,10 @@ import YesOrNo from './YesOrNo';
 
 import '../styles/styles.css'; 
 
-const WorkExperienceFormDetails = ({formData, onChange, currentRoleIndex, hasNewRole, setHasNewRole}) => {
+const WorkExperienceFormDetails = ({ formData, onChange }) => {
   const bullets = formData.bullets;
 
   const [selectedBulletId, setSelectedBulletId] = useState(0);
-
-  if (currentRoleIndex > 0) {
-    
-  }
 
   const updateBullets = (e) => {
     const newBullet = e.target.value;
@@ -40,6 +36,17 @@ const WorkExperienceFormDetails = ({formData, onChange, currentRoleIndex, hasNew
     onChange(event);
   };
 
+  const setIsLastRole = (newValue) => {
+    console.log(newValue);
+    const event = {
+      target: {
+        value: newValue,
+        name: 'isLastRole'
+      }
+    };
+    onChange(event);
+  }
+
   return (
     <div className='formContainer'>
       <h2 className='formTitle'>Let's hear a little more about your role as {formData.jobTitle} at {formData.companyName}.</h2>
@@ -59,8 +66,9 @@ const WorkExperienceFormDetails = ({formData, onChange, currentRoleIndex, hasNew
       />
       <YesOrNo
         question="Have another role to enter?"
-        state={hasNewRole}
-        setState={setHasNewRole}
+        isInverted={true}
+        state={formData.isLastRole}
+        setState={setIsLastRole}
       />
     </div>
   );

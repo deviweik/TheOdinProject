@@ -10,7 +10,7 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
   const roles = formData.roles;
   const currentRoleIndex = formData.currentRoleIndex;
   const [step, setStep] = useState(0); // Current step
-  const [hasNewRole, setHasNewRole] = useState(true);
+
   // NEED TO MAKE IT SO THAT 'Have another role to enter?' doesn't stay 
   // the same when going back through roles that were already entered. 
   // Maybe I can have it check if it is the last role when rendering, and 
@@ -41,7 +41,16 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
     }
     console.log('prevRole: ', updatedFormData);
     onChange(updatedFormData);
-  }
+  };
+
+  const nextRole = () => {
+    let updatedFormData = {
+      ...formData,
+      currentRoleIndex: currentRoleIndex + 1
+    }
+    console.log('nextRole: ', updatedFormData);
+    onChange(updatedFormData);
+  };
 
   const initializeNewRole = () => {
     const newId = roles.length;
@@ -55,6 +64,7 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
         currentlyEmployed: false,
         startDate: '',
         endDate: '',
+        isLastRole: false,
         bullets: [
           {
             id: 0,
@@ -73,12 +83,14 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
   const nextStep = () => {
     if (step === 0) {
       setStep(1);
-    } else if (step === 1 && hasNewRole == false) {
+    } else if (step === 1 && roles[currentRoleIndex].isLastRole == true) {
       setStep(2);
-    } else if (step === 1 && hasNewRole == true) {
+    } else if (step === 1 && roles[currentRoleIndex].isLastRole == false) {
       setStep(0);
       if (currentRoleIndex === roles.length - 1) {
         initializeNewRole();
+      } else {
+        nextRole();
       }
     } else if (step === 2) {
       onNextStep();
@@ -113,9 +125,6 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
           <WorkExperienceFormDetails 
             formData={roles[currentRoleIndex]}
             onChange={handleChange}
-            currentRoleIndex={currentRoleIndex}
-            hasNewRole={hasNewRole}
-            setHasNewRole={setHasNewRole}
           />
         );
       case 2: // WorkExperienceFormRecap

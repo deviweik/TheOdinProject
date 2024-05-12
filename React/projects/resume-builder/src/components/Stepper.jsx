@@ -28,6 +28,7 @@ const Stepper = () => {
           currentlyEmployed: false,
           startDate: '',
           endDate: '',
+          isLastRole: false,
           bullets: [
             {
               id: 0,
