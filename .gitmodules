@@ -33,3 +33,7 @@
 [submodule "Ruby/projects/event-manager"]
 	path = Ruby/projects/event-manager
 	url = https://github.com/deviweik/event-manager
+
+[submodule "Ruby/projects/odin_exercises/custom_enumerable_project"]
+	path = Ruby/projects/odin_exercises/custom_enumerable_project
+	url = https://github.com/deviweik/custom_enumerable_project
