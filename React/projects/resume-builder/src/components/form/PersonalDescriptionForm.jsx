@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
-import '../styles/styles.css'; 
+import '../../styles/styles.css'; 
 
-const PersonalDescriptionForm = ({ formData, onChange }) => {
+const PersonalDescriptionForm = ({ formData, onChange, setValidation }) => {
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     onChange(value);
   };
+
+  useEffect(() => {
+    if (formData.length > 10) {
+      setValidation(true);
+    } else {
+      setValidation(false);
+    }
+  }, [formData, setValidation]);
 
   return (
     <div className='formContainer'>

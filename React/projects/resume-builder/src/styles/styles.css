@@ -46,7 +46,7 @@ body {
 .defaultButton {
   padding: 8px 16px;
   margin: 8px 16px;
-  border: none;
+  border: 1px solid #3498db;
   border-radius: 4px;
   background-color: #3498db;
   color: #fff;
@@ -55,6 +55,13 @@ body {
 
 .defaultButton:hover {
   background-color: #2980b9;
+}
+
+.defaultButton.validationUnmet {
+  background-color: #fff;
+  color: #3498db;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .navButtonContainer.hidden {

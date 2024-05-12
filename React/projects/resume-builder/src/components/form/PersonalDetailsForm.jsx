@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
-import '../styles/styles.css'; 
+import '../../styles/styles.css'; 
 
-const PersonalDetailsForm = ({ formData, onChange }) => {
+const PersonalDetailsForm = ({ formData, onChange, setValidation }) => {
+  const { name, address, email, phoneNumber } = formData;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     onChange({ ...formData, [name]: value });
   };
+
+  useEffect(() => {
+    if (name && address && email && phoneNumber) {
+      setValidation(true);
+    } else {
+      setValidation(false);
+    }
+  }, [formData, setValidation]);
 
   return (
     <div className='formContainer'>
@@ -15,7 +25,7 @@ const PersonalDetailsForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name="name"
-        value={formData.name}
+        value={name}
         placeholder="Name"
         onChange={handleChange}
       />
@@ -23,7 +33,7 @@ const PersonalDetailsForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name="address"
-        value={formData.address}
+        value={address}
         placeholder="Address"
         onChange={handleChange}
       />
@@ -31,7 +41,7 @@ const PersonalDetailsForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name="email"
-        value={formData.email}
+        value={email}
         placeholder="Email"
         onChange={handleChange}
       />
@@ -39,7 +49,7 @@ const PersonalDetailsForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name="phoneNumber"
-        value={formData.phoneNumber}
+        value={phoneNumber}
         placeholder="Phone Number"
         onChange={handleChange}
       />

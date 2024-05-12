@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import TileSelector from './TileSelector';
-import YesOrNo from './YesOrNo';
+import React, { useState, useEffect } from 'react';
+import TileSelector from '../helpers/TileSelector';
+import YesOrNo from '../helpers/YesOrNo';
 
-import '../styles/styles.css'; 
+import '../../styles/styles.css'; 
 
-const WorkExperienceFormDetails = ({ formData, onChange }) => {
+const WorkExperienceFormDetails = ({ formData, onChange, setValidation }) => {
   const bullets = formData.bullets;
 
   const [selectedBulletId, setSelectedBulletId] = useState(0);
+
+  useEffect(() => {
+    if (bullets.length >= 3) {
+      setValidation(true);
+    } else {
+      setValidation(false);
+    }
+  }, [formData, setValidation]);
 
   const updateBullets = (e) => {
     const newBullet = e.target.value;

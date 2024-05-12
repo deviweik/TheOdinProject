@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import PersonalDetailsForm from './PersonalDetailsForm';
-import PersonalDescriptionForm from './PersonalDescriptionForm';
-import WorkExperienceForm from './WorkExperienceForm';
-import EducationForm from './EducationForm';
-import SkillsForm from './SkillsForm';
+import PersonalDetailsForm from './form/PersonalDetailsForm';
+import PersonalDescriptionForm from './form/PersonalDescriptionForm';
+import WorkExperienceForm from './form/WorkExperienceForm';
+import EducationForm from './form/EducationForm';
+import SkillsForm from './form/SkillsForm';
 
 import '../styles/styles.css'; 
 
 const Stepper = () => {
   const [step, setStep] = useState(0); // Current step
+  const [validationMet, setValidationMet] = useState(false);
   const [formData, setFormData] = useState({
     personalDetails: {
       name: '',
@@ -45,8 +46,7 @@ const Stepper = () => {
       major: '',
       details: '',
       isPursuing: false,
-      gradDate: '',
-      expGradDate: ''
+      gradDate: ''
     },
     skills: [
       {
@@ -58,6 +58,7 @@ const Stepper = () => {
   
   const nextStep = () => {
     setStep(step + 1);
+    setValidationMet(false);
   };
 
   const prevStep = () => {
@@ -82,6 +83,7 @@ const Stepper = () => {
           <PersonalDetailsForm 
             formData={formData.personalDetails} 
             onChange={(newData) => handleFormChange('personalDetails', newData)}
+            setValidation={setValidationMet}
           />
         );
       case 1: // PersonalDescriptionForm
@@ -89,6 +91,7 @@ const Stepper = () => {
           <PersonalDescriptionForm 
             formData={formData.personalDescription} 
             onChange={(newData) => handleFormChange('personalDescription', newData)}
+            setValidation={setValidationMet}
           />
         );
       case 2: // WorkExperienceForm
@@ -98,6 +101,8 @@ const Stepper = () => {
             onChange={(newData) => handleFormChange('workExperience', newData)}
             onPrevStep={prevStep}
             onNextStep={nextStep} 
+            validation={validationMet}
+            setValidation={setValidationMet}
           />
         );
       case 3: // EducationForm
@@ -105,6 +110,7 @@ const Stepper = () => {
           <EducationForm 
             formData={formData.education} 
             onChange={(newData) => handleFormChange('education', newData)}
+            setValidation={setValidationMet}
           />
         );
       case 4: // SkillsForm
@@ -112,6 +118,7 @@ const Stepper = () => {
           <SkillsForm 
             formData={formData.skills} 
             onChange={(newData) => handleFormChange('skills', newData)}
+            setValidation={setValidationMet}
           />
         );
       default:
@@ -124,7 +131,7 @@ const Stepper = () => {
       {renderStep()}
       <div className={step === 2 ? 'navButtonContainer hidden' : 'navButtonContainer'}>
         {step > 0 && <button className="defaultButton" onClick={prevStep}>Prev</button>}
-        <button className="defaultButton" onClick={nextStep}>Next</button>
+        <button className={validationMet ? 'defaultButton' : 'defaultButton validationUnmet'} onClick={nextStep}>Next</button>
       </div>
     </div>
   );

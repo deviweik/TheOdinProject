@@ -3,18 +3,12 @@ import WorkExperienceFormGeneral from './WorkExperienceFormGeneral';
 import WorkExperienceFormDetails from './WorkExperienceFormDetails';
 import WorkExperienceFormRecap from './WorkExperienceFormRecap';
 
-import '../styles/styles.css'; 
+import '../../styles/styles.css'; 
 
-const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
-  // const [roles, setRoles] = useState([]);
+const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep, validation, setValidation }) => {
   const roles = formData.roles;
   const currentRoleIndex = formData.currentRoleIndex;
   const [step, setStep] = useState(0); // Current step
-
-  // NEED TO MAKE IT SO THAT 'Have another role to enter?' doesn't stay 
-  // the same when going back through roles that were already entered. 
-  // Maybe I can have it check if it is the last role when rendering, and 
-  // set hasNewRole to true if it's not.
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,8 +77,10 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
   const nextStep = () => {
     if (step === 0) {
       setStep(1);
+      setValidation(false);
     } else if (step === 1 && roles[currentRoleIndex].isLastRole == true) {
       setStep(2);
+      setValidation(false);
     } else if (step === 1 && roles[currentRoleIndex].isLastRole == false) {
       setStep(0);
       if (currentRoleIndex === roles.length - 1) {
@@ -92,6 +88,7 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
       } else {
         nextRole();
       }
+      setValidation(false);
     } else if (step === 2) {
       onNextStep();
     }
@@ -117,6 +114,7 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
           <WorkExperienceFormGeneral 
             formData={roles[currentRoleIndex]}
             onChange={handleChange}
+            setValidation={setValidation}
           />
         );
         
@@ -125,6 +123,7 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
           <WorkExperienceFormDetails 
             formData={roles[currentRoleIndex]}
             onChange={handleChange}
+            setValidation={setValidation}
           />
         );
       case 2: // WorkExperienceFormRecap
@@ -132,6 +131,7 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
           <WorkExperienceFormRecap 
             formData={formData}
             onChange={handleChange}
+            setValidation={setValidation}
           />
         );
       default:
@@ -139,16 +139,12 @@ const WorkExperienceForm = ({ formData, onChange, onPrevStep, onNextStep }) => {
     }
   };
 
-  const handleAddRole = () => {
-    setRoles([...roles, { title: '', description: '' }]);
-  };
-
   return (
     <div>
       {renderStep()}
       <div>
         <button className="defaultButton" onClick={prevStep}>Prev</button>
-        <button className="defaultButton" onClick={nextStep}>Next</button>
+        <button className={validation ? 'defaultButton' : 'defaultButton validationUnmet'} onClick={nextStep}>Next</button>
       </div>
     </div>
   );

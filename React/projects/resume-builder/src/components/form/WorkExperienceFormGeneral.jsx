@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import YesOrNo from './YesOrNo';
+import React, { useEffect } from 'react';
+import YesOrNo from '../helpers/YesOrNo';
 
-import '../styles/styles.css'; 
+import '../../styles/styles.css'; 
 
+const WorkExperienceFormGeneral = ({ formData, onChange, setValidation }) => {
+  const { jobTitle, companyName, location, startDate, currentlyEmployed, endDate } = formData;
+  const isEndDateValid = currentlyEmployed || endDate;
 
-
-const WorkExperienceFormGeneral = ({ formData, onChange }) => {
   const setCurrentlyEmployed = (newValue) => {
     // console.log(newValue);
     const event = {
@@ -17,6 +18,14 @@ const WorkExperienceFormGeneral = ({ formData, onChange }) => {
     onChange(event);
   }
 
+  useEffect(() => {
+    if (jobTitle && companyName && location && startDate && isEndDateValid) {
+      setValidation(true);
+    } else {
+      setValidation(false);
+    }
+  }, [formData, setValidation]);
+
   return (
     <div className='formContainer'>
       <h2 className='formTitle'>{formData.id === 0 ? 'Time for your work experience.' : 'Please enter your next position.'}</h2>
@@ -24,7 +33,7 @@ const WorkExperienceFormGeneral = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='jobTitle'
-        value={formData.jobTitle}
+        value={jobTitle}
         placeholder="Job Title"
         onChange={onChange}
       />
@@ -32,7 +41,7 @@ const WorkExperienceFormGeneral = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='companyName'
-        value={formData.companyName}
+        value={companyName}
         placeholder="Company Name"
         onChange={onChange}
       />
@@ -40,13 +49,13 @@ const WorkExperienceFormGeneral = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='location'
-        value={formData.location}
+        value={location}
         placeholder="Location (eg. New York City, NY)"
         onChange={onChange}
       />
       <YesOrNo
         question="Are you currently employed in this role?"
-        state={formData.currentlyEmployed}
+        state={currentlyEmployed}
         setState={setCurrentlyEmployed}
       />
       <div className='dateInputContainer'>
@@ -55,18 +64,18 @@ const WorkExperienceFormGeneral = ({ formData, onChange }) => {
           className="defaultDateInput"
           type="date"
           name='startDate'
-          value={formData.startDate}
+          value={startDate}
           placeholder="Start Date"
           onChange={onChange}
         />
       </div>
-      <div className={formData.currentlyEmployed === true ? 'dateInputContainer hidden' : 'dateInputContainer'} >
+      <div className={currentlyEmployed === true ? 'dateInputContainer hidden' : 'dateInputContainer'} >
         <h5 className='dateInputTitle'>End Date:</h5>
         <input 
           className="defaultDateInput"
           type="date"
           name='endDate'
-          value={formData.endDate}
+          value={endDate}
           placeholder="End Date"
           onChange={onChange}
         />

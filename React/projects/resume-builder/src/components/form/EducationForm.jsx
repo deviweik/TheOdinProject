@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import YesOrNo from './YesOrNo';
+import React, { useEffect } from 'react';
+import YesOrNo from '../helpers/YesOrNo';
 
-import '../styles/styles.css'; 
+import '../../styles/styles.css'; 
 
-const EducationForm = ({ formData, onChange }) => {
-  // const [isPursuing, setIsPursuing] = useState(true);
+const EducationForm = ({ formData, onChange, setValidation }) => {
+  const { schoolName, location, degree, major, details, isPursuing, gradDate } = formData;
 
   const setIsPursuing = (newValue) => {
     onChange({ ...formData, 'isPursuing': newValue });
   };
+
+  useEffect(() => {
+    if (schoolName && location && degree && major && details && gradDate) {
+      setValidation(true);
+    } else {
+      setValidation(false);
+    }
+  }, [formData, setValidation]);
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -22,7 +30,7 @@ const EducationForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='schoolName'
-        value={formData.schoolName}
+        value={schoolName}
         placeholder="School Name"
         onChange={handleChange}
       />
@@ -30,7 +38,7 @@ const EducationForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='location'
-        value={formData.location}
+        value={location}
         placeholder="Location (eg. New York City, NY)"
         onChange={handleChange}
       />
@@ -38,7 +46,7 @@ const EducationForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='degree'
-        value={formData.degree}
+        value={degree}
         placeholder="Degree (Masters, Bachelors, Associate, etc.)"
         onChange={handleChange}
       />
@@ -46,7 +54,7 @@ const EducationForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='major'
-        value={formData.major}
+        value={major}
         placeholder="Major"
         onChange={handleChange}
       />
@@ -54,16 +62,26 @@ const EducationForm = ({ formData, onChange }) => {
         className="defaultTextInput"
         type="text"
         name='details'
-        value={formData.details}
+        value={details}
         placeholder="Details (Honors, GPA, etc.)"
         onChange={handleChange}
       />
       <YesOrNo
         question="Are you currently pursuing this degree?"
         isInverted={false}
-        state={formData.isPursuing}
+        state={isPursuing}
         setState={setIsPursuing}
       />
+      <div className='dateInputContainer' >
+        <h5 className='dateInputTitle'>{!formData.isPursuing ? 'Grad Date:' : 'Expected Grad Date:'}</h5>
+        <input 
+          className="defaultDateInput"
+          type="date"
+          name='gradDate'
+          value={gradDate}
+          onChange={handleChange}
+        />
+      </div>
     </div>
   );
 }

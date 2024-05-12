@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
-import TileSelector from './TileSelector';
+import React, { useState, useEffect } from 'react';
+import TileSelector from '../helpers/TileSelector';
 
-import '../styles/styles.css'; 
+import '../../styles/styles.css'; 
 
-const SkillsForm = ({ formData, onChange }) => {
+const SkillsForm = ({ formData, onChange, setValidation }) => {
   const [selectedSkillId, setSelectedSkillId] = useState(0);
   const skills = formData;
-  // const [skills, setSkills] = useState([]);
+
+  useEffect(() => {
+    if (skills.length >= 3) {
+      setValidation(true);
+    } else {
+      setValidation(false);
+    }
+  }, [formData, setValidation]);
 
   const handleChange = (e) => {
     const newValue = e.target.value;
