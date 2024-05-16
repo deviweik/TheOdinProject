@@ -4,6 +4,7 @@ import PersonalDescriptionForm from './form/PersonalDescriptionForm';
 import WorkExperienceForm from './form/WorkExperienceForm';
 import EducationForm from './form/EducationForm';
 import SkillsForm from './form/SkillsForm';
+import Resume from './resume/Resume';
 
 import '../styles/styles.css'; 
 
@@ -128,11 +129,14 @@ const Stepper = () => {
 
   return (
     <div className='formMain'>
-      {renderStep()}
+      <Resume 
+        formData={formData}
+      />
+      {/* {renderStep()}
       <div className={step === 2 ? 'navButtonContainer hidden' : 'navButtonContainer'}>
         {step > 0 && <button className="defaultButton" onClick={prevStep}>Prev</button>}
         <button className={validationMet ? 'defaultButton' : 'defaultButton validationUnmet'} onClick={nextStep}>Next</button>
-      </div>
+      </div> */}
     </div>
   );
 };

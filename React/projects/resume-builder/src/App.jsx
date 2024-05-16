@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
 import Stepper from './components/Stepper';
-import './App.css'
+import './App.css';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,6 +12,6 @@ function App() {
       <Stepper className="stepper" />
     </>
   );
-}
+};
 
-export default App
+export default App;
