@@ -190,6 +190,12 @@ body {
   margin: 1rem auto;
 }
 
+.resume .header {
+  margin-left: -1rem;
+  margin-bottom: 0.2rem;
+}
+
+/* Personal Details */
 .resume .personalDetailsContainer .nameContainer {
   display: flex;
   justify-content: start;
@@ -219,13 +225,14 @@ body {
   text-align: left;
 }
 
-.resume .workExperienceContainer {
-  text-align: left;
+.resume .personalDescriptionContainer .personalDescription {
+  font-size: 0.9rem;
+  line-height: 150%;
 }
 
-.resume .workExperienceContainer .header {
-  margin-left: -1rem;
-  margin-bottom: 0.2rem;
+/* Work Experience */
+.resume .workExperienceContainer {
+  text-align: left;
 }
 
 .resume .workExperienceContainer .roleContainer {
@@ -238,6 +245,11 @@ body {
 
 .resume .workExperienceContainer .roleContainer .titleContainer {
   display: flex;
+}
+
+.resume .workExperienceContainer .roleContainer .company {
+  margin-left:-0.5rem;
+  margin-bottom:-0.2rem;
 }
 
 .resume .workExperienceContainer .roleContainer .titleContainer .title {
@@ -254,4 +266,18 @@ body {
   font-size: 0.9rem;
   line-height: 100%;
   margin-bottom: 0.3rem;
+}
+
+/* Education */
+
+.resume .educationContainer {
+  text-align: left;
+}
+
+.resume .educationContainer .schoolContainer {
+  display: flex;
+}
+
+.resume .educationContainer .schoolContainer .gradDate {
+  margin-left: 0.5rem;
 }

@@ -85,7 +85,7 @@ const testData = {
           },
           {
             "id": 2,
-            "value": "I was recently promoted to Solutions Engineering manager, an interesting title, mostly meant to reflect the technical solutions I've been able to personally implement while also serving as a Product/Project Manager."
+            "value": "I was recently promoted to Solutions Engineering manager, a title that reflects the technical solutions I've been able to implement while also serving as a Product/Project Manager."
           }
         ]
       }
@@ -118,26 +118,32 @@ const testData = {
 
 const Resume = ({ formData }) => {
   formData = testData;
-  return (
-    <div className='resume'>
-      <PersonalDetailsResume
-        formData={formData.personalDetails}
-      />
-      <div className='lineBreak'></div>
-      <PersonalDescriptionResume
-        formData={formData.personalDescription}
-      />
-      <WorkExperienceResume
-        formData={formData.workExperience}
-      />
-      <EducationResume
-        formData={formData.education}
-      />
-      <SkillsResume
-        formData={formData.skills}
-      />
-    </div>
-  );
+  if (formData.personalDetails.name) {
+    return (
+      <div className='resume'>
+        <PersonalDetailsResume
+          formData={formData.personalDetails}
+        />
+        <div className='lineBreak'></div>
+        <PersonalDescriptionResume
+          formData={formData.personalDescription}
+        />
+        <WorkExperienceResume
+          formData={formData.workExperience}
+        />
+        <EducationResume
+          formData={formData.education}
+        />
+        <SkillsResume
+          formData={formData.skills}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <h2 className='errorMessage'>Data input is invalid, please try again.</h2>
+    );
+  }
 };
 
 export default Resume;

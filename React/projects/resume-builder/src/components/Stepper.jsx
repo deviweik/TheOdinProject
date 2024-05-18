@@ -122,7 +122,13 @@ const Stepper = () => {
             setValidation={setValidationMet}
           />
         );
-      default:
+      case 5: //resume
+          return (
+            <Resume 
+              formData={formData}
+            />
+          );
+        default:
         return null;
     }
   };

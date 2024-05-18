@@ -6,14 +6,12 @@ const WorkExperienceResume = ({ formData }) => {
   const month = date.toLocaleString('default', { month: 'long' });
   const year = date.getFullYear();
 
-
   return (
     <div className='workExperienceContainer'>
       <h3 className='header'>Professional Experience</h3>
-      {formData.roles.map((role, index) => (
-        <WorkExperienceResumeRole role={role} index={index} />
+      {formData.roles.map((role) => (
+        <WorkExperienceResumeRole key={role.id} role={role} />
       ))}
-      
     </div>
   );
 };

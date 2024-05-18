@@ -1,6 +1,6 @@
 import React from 'react';
 
-const WorkExperienceResumeRole = ({ role, index }) => {
+const WorkExperienceResumeRole = ({ role }) => {
   const startDate = new Date(role.startDate);
   const startMonth = startDate.toLocaleString('default', { month: 'long' });
   const startYear = startDate.getFullYear();
@@ -16,7 +16,7 @@ const WorkExperienceResumeRole = ({ role, index }) => {
   }
 
   return (
-    <div key={index} className='roleContainer'>
+    <div className='roleContainer'>
         <div className='header'>
           <p className='company'>{role.companyName} - <i>{role.location}</i></p>
           <div className='titleContainer'>
@@ -26,8 +26,8 @@ const WorkExperienceResumeRole = ({ role, index }) => {
         </div>
         <div className='bulletsContainer'>
           <ul className='bulletsList'>
-            {role.bullets.map((bullet, index) => (
-              <li key={index} className='bullet'>{bullet.value}</li>
+            {role.bullets.map((bullet) => (
+              <li key={bullet.id} className='bullet'>{bullet.value}</li>
             ))}
           </ul>
         </div>
