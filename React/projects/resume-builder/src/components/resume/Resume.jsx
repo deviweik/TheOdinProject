@@ -117,7 +117,7 @@ const testData = {
 };
 
 const Resume = ({ formData }) => {
-  formData = testData;
+  // formData = testData;
   if (formData.personalDetails.name) {
     return (
       <div className='resume'>

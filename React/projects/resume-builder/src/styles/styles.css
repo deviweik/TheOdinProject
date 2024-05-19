@@ -236,7 +236,7 @@ body {
 }
 
 .resume .workExperienceContainer .roleContainer {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .resume .workExperienceContainer .roleContainer * {
@@ -266,6 +266,11 @@ body {
   font-size: 0.9rem;
   line-height: 100%;
   margin-bottom: 0.3rem;
+  margin-left: -0.5rem;
+}
+
+.resume .workExperienceContainer .roleContainer .bulletsContainer .bulletsList {
+  margin-top: 0.5rem;
 }
 
 /* Education */
@@ -274,10 +279,41 @@ body {
   text-align: left;
 }
 
+.resume .educationContainer .header {
+  margin-left: -1rem;
+}
+
 .resume .educationContainer .schoolContainer {
   display: flex;
+  margin-left: -0.5rem;
+}
+
+.resume .educationContainer * {
+  margin: 0;
 }
 
 .resume .educationContainer .schoolContainer .gradDate {
   margin-left: 0.5rem;
+}
+
+/* Skills */
+
+.resume .skillsContainer {
+  text-align: left;
+}
+
+.resume .skillsContainer .header{
+  margin-left: -1rem;
+  margin-bottom: 0;
+}
+
+.resume .skillsContainer .skillsListContainer * {
+  font-size: 0.9rem;
+  line-height: 100%;
+  margin-bottom: 0.3rem;
+  margin-left: -0.5rem;
+}
+
+.resume .skillsContainer .skillsListContainer .skillsList {
+  margin-top: 0.5rem;
 }

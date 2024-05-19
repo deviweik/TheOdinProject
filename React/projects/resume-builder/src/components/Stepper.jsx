@@ -135,14 +135,14 @@ const Stepper = () => {
 
   return (
     <div className='formMain'>
-      <Resume 
+      {/* <Resume 
         formData={formData}
-      />
-      {/* {renderStep()}
+      /> */}
+      {renderStep()}
       <div className={step === 2 ? 'navButtonContainer hidden' : 'navButtonContainer'}>
         {step > 0 && <button className="defaultButton" onClick={prevStep}>Prev</button>}
         <button className={validationMet ? 'defaultButton' : 'defaultButton validationUnmet'} onClick={nextStep}>Next</button>
-      </div> */}
+      </div>
     </div>
   );
 };

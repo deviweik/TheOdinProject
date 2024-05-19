@@ -62,7 +62,7 @@ const WorkExperienceFormDetails = ({ formData, onChange, setValidation }) => {
       <textarea 
         className='defaultLongTextInput' 
         value={bullets[selectedBulletId].value || ''}
-        placeholder="Enter your skills here." 
+        placeholder="Enter more details about your role here." 
         onChange={updateBullets}
       />
       <TileSelector 
