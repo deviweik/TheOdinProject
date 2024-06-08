@@ -1,35 +1,27 @@
-[submodule "JS/EventListenerExercises"]
+[submodule "EventListenerExercises"]
   path = JS/EventListenerExercises
-  url = https://github.com/wesbos/JavaScript30
+  url = https://github.com/deviweik/EventListenerExercises
 
-[submodule "JS/javascript-exercises"]
+[submodule "javascript-exercises"]
   path = JS/javascript-exercises
-  url = https://github.com/TheOdinProject/javascript-exercises
+  url = https://github.com/deviweik/javascript-exercises
 
-[submodule "JS/etch-a-sketch"]
+[submodule "etch-a-sketch"]
 	path = JS/etch-a-sketch
-	url = git@github.com:deviweik/etch-a-sketch.git
+	url = https://github.com/deviweik/etch-a-sketch
 
-[submodule "JS/calculator"]
+[submodule "calculator"]
 	path = JS/calculator
-	url = git@github.com:deviweik/calculator.git
+	url = https://github.com/deviweik/calculator
 
-[submodule "Ruby/ruby-exercises"]
-	path = Ruby/ruby-exercises
-	url = https://github.com/TheOdinProject/ruby-exercises.git
-
-[submodule "CSS/css-exercises"]
+[submodule "css-exercises"]
 	path = CSS/css-exercises
 	url = https://github.com/deviweik/css-exercises
 
-[submodule "CSS/first-landing-page"]
-	path = CSS/first-landing-page
-	url = https://github.com/deviweik/first-landing-page
-
-[submodule "HTML/odin-recipes"]
+[submodule "odin-recipes"]
 	path = HTML/odin-recipes
 	url = https://github.com/deviweik/odin-recipes
 
-[submodule "Ruby/projects/odin_exercises/custom_enumerable_project"]
+[submodule "custom_enumerable_project"]
 	path = Ruby/projects/odin_exercises/custom_enumerable_project
 	url = https://github.com/deviweik/custom_enumerable_project
