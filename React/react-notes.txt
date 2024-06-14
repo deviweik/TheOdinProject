@@ -939,6 +939,7 @@ State - Provides memory for components
           2. What is their common parent?
           3. Does it make sense for the state to live there, or should it 
           be contained higher in the component tree?
+
 Rendering steps
   Any screen update in a React app happens in three steps:
     Trigger
@@ -974,3 +975,195 @@ Rendering steps
 
   React does not touch the DOM if the rendering result is the same as last 
   time
+
+  Rendering key words:
+    Mounting - component is first rendered and inserted into the DOM 
+
+    Re-rendering - occurs when a components state or props change, no 
+    mounting or unmounting action occurs, the rendered output is just 
+    updated
+
+    Unmounting - occurs when the component is removed from the DOM
+
+Side Effects - operations that affect something outside the scope of the 
+function being executed
+  Examples:
+    Fetching data from an API 
+
+    Directly manipulating DOM 
+    
+    Subscribing or unsubscribing to events
+
+    Setting up timers 
+
+  useEffect Hook - used to perform side effects in function components 
+    Takes 2 arguments:
+      1. a function containing the side effect logic 
+      2. optional array of dependencies
+
+    Syntax example: 
+      without cleanup function:
+        useEffect(() => {
+          // side-effect logic
+        }, [dependencies]);
+
+      with cleanup function: 
+        useEffect(
+          () => {
+            // execute side effect
+            return () => {
+              // cleanup function on unmounting or re-running effect
+            }
+          },
+          // optional dependency array
+          [/* 0 or more entries */]
+        )
+
+  How it works:
+    1. Initial Render - the function passed to useEffect is executed after 
+    the component renders 
+    2. Dependency Array - if a dependency array is provider, the effect 
+    will only run if one of the dependencies has changed since the last 
+    render.
+      If an empty array is provided, the effect only runs once (after the 
+      initial render)
+        Use cases: 
+          Initial data fetch: when you need to load data from an API on 
+          the initial render 
+
+          Setting up event subscriptions
+
+          Initializing libraries
+
+      If no array is provided, the effect runs after every render 
+
+    3. Cleanup function - if the effect returns a function, React will run 
+    it before the component unmounts or before running the effect again 
+    on subsequent renders.
+      Useful for cleanup operations like unsubscribing from events
+
+      You will typically want to define a cleanup function 
+        If no cleanup function is returned, React will behave as if an 
+        empty function was returned. 
+
+    Effects are executed in the order they're declared
+
+    Be cautious not to create infinite loops with dependencies 
+
+    Component Lifecycle:
+      1. Mount - when added to the screen
+      2. Update (re-render) - when receiving new props or state
+      3. Unmount - when removed from the screen
+
+      Effects don't really fit into this lifecycle. 
+        They can start and stop synchronizing multiple times while the 
+        component is mounted
+    
+    Effect Lifecycle: 
+      1. start synchronizing something - defined in Effect body
+      2. stop synchronizing it - defined in cleanup function
+
+      An effect describes how to synchronize an external system to the 
+      current props and state
+
+    Practical effect example: (chat room component)
+      const serverUrl = 'https://localhost:1234';
+
+      function ChatRoom({ roomId }) {
+        useEffect(() => {
+          const connection = createConnection(serverUrl, roomId);
+          connection.connect();
+          return () => {
+            connection.disconnect();
+          };
+        }, [roomId]);
+        // ...
+      }
+
+  Key Points:
+    How to think of effects
+      Instead of trying to think of effects as correlating with component 
+      events ('after a render', 'before unmount'), always focus on a single 
+      start/stop cycle at a time. It shouldn’t matter whether a component is 
+      mounting, updating, or unmounting. All you need to do is to describe 
+      how to start synchronization and how to stop it. 
+      
+      If you do it well, your Effect will be resilient to being started and 
+      stopped as many times as it’s needed.
+
+      This might remind you how you don’t think whether a component is 
+      mounting or updating when you write the rendering logic that creates 
+      JSX. You describe what should be on the screen, and React figures out 
+      the rest.
+
+      The exception would be if you provide an empty dependency array. In 
+      this case the does not rely on any Reactive values within the 
+      component, so no re-renders will trigger it to run until the 
+      component unmounts, and the cleanup function is returned
+
+    Each effect should represent a separate synchronization process 
+      If you create an effect to synchronize something, then later on 
+      realize a separate synchronization is required that has the same 
+      dependencies, it can be temping to add the separate synchronization 
+      logic into the same effect. 
+
+      This is a bad practice because if you need to add another dependency 
+      for the first synchronization and not the second, you will need to 
+      create separate effects anyway. The causes here can be even more 
+      subtle too - dependencies are reactive values, so issues may occur if
+      you change how the state/props used in your effect are updated in a 
+      way that shouldn't affect one of the synchronization processes.
+      
+      And worse yet, if you don't realize that you're unintentionally 
+      changing the dependencies of the second synchronization, you may 
+      produce a bug that's difficult to catch.
+
+    Reactive values must be included in dependencies (state, props, and any
+     component variables that are calculated from them)
+      If the value is constant, meaning it will never change during a 
+      re-render, then it doesn't need to be defined as a dependency.
+
+      Anything else is a reactive value, and the effect needs to run again 
+      if it's variables change so that it can make sure it is synchronized 
+      with the current UI. Therefore all reactive values must be included 
+      in dependencies.
+
+      Keep in mind that component variables calculated from state are also 
+      reactive values. To be safe, ANY variables used in the effect that 
+      are not defined as constant within the component should be listed as 
+      a dependency. (React linters will check for this)
+
+    Effect Events - Used if you want to read the latest value of props 
+    without "reacting" to it and re-synchronizing the Effect
+
+    Avoid using objects and functions as dependencies 
+      If you created objects and functions during rendering and then use 
+      them in an Effect, they will always be 'different' on every render. 
+      
+      I'd imagine this isn't always an issue. But you can see how it would 
+      become a huge issue if done unintentionally, potentially causing an 
+      effect to synchronize way more often than intended.
+        Which can be really bad if it's a large data fetch or interacting 
+        with a rate limited server
+
+  Best Practices:
+    Avoid Side Effects in Rendering:
+      Side effects should be placed inside useEffect rather than directly 
+      in the rendering logic.
+
+    Minimize Dependencies:
+      Keep the dependency array as small as possible to prevent unnecessary
+      re-renders.
+
+    Asynchronous Operations:
+      Handle asynchronous operations correctly by using async/await inside 
+      the useEffect function or within an inner function.
+
+      It is very important to consider how long the effect will take to 
+      run. If the effect involves long-running operations (e.g., API 
+      calls), you should define asynchronous functions within useEffect to 
+      handle these operations. This ensures the UI remains responsive and 
+      reactive.
+
+
+
