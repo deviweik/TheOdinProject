@@ -1165,5 +1165,43 @@ function being executed
       handle these operations. This ensures the UI remains responsive and 
       reactive.
 
+  You might not need an effect 
+    Effects let you "step outside" of React and synchronize with an 
+    external system (ex: non-React widget, network, browser DOM)
+
+    If there's no external system involved then you shouldn't need an 
+    effect. 
+      *unless you're using an effect with no dependency array as a 
+      one-time initialization on mount*
+        use cases: 
+          Initializing a third party library 
+
+          Initializing an internal (setting up a timer)
+
+          Animations
+
+    Cases where an effect is not needed 
+      Transforming data for rendering 
+        Rendering completes before an effect runs, then the component 
+        rerenders if necessary, so to avoid unecessary renders just 
+        do all data transformations at the top level of the component.
+          Note: if you're tempted to put a data transformation into an 
+          effect because of how long it takes, you should really be using 
+          useMemo. Using memoization the code block will run during the 
+          render instead of after, but it will store the initial result 
+          and only run if one of it's dependencies changes.
+
+      User events 
+        These should be handled by event handler functions. If you try to 
+        handle events with effects, you won't know what the user actually 
+        did (what button they hit, what input they changed, etc.)
+
+      
+
+      
+
+
+
+
 
 
