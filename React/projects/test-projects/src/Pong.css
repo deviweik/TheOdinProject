@@ -1,0 +1,82 @@
+:root {
+  --boardWidth: 1000px;
+  --boardHeight: 550px;
+  --scoreboardHeight: 70px;
+  --ballDiameter: 50px;
+  --paddleWidth: 25px;
+  --paddleHeight: 100px;
+  --playerOneColor: limegreen;
+  --playerTwoColor: cyan;
+}
+
+#root {
+  padding: 0px;
+}
+
+#innerBorder {
+  border: 2px solid black;
+}
+
+#gameContainer {
+  position: relative;
+  width: var(--boardWidth);
+  height: var(--boardHeight);
+  background-color: black;
+}
+
+#scoreboardContainer {
+  height: var(--scoreboardHeight);
+  background-color: black;
+  border: 2px solid white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0;
+}
+
+#scoreboardContainer .score {
+  font-size: 50px;
+}
+
+#scoreboardContainer #playerOneScore {
+  font-size: 50px;
+  color: var(--playerOneColor);
+}
+
+#scoreboardContainer #playerTwoScore {
+  font-size: 50px;
+  color: var(--playerTwoColor);
+}
+
+
+#scoreboardContainer #timer {
+  font-size: 50px;
+}
+
+.paddle {
+  position: absolute;
+  width: var(--paddleWidth);
+  height: var(--paddleHeight);
+}
+
+#playerOnePaddle {
+  left: 0px;
+  top: calc((var(--boardHeight) - var(--paddleHeight)) / 2);
+  background-color: var(--playerOneColor);
+}
+
+#playerTwoPaddle {
+  right: 0px;
+  top: calc((var(--boardHeight) - var(--paddleHeight)) / 2);
+  background-color: var(--playerTwoColor);
+}
+
+#ball {
+  position: absolute;
+  width: var(--ballDiameter);
+  height: var(--ballDiameter);
+  background-color: #fff;
+  border-radius: 50%; 
+  left: calc((var(--boardWidth) - var(--ballDiameter)) / 2);
+  top: calc((var(--boardHeight) - var(--ballDiameter)) / 2);
+}
