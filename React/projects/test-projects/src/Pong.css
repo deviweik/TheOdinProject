@@ -51,6 +51,7 @@
 
 #scoreboardContainer #timer {
   font-size: 50px;
+  color: white;
 }
 
 .paddle {
@@ -61,13 +62,11 @@
 
 #playerOnePaddle {
   left: 0px;
-  top: calc((var(--boardHeight) - var(--paddleHeight)) / 2);
   background-color: var(--playerOneColor);
 }
 
 #playerTwoPaddle {
   right: 0px;
-  top: calc((var(--boardHeight) - var(--paddleHeight)) / 2);
   background-color: var(--playerTwoColor);
 }
 

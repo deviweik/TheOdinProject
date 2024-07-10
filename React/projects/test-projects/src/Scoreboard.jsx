@@ -19,7 +19,10 @@ function secondsToMinutes(timeInSeconds) {
   if (seconds.length === 1) {
     seconds = '0' + seconds;
   }
-  const timeInMinutes = minutes.toString() + ':' + seconds;
+  var timeInMinutes = minutes.toString() + ':' + seconds;
+  if (minutes <= 0 && seconds <= 0) {
+    timeInMinutes = '0:00';
+  }
   return timeInMinutes;
 }
 

@@ -5,10 +5,13 @@ import './Pong.css'
 
 function Pong() {
 
+  const boardWidth = 1000;
+  const boardHeight = 550;
+
   const initialState = {
-    ball: { x: 50, y: 50, dx: 2, dy: 2 },
-    paddle1: { y: null },
-    paddle2: { y: null },
+    ball: { x: boardWidth/2, y: boardHeight/2, dx: 2, dy: 0 },
+    paddle1: { y: boardHeight/2 },
+    paddle2: { y: boardHeight/2 },
     score: { player1: 0, player2: 0 },
   };
 

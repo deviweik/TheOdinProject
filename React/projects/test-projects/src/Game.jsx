@@ -4,6 +4,8 @@ import './Pong.css'
 
 function Game({ gameTime, state, setState }) {
 
+  const paddleHeight = 100;
+
   useEffect(() => {
     const interval = setInterval(() => {
       setState((state) => {
@@ -19,15 +21,8 @@ function Game({ gameTime, state, setState }) {
     return () => clearInterval(interval);
   }, [setState])
 
-  var paddleOneY = null;
-  var paddleTwoY = null;
-
-  if (state.paddle1.y) {
-    var paddleOneY = state.paddle1.y;
-  }
-  if (state.paddle2.y) {
-    var paddleTwoY = state.paddle2.y;
-  }
+  var paddleOneY = state.paddle1.y - paddleHeight/2;
+  var paddleTwoY = state.paddle2.y - paddleHeight/2;
 
   return (
     <>
@@ -37,11 +32,11 @@ function Game({ gameTime, state, setState }) {
         style={{
           top: `${paddleOneY}px`,
         }}
-        ></div>
+      ></div>
       <div 
         id='ball'
         style={{
-          
+
         }}
       ></div>
       <div 
