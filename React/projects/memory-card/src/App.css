@@ -1,0 +1,112 @@
+html, body, #root {
+  height: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+#menuContainer, #gameContainer{
+  max-height: 100vh;
+  height: 100vh;
+  max-width: 60vw;
+  width: 60vw;
+}
+
+#menuRight {
+  color: white;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#menuHeader, #menuDescription {
+  max-width: 60%;
+}
+
+#menuHeader {
+  margin-top: auto;
+}
+
+#menuHighScore {
+  margin-top: auto;
+}
+
+#gameContainer {
+  background-color: black;
+  color: white;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#scoreboard .top {
+  justify-content: flex-end;
+}
+
+#sbHighScore {
+  padding: 10px;
+  width: 30px;
+}
+#sbHighScoreLabel {
+  padding: 10px;
+}
+
+#sbScoreLabel, #sbScore {
+  flex: 1; 
+  padding: 10px;
+  margin: 0;
+}
+
+#sbScoreLabel {
+  text-align: end;
+}
+
+#sbScore {
+  text-align: start;
+}
+
+#backButton {
+  margin: auto 0 30px 0;
+}
+
+#cardArray {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 10px; /* Adjust the gap between grid items as needed */
+  padding: 20px;
+}
+
+.cardPhoto {
+  width: 100%; /* Make the images responsive */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensure the images cover the grid cell */
+  border-radius: 5px; /* Optional: add rounded corners to the images */
+}
+
+.cardPhoto {
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition for both box-shadow and scale */
+}
+
+.cardPhoto:hover {
+  transform: scale(1.1); /* Scale the image up slightly on hover */
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3); /* Adds a blurred border effect */
+}
+
+#cardCounter {
+  justify-content: space-around;
+  margin: 0 300px;
+}
+
+.suitContainer {
+  flex-direction: column;
+}
+
+.suitImg {
+  height: 100px;
+}

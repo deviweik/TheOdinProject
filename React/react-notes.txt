@@ -328,6 +328,28 @@ Rendering Techniques
       Nested ternaries and && operators can be tough to look at
 
 Keys - used for referencing elements
+  By passing userId as a key to the Profile component, you’re asking React
+  to treat two Profile components with different userId as two different
+  components that should not share any state
+    Normally, React preserves the state when the same component is rendered
+    in the same spot
+
+    ex: 
+      export default function ProfilePage({ userId }) {
+      return (
+        <Profile
+          userId={userId}
+          key={userId}
+        />
+      );
+    }
+
+    function Profile({ userId }) {
+      // This and any other state below will reset on key change automatically
+      const [comment, setComment] = useState('');
+      // ...
+    }
+
   Each element needs to have a unique identifier
 
   Using uuid package: 
@@ -1164,6 +1186,15 @@ function being executed
       calls), you should define asynchronous functions within useEffect to 
       handle these operations. This ensures the UI remains responsive and 
       reactive.
+    
+    Avoid using objects as dependencies 
+      Objects are only equal in JavaScript if they reference the exact same
+      object. In most cases when you perform operations on an existing 
+      object, you are creating a new object. This creates an infinite loop 
+      if you update (recreate) that object within the effect
+
+      To get around this you can use specific values within the object as 
+      dependencies. useEffect(() => {callback,[object.value]});
 
   You might not need an effect 
     Effects let you "step outside" of React and synchronize with an 
@@ -1196,7 +1227,30 @@ function being executed
         handle events with effects, you won't know what the user actually 
         did (what button they hit, what input they changed, etc.)
 
+    Summary: 
+      If you can calculate something during render, you don’t need an Effect.
       
+      To cache expensive calculations, add useMemo instead of useEffect.
+      
+      To reset the state of an entire component tree, pass a different key
+      to it.
+      
+      To reset a particular bit of state in response to a prop change, set
+      it during rendering.
+      
+      Code that runs because a component was displayed should be in 
+      Effects, the rest should be in events.
+      
+      If you need to update the state of several components, it’s better to
+      do it during a single event.
+      
+      Whenever you try to synchronize state variables in different 
+      components, consider lifting state up.
+      
+      You can fetch data with Effects, but you need to implement cleanup 
+      to avoid race conditions.
+
+
 
       
 

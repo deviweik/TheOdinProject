@@ -42,9 +42,6 @@ HTML
 
         multiple: allows multiple uploads on file input type
 
-
-
-
 Git
     Commits
         git add .
