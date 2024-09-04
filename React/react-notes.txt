@@ -1250,12 +1250,177 @@ function being executed
       You can fetch data with Effects, but you need to implement cleanup 
       to avoid race conditions.
 
+Class Based Components - Legacy code, replaced by Functional Components
+  Structure + Syntax (constructor, props, methods, `this`)
+    Example definition:
+      import { Component } from "react";
 
+      class ClassInput extends Component {
+        constructor(props) {
+          super(props);
+          // passing props to your class's constructor and then using the 
+          // super method on them allows you to use props in reference to 
+          // `this`. Which in this case would reference your component. 
 
-      
+          this.state = {
+            todos: [],
+            inputVal: "",
+          };
+          // `this` is also used to define state in class components as 
+          // part of the constructor
 
+          this.handleInputChange = this.handleInputChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+          // when methods are declared within the component, you must 
+          // `bind` the `this` of the method to the `this` of the class.
+          // This is usually done within the constructor
+        }
+        
+        handleInputChange(e) {
+          this.setState((state) => ({
+            ...state,
+            inputVal: e.target.value,
+          }));
+        }
 
+        handleSubmit(e) {
+          // pre-defined setState method is used to update state
+          e.preventDefault();
+          this.setState((state) => ({
+            todos: state.todos.concat(state.inputVal),
+            inputVal: "",
+          }));
+        }
 
+        render() {
+          return (
+            <section>
+              <h3>{this.props.name}</h3>
+              {/* Able to reference props now because of super above */}
+              <form onSubmit={this.handleSubmit}>
+                <label htmlFor="task-entry">Enter a task: </label>
+                <input 
+                  type="text" 
+                  name="task-entry" 
+                  value={this.state.inputVal}
+                  onChange={this.handleInputChange}
+                />
+                <button type="submit">Submit</button>
+              </form>
+              <h4>All the tasks!</h4>
+              <ul>
+                {this.state.todos.map((todo) => (
+                  <li key={todo}>{todo}</li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+      }
+
+      export default ClassInput;
+
+  Component Lifecycle Methods
+    render()
+      Only required lifecycle method in a class component. 
+
+      Render should be pure, meaning:
+        - Doesn't modify state 
+        - Returns same thing on each call given same inputs 
+        - doesn't directly interact with the browser 
+
+    componentDidMount()
+      Run after the component is mounted. 
+
+      Should be used to make any calls to fetch data
+
+    componentDidUpdate() 
+      Run after a component re-renders 
+
+      Need to be careful not to update state indiscriminately (without 
+      conditions) to prevent an endless loop 
+        previous props and state are always automatically passed to the 
+        method by React
+
+        Example with conditions: 
+          componentDidUpdate(prevProps, prevState) {
+            if (prevProps.someValue !== this.props.someValue) {
+              this.setState({ updatedValue: this.props.someValue });
+            }
+          }
+
+      Practical example: refetch user data if the user changes
+    
+    componentWillUnmount() 
+      Called before a component is unmounted and destroyed.
+
+      Should be used to perform cleanup actions like cancelling network 
+      requests, clearing timers, etc.
+
+  How useEffect combines these Lifecycle Methods 
+    The useEffect hook is a combination of componentDidMount, 
+    componentDidUpdate, and componentWillUnmount, where the methods used 
+    are based on the provided dependency array and whether it returns 
+    anything.
+
+    Cases: 
+      Empty dependency array -> componentDidMount
+
+      Dependency array with value(s) -> combo of componentDidMount and 
+      componentDidUpdate that updates when dependencies change
+
+      No dependency array -> componentDidMount and componentDidUpdate
+
+      Return function -> componentWillUnmount
+
+Type Checking - Process of verifying that a piece of code is using the 
+correct data types 
+  PropTypes - way to check the props that a component receives
+    Helpful for catching bugs
+
+  Setting up PropTypes 
+    Install library to project:
+      Run in main project directory
+        npm install --save prop-types
+    
+    Import PropTypes package:
+      import PropTypes from 'prop-types';
+
+  Using PropTypes 
+    Example:
+      import PropTypes from 'prop-types';
+
+      const RenderName = (props) => {
+        return <div>{props.name}</div>;
+      };
+
+      RenderName.propTypes = {
+        name: PropTypes.string,
+        // name: PropTypes.string.isRequired,
+        // above makes it a required prop
+      };
+
+      // RenderName.defaultProps = {
+      //   name: 'Zach',
+      // };
+      // Can also set a default value like so
+
+      export default RenderName;
+
+    Available prop types: 
+      - array 
+      - bigint 
+      - bool 
+      - func 
+      - number 
+      - object 
+      - string 
+      - symbol 
+      - more... https://www.npmjs.com/package/prop-types
+    
+    Default Props: 
+      Can use the `defaultProps` property to define default values for 
+      props
 
 
 

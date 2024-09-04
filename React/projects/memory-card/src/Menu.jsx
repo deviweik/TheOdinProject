@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import menuPhoto from './assets/menu-photo.png';
-import './App.css'
+import './App.css';
 
 function Menu({ nextPage, highScore }) {
 
@@ -17,4 +18,9 @@ function Menu({ nextPage, highScore }) {
   )
 }
 
-export default Menu
+Menu.propTypes = {
+  nextPage: PropTypes.function,
+  highScore: PropTypes.integer
+};
+
+export default Menu;
