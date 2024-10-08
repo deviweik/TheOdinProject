@@ -12,9 +12,7 @@ Library vs Framework
 
     More freedom = less opinionated
 
-Vite 
-  Used to quick start React projects
-  
+Vite - quick start React projects
   Minimum steps required to configure your own project and development 
   environment:
     - Package Management (NPM, Yarn)
@@ -1422,5 +1420,54 @@ correct data types
       Can use the `defaultProps` property to define default values for 
       props
 
+React Router - Client-side routing with React
+  What is client-side routing?
+    Javascript takes over the duty of handling the routes in an application
+    
+    Helps build single-page applications, which don't need to refresh as 
+    the user navigates 
 
+  Install React Router package 
+    npm install react-router-dom
+  
+  React Router set up
+    example: 
+      import { StrictMode } from "react";
+      import { createRoot } from "react-dom/client";
+      import { createBrowserRouter, RouterProvider } from "react-router-dom";
+      import App from "./App";
+      import Profile from "./Profile";
+
+      const router = createBrowserRouter([
+        {
+          path: "/",
+          element: <App />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+      ]);
+
+      createRoot(document.getElementById("root")).render(
+        <StrictMode>
+          <RouterProvider router={router} />
+        </StrictMode>
+      );
+
+    1. import createBrowserRouter and RouterProvider from React Router 
+    2. use createBrowserRouter to create router config by passing an array 
+      of route objects (path (url path) and element (component))
+    3. Render this configuration by passing it to the RouterProvider 
+      component
+
+  Link element
+    If you are linking to other pages within your application (like in a 
+    nav bar for example), you will need to use the custom Link element 
+    rather than <a>. If you use <a> it will still reload the page like a 
+    normal url link 
+
+    Link element is provided with a `to` attribute that is set to the 
+    router path 
+      ex: <Link to="profile">Profile page</Link>
 
